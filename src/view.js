@@ -1,16 +1,7 @@
 import { createElement } from "@wordpress/element";
 import { hydrate } from "react-dom";
-import Title from "./components/title";
-import Button from "./components/button";
+import Block from "./components/block";
 import Children from "./children";
-
-const Block = ({ attributes, children }) => (
-  <>
-    <Title message={attributes.message} />
-    <Button />
-    {children}
-  </>
-);
 
 window.addEventListener("load", (event) => {
   document

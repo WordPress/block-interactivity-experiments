@@ -1,17 +1,15 @@
-import { useBlockProps, InnerBlocks } from "@wordpress/block-editor";
-import Title from "./components/title";
-import Button from "./components/button";
+import { useBlockProps } from "@wordpress/block-editor";
+import InnerBlocks from "./inner-blocks";
+import Block from "./components/block";
 
 const Save = ({ attributes }) => (
   <div
     {...useBlockProps.save()}
     data-gutenberg-attributes={JSON.stringify(attributes)}
   >
-    <Title message={attributes.message} />
-    <Button />
-    <gutenberg-inner-blocks>
-      <InnerBlocks.Content />
-    </gutenberg-inner-blocks>
+    <Block attributes={attributes}>
+      <InnerBlocks />
+    </Block>
   </div>
 );
 
