@@ -3,7 +3,7 @@ import Title from "./components/title";
 import Button from "./components/button";
 
 const Save = ({ attributes }) => (
-  <gutenberg-root
+  <div
     {...useBlockProps.save()}
     data-gutenberg-attributes={JSON.stringify(attributes)}
   >
@@ -12,7 +12,7 @@ const Save = ({ attributes }) => (
     <gutenberg-inner-blocks>
       <InnerBlocks.Content />
     </gutenberg-inner-blocks>
-  </gutenberg-root>
+  </div>
 );
 
 export default Save;
