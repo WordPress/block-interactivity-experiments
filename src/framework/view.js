@@ -10,24 +10,28 @@ const Children = ({ value }) => {
 };
 Children.shouldComponentUpdate = () => false;
 
-const view = (Comp) => {
-  window.addEventListener("load", () => {
-    document
-      .querySelectorAll(".wp-block-luisherranz-block-hydration-experiments")
-      .forEach((block) => {
-        const attributes = JSON.parse(block.dataset["gutenbergAttributes"]);
-        const innerBlocks = block.querySelector("gutenberg-inner-blocks");
-        const el = createElement(
-          Comp,
-          { attributes, suppressHydrationWarning: true },
-          createElement(Children, {
-            value: innerBlocks.innerHTML,
-            suppressHydrationWarning: true,
-          })
-        );
-        hydrate(el, block);
-      });
-  });
+const view = (name, Comp) => {
+  customElements.define(
+    name.replace("/", "_"),
+    class extends HTMLDivElement {
+      connectedCallback() {
+        setTimeout(() => {
+          const attributes = JSON.parse(this.dataset["gutenbergAttributes"]);
+          const innerBlocks = this.querySelector("gutenberg-inner-blocks");
+          const el = createElement(
+            Comp,
+            { attributes, suppressHydrationWarning: true },
+            createElement(Children, {
+              value: innerBlocks && innerBlocks.innerHTML,
+              suppressHydrationWarning: true,
+            })
+          );
+          hydrate(el, this);
+        });
+      }
+    },
+    { extends: "div" }
+  );
 };
 
 export default view;
