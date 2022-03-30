@@ -11,7 +11,8 @@
     "lint:js": "wp-scripts lint-js",
     "packages-update": "wp-scripts packages-update",
     "plugin-zip": "wp-scripts plugin-zip",
-    "start": "wp-scripts start"
+    "start": "wp-scripts start",
+    "wp-env": "wp-env"
   },
   "devDependencies": {
     "@wordpress/element": "^4.3.0",
