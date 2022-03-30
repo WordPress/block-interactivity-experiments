@@ -1,16 +1,13 @@
 import { TextControl } from "@wordpress/components";
 import { useBlockProps, InnerBlocks } from "@wordpress/block-editor";
+import Title from "./components/title";
 
 export default function Edit({ attributes, setAttributes }) {
   const blockProps = useBlockProps();
   return (
     <>
       <div {...blockProps}>
-        <TextControl
-          placeholder="Enter the title"
-          value={attributes.message}
-          onChange={(val) => setAttributes({ message: val })}
-        />
+        <Title value={attributes.message} onChange={(val) => setAttributes({ message: val })} placeholder="Enter the Title" />
         <InnerBlocks />
       </div>
     </>
