@@ -1,5 +1,4 @@
-import { name } from "./block.json";
-import Block from "./frontend/block";
-import view from "./framework/view";
+import { registerBlockType } from "./gutenberg-packages/frontend";
+import Block from "./frontend";
 
-view(name, Block);
+registerBlockType("luisherranz/block-hydration-experiments", Block);

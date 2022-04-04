@@ -1,7 +1,7 @@
-import { name } from "../block.json";
+import { registerBlockType as gutenbergRegisterBlockType } from "@wordpress/blocks";
 import { useBlockProps, InnerBlocks } from "@wordpress/block-editor";
 
-const save = (Comp) => ({ attributes }) => {
+const save = (name, Comp) => ({ attributes }) => {
   const blockProps = useBlockProps.save();
   return (
     <gutenberg-interactive-block
@@ -18,4 +18,10 @@ const save = (Comp) => ({ attributes }) => {
   );
 };
 
-export default save;
+export const registerBlockType = (name, { frontend, edit, ...rest }) => {
+  gutenbergRegisterBlockType(name, {
+    edit,
+    save: save(name, frontend),
+    ...rest,
+  });
+};

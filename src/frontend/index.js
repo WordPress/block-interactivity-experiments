@@ -1,5 +1,5 @@
-import { useState } from "../framework/wordpress-element";
-import Title from "./title";
+import { useState } from "../gutenberg-packages/wordpress-element";
+import Title from "../shared/title";
 import Button from "./button";
 
 const Block = ({ blockProps, attributes, children }) => {

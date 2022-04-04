@@ -2,9 +2,9 @@ import { hydrate, EnvContext } from "./wordpress-element";
 
 const blockTypes = new Map();
 
-export default function view(name, Comp) {
+export const registerBlockType = (name, Comp) => {
   blockTypes.set(name, Comp);
-}
+};
 
 const Children = ({ value }) => {
   if (!value) return null;
