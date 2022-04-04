@@ -1,3 +1,3 @@
-const Button = () => <button onClick={() => alert("hi")}>Show</button>;
+const Button = ({ handler }) => <button onClick={handler}>Show</button>;
 
 export default Button;

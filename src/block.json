@@ -15,6 +15,9 @@
     }
   },
   "supports": {
+    "color": {
+      "text": true
+    },
     "html": true
   },
   "textdomain": "block-hydration-experiments",
