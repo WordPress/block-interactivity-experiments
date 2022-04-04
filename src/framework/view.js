@@ -1,4 +1,4 @@
-import { hydrate } from "./wordpress-element";
+import { hydrate, EnvContext } from "./wordpress-element";
 
 const blockTypes = new Map();
 
@@ -30,16 +30,18 @@ class GutenbergBlock extends HTMLElement {
       const innerBlocks = this.querySelector("gutenberg-inner-blocks");
       const Comp = blockTypes.get(blockType);
       hydrate(
-        <Comp
-          attributes={attributes}
-          blockProps={blockProps}
-          suppressHydrationWarning={true}
-        >
-          <Children
-            value={innerBlocks && innerBlocks.innerHTML}
+        <EnvContext.Provider value="frontend">
+          <Comp
+            attributes={attributes}
+            blockProps={blockProps}
             suppressHydrationWarning={true}
-          />
-        </Comp>,
+          >
+            <Children
+              value={innerBlocks && innerBlocks.innerHTML}
+              suppressHydrationWarning={true}
+            />
+          </Comp>
+        </EnvContext.Provider>,
         this
       );
     });
