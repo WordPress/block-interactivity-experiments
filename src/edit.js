@@ -1,4 +1,8 @@
-import { TextControl } from "@wordpress/components";
+// this import is needed to ensure that the `wp.blockEditor` global is
+// available by the time this component gets loaded. The `Title` component
+// consumes the global but cannot import it because it shouldn't be loaded
+// on the frontend of the site.
+import { RichText } from '@wordpress/block-editor';
 import { useBlockProps, InnerBlocks } from "@wordpress/block-editor";
 import Title from "./components/title";
 
