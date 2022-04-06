@@ -1,4 +1,4 @@
-import { hydrate, EnvContext } from "./wordpress-element";
+import { EnvContext, hydrate } from "./wordpress-element";
 
 const blockTypes = new Map();
 
@@ -22,10 +22,10 @@ class GutenbergBlock extends HTMLElement {
     setTimeout(() => {
       const blockType = this.getAttribute("data-gutenberg-block-type");
       const attributes = JSON.parse(
-        this.getAttribute("data-gutenberg-attributes")
+        this.getAttribute("data-gutenberg-attributes"),
       );
       const blockProps = JSON.parse(
-        this.getAttribute("data-gutenberg-block-props")
+        this.getAttribute("data-gutenberg-block-props"),
       );
       const innerBlocks = this.querySelector("gutenberg-inner-blocks");
       const Comp = blockTypes.get(blockType);
@@ -42,7 +42,7 @@ class GutenbergBlock extends HTMLElement {
             />
           </Comp>
         </EnvContext.Provider>,
-        this
+        this,
       );
     });
   }

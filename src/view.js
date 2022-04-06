@@ -1,4 +1,4 @@
-import { registerBlockType } from "./gutenberg-packages/frontend";
 import Block from "./frontend";
+import { registerBlockType } from "./gutenberg-packages/frontend";
 
 registerBlockType("luisherranz/block-hydration-experiments", Block);

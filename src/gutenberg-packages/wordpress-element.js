@@ -1,8 +1,8 @@
 import {
-  useState as useReactState,
-  useEffect as useReactEffect,
-  useContext as useReactContext,
   createContext,
+  useContext as useReactContext,
+  useEffect as useReactEffect,
+  useState as useReactState,
 } from "@wordpress/element";
 export { hydrate } from "react-dom";
 

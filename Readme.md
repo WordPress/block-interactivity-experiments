@@ -36,9 +36,9 @@ Feel free to inspect the code, open issues, submit PRs, ask questions...
 - [ ] Avoid bundling unnecessary code (like the Save serializer or lodash) in the Frontend.
 - [ ] Bundle Preact compat instead of React in the Frontend (up for discussion).
 - [ ] Implement different hydration techniques:
-	- [ ] Load
-	- [ ] Idle
-	- [ ] View
-	- [ ] Media
+  - [ ] Load
+  - [ ] Idle
+  - [ ] View
+  - [ ] Media
 - [ ] Change hydration technique based on block attributes.
 - [ ] Experiment ways to not hydrate the entire block, only the "client components".
