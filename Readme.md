@@ -4,7 +4,7 @@ A repository to explore patterns related to block hydration with the goal of abs
 
 _It's not a goal to do an in-depth analysis of the patterns, only to experiment with them in a controlled environment to assess their potential and then test them in [the Gutenberg repository](https://github.com/WordPress/gutenberg), where we will see if they are a good fit or not._
 
-Ideally, the Save component should be derived from the Frontend implementation, and developers should be able to share as much code as possible between the Edit and Save/Frontend component.
+Ideally, the Save component should be derived from the Frontend implementation, and developers should be able to share as much code as possible between the Edit and Save/Frontend components.
 
 There are some folders in this repository:
 
@@ -35,3 +35,9 @@ Feel free to inspect the code, open issues, submit PRs, ask questions...
 - [ ] Avoid using `wp` globals in the Frontend.
 - [ ] Avoid bundling unnecessary code (like the Save serializer or lodash) in the Frontend.
 - [ ] Bundle Preact compat instead of React in the Frontend (up for discussion).
+- [ ] Implement different hydration techniques
+	- [ ] Load
+	- [ ] Idle
+	- [ ] View
+	- [ ] Media
+- [ ] Change hydration technique based on block attributes
