@@ -4,10 +4,10 @@
 // the site.
 import "@wordpress/block-editor";
 
-import { InnerBlocks, useBlockProps } from "@wordpress/block-editor";
+import { useBlockProps } from "@wordpress/block-editor";
 import Title from "../shared/title";
 
-export default function Edit({ attributes, setAttributes }) {
+export default function Edit({ attributes, setAttributes, children }) {
   const blockProps = useBlockProps();
   return (
     <>
@@ -17,7 +17,7 @@ export default function Edit({ attributes, setAttributes }) {
           onChange={(val) => setAttributes({ message: val })}
           placeholder="Enter the Title"
         />
-        <InnerBlocks />
+        {children}
       </div>
     </>
   );

@@ -1,7 +1,7 @@
 import { InnerBlocks, useBlockProps } from "@wordpress/block-editor";
 import { registerBlockType as gutenbergRegisterBlockType } from "@wordpress/blocks";
 
-const save = (name, Comp) =>
+const Save = (name, Comp) =>
   ({ attributes }) => {
     const blockProps = useBlockProps.save();
     return (
@@ -19,10 +19,17 @@ const save = (name, Comp) =>
     );
   };
 
+const Edit = (Comp) =>
+  (props) => (
+    <Comp {...props}>
+      <InnerBlocks />
+    </Comp>
+  );
+
 export const registerBlockType = (name, { frontend, edit, ...rest }) => {
   gutenbergRegisterBlockType(name, {
-    edit,
-    save: save(name, frontend),
+    edit: Edit(edit),
+    save: Save(name, frontend),
     ...rest,
   });
 };
