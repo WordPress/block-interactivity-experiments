@@ -2,6 +2,10 @@ import { EnvContext, hydrate } from "./wordpress-element";
 
 const blockTypes = new Map();
 
+document.addEventListener("gutenberg-context", (e) => {
+  e.detail.context = { value: "x" };
+});
+
 export const registerBlockType = (name, Comp) => {
   blockTypes.set(name, Comp);
 };
@@ -19,6 +23,15 @@ Children.shouldComponentUpdate = () => false;
 
 class GutenbergBlock extends HTMLElement {
   connectedCallback() {
+    const event = new CustomEvent("gutenberg-context", {
+      detail: {},
+      bubbles: true,
+      cancelable: true,
+    });
+    this.dispatchEvent(event);
+    const context = event.detail.context;
+    console.log(context);
+
     setTimeout(() => {
       const blockType = this.getAttribute("data-gutenberg-block-type");
       const attributes = JSON.parse(
