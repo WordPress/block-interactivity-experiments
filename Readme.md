@@ -23,10 +23,12 @@ Feel free to inspect the code, open issues, submit PRs, ask questions...
 - [x] Support partial hydration with Inner blocks (children raw HTML).
 - [x] Use `children` instead of `<InnerBlocks.Content />` in Save component to be able to reuse the same component in the Frontend.
 - [x] Serialize attributes and pass them down to the Frontend component.
+- [ ] Support definition of public frontend attributes and only serialize those.
 - [x] Wrapperless hydration: https://github.com/luisherranz/block-hydration-experiments/pull/3.
-- [x] Reuse the same `RichText` component across the different environments (Edit, Save and Frontend): https://github.com/luisherranz/block-hydration-experiments/pull/2.
+- [x] Reuse the same `RichText` component across the different environments (Edit, Save, and Frontend): https://github.com/luisherranz/block-hydration-experiments/pull/2.
 - [x] Support `useState` and `useEffect` hook in the Save component to be able to reuse the same component in the Frontend: https://github.com/luisherranz/block-hydration-experiments/pull/3.
 - [ ] Support the rest of the hooks in the Save component to be able to reuse the same component in the Frontend.
+- [ ] Support the BlockContext between different blocks.
 - [ ] Support for the Context API between different blocks.
 - [ ] Support for Suspense and Error boundaries between different blocks.
 - [ ] Support for Block Supports (wrapper only):https://github.com/luisherranz/block-hydration-experiments/pull/3.
@@ -34,6 +36,7 @@ Feel free to inspect the code, open issues, submit PRs, ask questions...
 - [ ] Support initially hidden Inner blocks.
 - [ ] Avoid using `wp` globals in the Frontend.
 - [ ] Avoid bundling unnecessary code (like the Save serializer or lodash) in the Frontend.
+- [ ] Pattern to export different code depending on the context (Edit, Save or Frontend).
 - [ ] Bundle Preact compat instead of React in the Frontend (up for discussion).
 - [ ] Implement different hydration techniques:
   - [ ] Load
