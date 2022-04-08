@@ -33,7 +33,7 @@ Feel free to inspect the code, open issues, submit PRs, ask questions...
 - [x] Reuse the same `RichText` component across the different environments (Edit, Save, and Frontend): https://github.com/luisherranz/block-hydration-experiments/pull/2.
 - [x] Support `useState` and `useEffect` hook in the Save component to be able to reuse the same component in the Frontend: https://github.com/luisherranz/block-hydration-experiments/pull/3.
 - [ ] Support the rest of the hooks in the Save component to be able to reuse the same component in the Frontend.
-- [ ] Support the BlockContext between different blocks.
+- [ ] Support the BlockContext between different blocks: https://github.com/luisherranz/block-hydration-experiments/pull/7.
   - [ ] Support "static" (not hydrated) BlockContext parents
 - [ ] Support for the Context API between different blocks.
 - [ ] Support for Suspense and Error boundaries between different blocks.
