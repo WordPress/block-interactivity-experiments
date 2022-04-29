@@ -24,7 +24,7 @@ Feel free to inspect the code, open issues, submit PRs, ask questions...
 
 - [x] Hydrate Frontend components.
 - [x] Make sure Frontend components are automatically rehydrated if they appear in the DOM at any point (not only on page load).
-- [ ] Make sure Frontend components are automatically hydrated when the JavaScript registers their block type (if it happens after the connectedCallback call).
+- [ ] Make sure Frontend components are automatically hydrated even if their component is registered after the connectedCallback execution.
 - [x] Support partial hydration with Inner blocks (children raw HTML).
   - [ ] Support initially hidden Inner blocks.
 - [x] Use `children` instead of `<InnerBlocks.Content />` in Save component to be able to reuse the same component in the Frontend.
