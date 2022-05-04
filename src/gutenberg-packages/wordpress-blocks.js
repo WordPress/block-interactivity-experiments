@@ -15,6 +15,11 @@ const save = (name, Comp) =>
             <InnerBlocks.Content />
           </gutenberg-inner-blocks>
         </Comp>
+        {/* Render InnerBlocks inside a template, to avoid losing them
+            if Comp doesn't render them. */}
+        <template class="gutenberg-inner-blocks">
+          <InnerBlocks.Content />
+        </template>
       </gutenberg-interactive-block>
     );
   };
