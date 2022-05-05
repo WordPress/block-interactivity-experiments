@@ -3,7 +3,7 @@ import Title from "../shared/title";
 import Button from "./button";
 
 const Block = ({ blockProps, attributes, children }) => {
-  const [show, setShow] = useState(true);
+  const [show, setShow] = useState(false);
   const [counter, setCounter] = useState(0);
 
   return (

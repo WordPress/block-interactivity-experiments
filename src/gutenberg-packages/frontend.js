@@ -27,7 +27,7 @@ class GutenbergBlock extends HTMLElement {
       const blockProps = JSON.parse(
         this.getAttribute("data-gutenberg-block-props"),
       );
-      const innerBlocks = this.querySelector("gutenberg-inner-blocks");
+      const innerBlocks = this.querySelector("template.gutenberg-inner-blocks");
       const Comp = blockTypes.get(blockType);
       hydrate(
         <EnvContext.Provider value="frontend">
@@ -41,6 +41,10 @@ class GutenbergBlock extends HTMLElement {
               suppressHydrationWarning={true}
             />
           </Comp>
+          <template
+            className="gutenberg-inner-blocks"
+            suppressHydrationWarning={true}
+          />
         </EnvContext.Provider>,
         this,
       );
