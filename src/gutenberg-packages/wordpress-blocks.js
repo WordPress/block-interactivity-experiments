@@ -1,7 +1,5 @@
-import { InnerBlocks, useBlockProps } from "@wordpress/block-editor";
-import { registerBlockType as gutenbergRegisterBlockType } from "@wordpress/blocks";
-
-const save = (name, Comp) =>
+const save =
+  (name, Comp) =>
   ({ attributes }) => {
     const blockProps = useBlockProps.save();
     return (

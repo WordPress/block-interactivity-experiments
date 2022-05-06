@@ -18,6 +18,7 @@
     "@wordpress/element": "^4.3.0",
     "@wordpress/env": "^4.4.0",
     "@wordpress/scripts": "^22.3.0",
-    "dprint": "^0.24.3"
+    "dprint": "^0.24.3",
+    "unplugin-auto-import": "^0.7.1"
   }
 }

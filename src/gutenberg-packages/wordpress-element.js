@@ -1,9 +1,3 @@
-import {
-  createContext,
-  useContext as useReactContext,
-  useEffect as useReactEffect,
-  useState as useReactState,
-} from "@wordpress/element";
 export { hydrate } from "react-dom";
 
 export const EnvContext = createContext(null);
