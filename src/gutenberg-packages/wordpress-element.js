@@ -4,7 +4,7 @@ import {
   useEffect as useReactEffect,
   useState as useReactState,
 } from "@wordpress/element";
-export { hydrate } from "react-dom";
+import { hydrate as ReactHydrate } from "react-dom";
 
 export const EnvContext = createContext(null);
 
@@ -34,3 +34,29 @@ export const useState = (init) =>
 
 export const useEffect = (...args) =>
   useBlockEnvironment() !== "save" ? useReactEffect(...args) : noop;
+
+export const hydrate = (container, element, technique) => {
+  switch (technique) {
+    case "view":
+      const io = new IntersectionObserver((entries) => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue;
+          // As soon as we hydrate, disconnect this IntersectionObserver.
+          io.disconnect();
+          ReactHydrate(container, element);
+          break; // break loop on first match
+        }
+      });
+      io.observe(element.children[0]);
+      break;
+    case "idle":
+      if ("requestIdleCallback" in window) {
+        window.requestIdleCallback(() => ReactHydrate(container, element));
+      } else {
+        setTimeout(ReactHydrate(container, element), 200);
+      }
+      break;
+    default:
+      ReactHydrate(container, element);
+  }
+};
