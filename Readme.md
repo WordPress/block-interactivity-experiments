@@ -43,10 +43,10 @@ Feel free to inspect the code, open issues, submit PRs, ask questions...
 - [ ] Avoid bundling unnecessary code (like the Save serializer or lodash) in the Frontend.
 - [ ] Pattern to export different code depending on the context (Edit, Save, or Frontend).
 - [ ] Bundle Preact (compat) instead of React in the Frontend (up for discussion).
-- [ ] Implement different hydration techniques:
-  - [ ] Load
-  - [ ] Idle
-  - [ ] View
-  - [ ] Media
+- [x] Implement different hydration techniques:https://github.com/luisherranz/block-hydration-experiments/pull/14.
+  - [x] Load
+  - [x] Idle
+  - [x] View
+  - [x] Media
 - [ ] Change hydration technique based on block attributes.
 - [ ] Experiment ways to not hydrate the entire block, only the "client components".
