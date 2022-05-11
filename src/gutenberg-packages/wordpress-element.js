@@ -37,6 +37,8 @@ export const useEffect = (...args) =>
 
 export const hydrate = (container, element, technique) => {
   switch (technique) {
+    // Hydrate the element when is visible in the viewport.
+    // https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API
     case "view":
       const io = new IntersectionObserver((entries) => {
         for (const entry of entries) {
@@ -50,8 +52,11 @@ export const hydrate = (container, element, technique) => {
       io.observe(element.children[0]);
       break;
     case "idle":
+      // Safari does not support requestIdleCalback, we use a timeout instead. https://developer.mozilla.org/en-US/docs/Web/API/Window/requestIdleCallback
       if ("requestIdleCallback" in window) {
-        window.requestIdleCallback(() => ReactHydrate(container, element));
+        window.requestIdleCallback(() => {
+          ReactHydrate(container, element);
+        });
       } else {
         setTimeout(ReactHydrate(container, element), 200);
       }

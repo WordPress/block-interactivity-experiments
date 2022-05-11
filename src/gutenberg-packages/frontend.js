@@ -29,7 +29,7 @@ class GutenbergBlock extends HTMLElement {
       );
       const innerBlocks = this.querySelector("gutenberg-inner-blocks");
       const Comp = blockTypes.get(blockType);
-      const technique = this.getAttribute("data-gutenberg-hydrate");
+      const hydrationTechnique = this.getAttribute("data-gutenberg-hydrate");
 
       hydrate(
         <EnvContext.Provider value="frontend">
@@ -45,7 +45,7 @@ class GutenbergBlock extends HTMLElement {
           </Comp>
         </EnvContext.Provider>,
         this,
-        technique
+        hydrationTechnique
       );
     });
   }
