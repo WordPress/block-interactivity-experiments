@@ -35,8 +35,22 @@ export const useState = (init) =>
 export const useEffect = (...args) =>
   useBlockEnvironment() !== "save" ? useReactEffect(...args) : noop;
 
-export const hydrate = (container, element, technique) => {
+export const hydrate = (container, element, hydrationOptions) => {
+  const { technique, media } = hydrationOptions || {};
+  const cb = () => {
+    ReactHydrate(container, element);
+  };
   switch (technique) {
+    case "media":
+      if (media) {
+        const mql = matchMedia(media);
+        if (mql.matches) {
+          cb();
+        } else {
+          mql.addEventListener("change", cb, { once: true });
+        }
+      }
+      break;
     // Hydrate the element when is visible in the viewport.
     // https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API
     case "view":
@@ -45,7 +59,7 @@ export const hydrate = (container, element, technique) => {
           if (!entry.isIntersecting) continue;
           // As soon as we hydrate, disconnect this IntersectionObserver.
           io.disconnect();
-          ReactHydrate(container, element);
+          cb();
           break; // break loop on first match
         }
       });
@@ -54,14 +68,13 @@ export const hydrate = (container, element, technique) => {
     case "idle":
       // Safari does not support requestIdleCalback, we use a timeout instead. https://developer.mozilla.org/en-US/docs/Web/API/Window/requestIdleCallback
       if ("requestIdleCallback" in window) {
-        window.requestIdleCallback(() => {
-          ReactHydrate(container, element);
-        });
+        window.requestIdleCallback(cb);
       } else {
-        setTimeout(ReactHydrate(container, element), 200);
+        setTimeout(cb, 200);
       }
       break;
+    // Hydrate this component immediately.
     default:
-      ReactHydrate(container, element);
+      cb();
   }
 };

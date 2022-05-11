@@ -10,7 +10,7 @@ const save =
         data-gutenberg-block-type={name}
         data-gutenberg-attributes={JSON.stringify(attributes)}
         data-gutenberg-block-props={JSON.stringify(blockProps)}
-        data-gutenberg-hydrate="view"
+        data-gutenberg-hydrate="idle"
       >
         <Comp blockProps={blockProps} attributes={attributes}>
           <gutenberg-inner-blocks>
