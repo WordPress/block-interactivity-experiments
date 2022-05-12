@@ -1,7 +1,7 @@
 import { getBlockType } from "@wordpress/blocks";
 
 /**
- * Get attributes that should only present in the frontend.
+ * Get attributes that should be present in the frontend.
  * @param {string} blockName
  */
 export const getFrontendAttributes = (blockName) => {
