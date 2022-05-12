@@ -11,7 +11,8 @@
     "message": {
       "type": "string",
       "source": "text",
-      "selector": ".title"
+      "selector": ".title",
+      "frontend": true
     }
   },
   "supports": {
