@@ -29,7 +29,7 @@ Feel free to inspect the code, open issues, submit PRs, ask questions...
   - [x] Support initially hidden Inner blocks: https://github.com/luisherranz/block-hydration-experiments/pull/8
 - [x] Use `children` instead of `<InnerBlocks.Content />` in Save component to be able to reuse the same component in the Frontend.
 - [x] Serialize attributes and pass them down to the Frontend component.
-- [ ] Support definition of public frontend attributes and only serialize those.
+- [x] Support definition of public frontend attributes and only serialize those: https://github.com/luisherranz/block-hydration-experiments/pull/15.
 - [ ] Support attribute sourcing (up for discussion)
 - [x] Wrapperless hydration: https://github.com/luisherranz/block-hydration-experiments/pull/3.
 - [x] Reuse the same `RichText` component across the different environments (Edit, Save, and Frontend): https://github.com/luisherranz/block-hydration-experiments/pull/2.
