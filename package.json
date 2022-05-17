@@ -7,6 +7,8 @@
   "scripts": {
     "build": "wp-scripts build",
     "format": "wp-scripts format",
+    "test": "jest",
+    "test:watch": "jest --watch",
     "lint:css": "wp-scripts lint-style",
     "lint:js": "wp-scripts lint-js",
     "packages-update": "wp-scripts packages-update",
@@ -15,9 +17,15 @@
     "wp-env": "wp-env"
   },
   "devDependencies": {
+    "@babel/core": "^7.17.10",
+    "@babel/preset-env": "^7.17.10",
+    "@types/jest": "^27.5.1",
+    "@wordpress/blocks": "^11.7.0",
     "@wordpress/element": "^4.3.0",
     "@wordpress/env": "^4.4.0",
     "@wordpress/scripts": "^22.3.0",
-    "dprint": "^0.24.3"
+    "babel-jest": "^28.1.0",
+    "dprint": "^0.24.3",
+    "jest": "^28.1.0"
   }
 }
