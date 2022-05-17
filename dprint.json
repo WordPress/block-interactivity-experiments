@@ -8,8 +8,11 @@
     "**/node_modules",
     "**/*-lock.json"
   ],
+  "typescript": {
+    "spaceAround": true
+  },
   "plugins": [
-    "https://plugins.dprint.dev/typescript-0.66.0.wasm",
+    "https://plugins.dprint.dev/typescript-0.68.2.wasm",
     "https://plugins.dprint.dev/json-0.15.0.wasm",
     "https://plugins.dprint.dev/markdown-0.13.0.wasm"
   ]
