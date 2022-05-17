@@ -1,5 +1,5 @@
 module.exports = {
   transform: {
-    "^.+\\.jsx?$": ["babel-jest", { configFile: "./jest.babel.config.js" }],
+    "^.+\\.jsx?$": [ "babel-jest", { configFile: "./jest.babel.config.js" } ],
   },
 };

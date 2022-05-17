@@ -1,6 +1,6 @@
 import { getFrontendAttributes } from "../gutenberg-packages/utils";
 
-jest.mock("@wordpress/blocks", () => {
+jest.mock( "@wordpress/blocks", () => {
   return {
     __esModule: true,
     getBlockType: () => ({
@@ -19,13 +19,13 @@ jest.mock("@wordpress/blocks", () => {
       },
     }),
   };
-});
+} );
 
 test("getFrontendAttributes", () => {
-  const frontendAttributes = getFrontendAttributes("test");
-  expect(frontendAttributes).toEqual({
+  const frontendAttributes = getFrontendAttributes( "test" );
+  expect( frontendAttributes ).toEqual( {
     shouldAppear: {
       string: true,
     },
-  });
+  } );
 });
