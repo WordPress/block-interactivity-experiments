@@ -22,10 +22,10 @@ class GutenbergBlock extends HTMLElement {
     setTimeout(() => {
       const blockType = this.getAttribute("data-gutenberg-block-type");
       const attributes = JSON.parse(
-        this.getAttribute("data-gutenberg-attributes")
+        this.getAttribute("data-gutenberg-attributes"),
       );
       const blockProps = JSON.parse(
-        this.getAttribute("data-gutenberg-block-props")
+        this.getAttribute("data-gutenberg-block-props"),
       );
       const innerBlocks = this.querySelector("template.gutenberg-inner-blocks");
       const Comp = blockTypes.get(blockType);
@@ -53,7 +53,7 @@ class GutenbergBlock extends HTMLElement {
           />
         </EnvContext.Provider>,
         this,
-        hydrationOptions
+        hydrationOptions,
       );
     });
   }
