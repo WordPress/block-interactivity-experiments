@@ -54,16 +54,20 @@ export const hydrate = (container, element, hydrationOptions) => {
     // Hydrate the element when is visible in the viewport.
     // https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API
     case "view":
-      const io = new IntersectionObserver((entries) => {
-        for (const entry of entries) {
-          if (!entry.isIntersecting) continue;
-          // As soon as we hydrate, disconnect this IntersectionObserver.
-          io.disconnect();
-          cb();
-          break; // break loop on first match
-        }
-      });
-      io.observe(element.children[0]);
+      try {
+        const io = new IntersectionObserver((entries) => {
+          for (const entry of entries) {
+            if (!entry.isIntersecting) continue;
+            // As soon as we hydrate, disconnect this IntersectionObserver.
+            io.disconnect();
+            cb();
+            break; // break loop on first match
+          }
+        });
+        io.observe(element.children[0]);
+      } catch (e) {
+        cb();
+      }
       break;
     case "idle":
       // Safari does not support requestIdleCalback, we use a timeout instead. https://developer.mozilla.org/en-US/docs/Web/API/Window/requestIdleCallback
