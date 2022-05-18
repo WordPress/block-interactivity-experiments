@@ -35,10 +35,10 @@ export const useState = (init) =>
 export const useEffect = (...args) =>
   useBlockEnvironment() !== "save" ? useReactEffect(...args) : noop;
 
-export const hydrate = (container, element, hydrationOptions) => {
+export const hydrate = (element, container, hydrationOptions) => {
   const { technique, media } = hydrationOptions || {};
   const cb = () => {
-    ReactHydrate(container, element);
+    ReactHydrate(element, container);
   };
   switch (technique) {
     case "media":
@@ -63,7 +63,7 @@ export const hydrate = (container, element, hydrationOptions) => {
           break; // break loop on first match
         }
       });
-      io.observe(element.children[0]);
+      io.observe(container.children[0]);
       break;
     case "idle":
       // Safari does not support requestIdleCalback, we use a timeout instead. https://developer.mozilla.org/en-US/docs/Web/API/Window/requestIdleCallback
