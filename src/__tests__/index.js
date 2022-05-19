@@ -14,6 +14,10 @@ jest.mock( '@wordpress/blocks', () => {
 } );
 
 test('getFrontendAttributes', () => {
-	const frontendAttributes = getFrontendAttributes( 'test' );
-	expect( frontendAttributes ).toEqual( { shouldAppear: { string: true } } );
+	const frontendAttributes = getFrontendAttributes( 'test', {
+		shouldAppear: 'yes',
+		shouldNotAppear: 'no',
+		shouldAlsoNotAppear: 'no',
+	} );
+	expect( frontendAttributes ).toEqual( { shouldAppear: 'yes' } );
 });

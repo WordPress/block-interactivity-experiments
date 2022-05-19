@@ -5,7 +5,7 @@ import { getFrontendAttributes } from './utils';
 const save = ( name, Comp ) =>
 	( { attributes } ) => {
 		const blockProps = useBlockProps.save();
-		const frontendAttributes = getFrontendAttributes( name );
+		const frontendAttributes = getFrontendAttributes( name, attributes );
 		return (
 			<gutenberg-interactive-block
 				data-gutenberg-block-type={name}
