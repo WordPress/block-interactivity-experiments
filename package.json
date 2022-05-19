@@ -6,7 +6,7 @@
 	"main": "build/index.js",
 	"scripts": {
 		"build": "wp-scripts build",
-		"format": "wp-scripts format",
+		"format": "dprint fmt",
 		"test": "jest",
 		"test:watch": "jest --watch",
 		"lint:css": "wp-scripts lint-style",

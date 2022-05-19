@@ -2,7 +2,7 @@ import { EnvContext, hydrate } from './wordpress-element';
 
 const blockTypes = new Map();
 
-export const registerBlockType  = ( name, Comp ) => {
+export const registerBlockType = ( name, Comp ) => {
 	blockTypes.set( name, Comp );
 };
 
