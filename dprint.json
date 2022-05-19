@@ -1,19 +1,27 @@
 {
-  "incremental": true,
-  "useTabs": false,
-  "indentWidth": 2,
-  "lineWidth": 80,
-  "includes": ["**/*.{ts,tsx,js,jsx,cjs,mjs,json,md}"],
-  "excludes": [
-    "**/node_modules",
-    "**/*-lock.json"
-  ],
-  "typescript": {
-    "spaceAround": true
-  },
-  "plugins": [
-    "https://plugins.dprint.dev/typescript-0.68.2.wasm",
-    "https://plugins.dprint.dev/json-0.15.2.wasm",
-    "https://plugins.dprint.dev/markdown-0.13.2.wasm"
-  ]
+	"incremental": true,
+	"useTabs": true,
+	"indentWidth": 2,
+	"lineWidth": 80,
+	"includes": ["**/*.{ts,tsx,js,jsx,cjs,mjs,json,md}"],
+	"excludes": [
+		"**/node_modules",
+		"**/*-lock.json"
+	],
+	"typescript": {
+		"quoteStyle": "alwaysSingle",
+		"useBraces": "always",
+		"singleBodyPosition": "nextLine",
+		"operatorPosition": "sameLine",
+		"preferSingleLine": true,
+		"memberExpression.preferSingleLine": false,
+		"binaryExpression.linePerExpression": true,
+		"memberExpression.linePerExpression": true,
+		"spaceAround": true
+	},
+	"plugins": [
+		"https://plugins.dprint.dev/typescript-0.68.2.wasm",
+		"https://plugins.dprint.dev/json-0.15.2.wasm",
+		"https://plugins.dprint.dev/markdown-0.13.2.wasm"
+	]
 }
