@@ -1,28 +1,29 @@
 {
-  "$schema": "https://schemas.wp.org/trunk/block.json",
-  "apiVersion": 2,
-  "name": "luisherranz/block-hydration-experiments",
-  "version": "0.1.0",
-  "title": "Block Hydration Experiments",
-  "category": "text",
-  "icon": "flag",
-  "description": "",
-  "attributes": {
-    "message": {
-      "type": "string",
-      "source": "text",
-      "selector": ".title"
-    }
-  },
-  "supports": {
-    "color": {
-      "text": true
-    },
-    "html": true
-  },
-  "textdomain": "block-hydration-experiments",
-  "editorScript": "file:./index.js",
-  "editorStyle": "file:./index.css",
-  "style": "file:./style-index.css",
-  "viewScript": "file:./view.js"
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 2,
+	"name": "luisherranz/block-hydration-experiments",
+	"version": "0.1.0",
+	"title": "Block Hydration Experiments",
+	"category": "text",
+	"icon": "flag",
+	"description": "",
+	"attributes": {
+		"message": {
+			"type": "string",
+			"source": "text",
+			"selector": ".title",
+			"frontend": true
+		}
+	},
+	"supports": {
+		"color": {
+			"text": true
+		},
+		"html": true
+	},
+	"textdomain": "block-hydration-experiments",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css",
+	"viewScript": "file:./view.js"
 }
