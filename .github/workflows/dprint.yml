@@ -1,6 +1,6 @@
 name: dprint
 
-on: [push, pull_request]
+on: [push]
 
 jobs:
   dprint:
