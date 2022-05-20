@@ -32,10 +32,10 @@ export const useBlockEnvironment = () => {
 const noop = () => {};
 
 export const useState = ( init ) =>
-	useBlockEnvironment(  ) !== 'save' ? useReactState( init ) : [ init, noop ];
+	useBlockEnvironment() !== 'save' ? useReactState( init ) : [ init, noop ];
 
 export const useEffect = ( ...args ) =>
-	useBlockEnvironment(  ) !== 'save' ? useReactEffect( ...args ) : noop;
+	useBlockEnvironment() !== 'save' ? useReactEffect( ...args ) : noop;
 
 export const hydrate = ( element, container, hydrationOptions ) => {
 	const { technique, media } = hydrationOptions || {};
