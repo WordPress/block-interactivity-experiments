@@ -11,7 +11,7 @@ const Text = ( { context } ) => {
 	return (
 		<div {...blockProps}>
 			<p>Child element</p>
-			{context?.message ? context.message : null}
+			{context?.message}
 		</div>
 	);
 };
