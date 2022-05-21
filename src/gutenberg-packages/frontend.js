@@ -1,6 +1,14 @@
 import { pickKeys } from './utils';
 import { EnvContext, hydrate } from './wordpress-element';
 
+// We assign `blockTypes` to window to make sure it's a global singleton.
+//
+// Have to do this because of the way we are currently bundling the code
+// in this repo, each block gets its own copy of this file.
+//
+// We COULD fix this by doing some webpack magic to spit out the code in
+// `gutenberg-packages` to a shared chunk but assigning `blockTypes` to window
+// is a cheap hack for now that will be fixed once we can merge this code into Gutenberg.
 if ( typeof window.blockTypes === 'undefined' ) {
 	window.blockTypes = new Map();
 }
@@ -99,6 +107,11 @@ class GutenbergBlock extends HTMLElement {
 	}
 }
 
+// We need to wrap the element registration code in a conditional for the same
+// reason we assing `blockTypes` to window (see top of the file).
+//
+// We need to ensure that the component registration code is only run once
+// because it throws if you try to register an element with the same name twice.
 if ( customElements.get( 'gutenberg-interactive-block' ) === undefined ) {
 	customElements.define( 'gutenberg-interactive-block', GutenbergBlock );
 }
