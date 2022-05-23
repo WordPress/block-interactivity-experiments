@@ -1,6 +1,6 @@
-import Frontend from '../../frontend';
 import { registerBlockType } from '../../gutenberg-packages/wordpress-blocks';
 import Edit from './edit';
+import Frontend from './frontend';
 import './style.scss';
 
 registerBlockType( 'bhe/block-hydration-experiments-parent', {

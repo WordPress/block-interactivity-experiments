@@ -5,7 +5,7 @@
 import '@wordpress/block-editor';
 import { useBlockProps } from '@wordpress/block-editor';
 
-const Text = ( { context } ) => {
+const Edit = ( { context } ) => {
 	const blockProps = useBlockProps();
 
 	return (
@@ -16,4 +16,4 @@ const Text = ( { context } ) => {
 	);
 };
 
-export default Text;
+export default Edit;

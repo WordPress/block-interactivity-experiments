@@ -1,4 +1,4 @@
-const Text = ( { blockProps, context } ) => {
+const Frontend = ( { blockProps, context } ) => {
 	return (
 		<div {...blockProps}>
 			<p>Child element</p>
@@ -7,4 +7,4 @@ const Text = ( { blockProps, context } ) => {
 	);
 };
 
-export default Text;
+export default Frontend;
