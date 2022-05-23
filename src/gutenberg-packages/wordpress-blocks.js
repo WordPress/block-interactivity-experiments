@@ -1,4 +1,4 @@
-import { InnerBlocks, useBlockProps } from '@wordpress/block-editor';
+import { useBlockProps, useInnerBlocksProps } from '@wordpress/block-editor';
 import { registerBlockType as gutenbergRegisterBlockType } from '@wordpress/blocks';
 import { getFrontendAttributes } from './utils';
 
@@ -6,6 +6,8 @@ const save = ( name, Comp ) =>
 	( { attributes } ) => {
 		const blockProps = useBlockProps.save();
 		const frontendAttributes = getFrontendAttributes( name, attributes );
+		const innerBlocksProps = useInnerBlocksProps.save();
+
 		return (
 			<gutenberg-interactive-block
 				data-gutenberg-block-type={name}
@@ -14,17 +16,13 @@ const save = ( name, Comp ) =>
 				data-gutenberg-hydrate='idle'
 			>
 				<Comp blockProps={blockProps} attributes={attributes}>
-					<gutenberg-inner-blocks>
-						<InnerBlocks.Content />
-					</gutenberg-inner-blocks>
+					<gutenberg-inner-blocks {...innerBlocksProps} />
 				</Comp>
 				{
 					/* Render InnerBlocks inside a template, to avoid losing them
             if Comp doesn't render them. */
 				}
-				<template class='gutenberg-inner-blocks'>
-					<InnerBlocks.Content />
-				</template>
+				<template class='gutenberg-inner-blocks' {...innerBlocksProps} />
 			</gutenberg-interactive-block>
 		);
 	};
