@@ -1,7 +1,7 @@
 {
 	"$schema": "https://schemas.wp.org/trunk/block.json",
 	"apiVersion": 2,
-	"name": "luisherranz/block-hydration-experiments-child",
+	"name": "bhe/block-hydration-experiments-child",
 	"version": "0.1.0",
 	"title": "BHE - Child",
 	"category": "text",
