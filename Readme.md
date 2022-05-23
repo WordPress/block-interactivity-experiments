@@ -18,7 +18,7 @@ Feel free to inspect the code, open issues, submit PRs, ask questions...
 
 ## Current Status
 
-[You can see a video with the explanation of the current status on this issue.](https://github.com/luisherranz/block-hydration-experiments/issues/6)
+[You can see a video with the explanation of the current status on this issue.](https://github.com/WordPress/block-hydration-experiments/issues/6)
 
 ## Current Experiments
 
@@ -29,17 +29,17 @@ Feel free to inspect the code, open issues, submit PRs, ask questions...
 - [x] Support partial hydration with Inner blocks (children raw HTML).
 - [x] Use children instead of in Save component to be able to reuse the same component in the Frontend.
 - [x] Serialize attributes and pass them down to the Frontend component.
-- [x] Support initially hidden Inner blocks – [PR](https://github.com/luisherranz/block-hydration-experiments/pull/8)
-- [x] Support definition of public frontend attributes and only serialize those – [PR](https://github.com/luisherranz/block-hydration-experiments/pull/15)
-- [x] Wrapperless hydration – [PR](https://github.com/luisherranz/block-hydration-experiments/pull/3)
-- [x] Reuse the same RichText component across the different environments (Edit, Save, and Frontend) – [PR](https://github.com/luisherranz/block-hydration-experiments/pull/2)
-- [x] Support useState and useEffect hook in the Save component to be able to reuse the same component in the Frontend – [PR](https://github.com/luisherranz/block-hydration-experiments/pull/3)
-- [x] Implement different hydration techniques: Idle, View, Media – [PR](https://github.com/luisherranz/block-hydration-experiments/pull/14)
+- [x] Support initially hidden Inner blocks – [PR](https://github.com/WordPress/block-hydration-experiments/pull/8)
+- [x] Support definition of public frontend attributes and only serialize those – [PR](https://github.com/WordPress/block-hydration-experiments/pull/15)
+- [x] Wrapperless hydration – [PR](https://github.com/WordPress/block-hydration-experiments/pull/3)
+- [x] Reuse the same RichText component across the different environments (Edit, Save, and Frontend) – [PR](https://github.com/WordPress/block-hydration-experiments/pull/2)
+- [x] Support useState and useEffect hook in the Save component to be able to reuse the same component in the Frontend – [PR](https://github.com/WordPress/block-hydration-experiments/pull/3)
+- [x] Implement different hydration techniques: Idle, View, Media – [PR](https://github.com/WordPress/block-hydration-experiments/pull/14)
 
 ### Up next
 
-- [ ] Support for Block Supports (wrapper only) – [PR in progress](https://github.com/luisherranz/block-hydration-experiments/pull/3)
-- [ ] Support the BlockContext between different blocks – [PR in progress](https://github.com/luisherranz/block-hydration-experiments/pull/7)
+- [ ] Support for Block Supports (wrapper only) – [PR in progress](https://github.com/WordPress/block-hydration-experiments/pull/3)
+- [ ] Support the BlockContext between different blocks – [PR in progress](https://github.com/WordPress/block-hydration-experiments/pull/7)
 - [ ] Support “static” (not hydrated) BlockContext parents
 - [ ] Support for the Context API between different blocks.
 - [ ] Support attribute sourcing.
