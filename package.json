@@ -1,7 +1,7 @@
 {
 	"name": "block-hydration-experiments",
 	"version": "0.1.0",
-	"author": "Luis Herranz",
+	"author": "The WordPress Contributors",
 	"license": "GPL-2.0-or-later",
 	"main": "build/index.js",
 	"scripts": {
