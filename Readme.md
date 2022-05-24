@@ -47,6 +47,7 @@ Feel free to inspect the code, open issues, submit PRs, ask questions...
 - [ ] Make sure Frontend components are automatically hydrated even if their component is registered after the connectedCallback execution.
 - [ ] Avoid the need to populate the blockProps (useBlockProps).
 - [ ] Change hydration technique based on block attributes.
+- [ ] Add an onClick hydration technique (like Qwik or Rocket).
 - [ ] Support for Suspense and Error boundaries between different blocks.
 
 ### Need discussion
