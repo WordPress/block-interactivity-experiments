@@ -1,9 +1,9 @@
 {
 	"$schema": "https://schemas.wp.org/trunk/block.json",
 	"apiVersion": 2,
-	"name": "bhe/block-hydration-experiments",
+	"name": "bhe/block-hydration-experiments-parent",
 	"version": "0.1.0",
-	"title": "Block Hydration Experiments",
+	"title": "BHE - Parent",
 	"category": "text",
 	"icon": "flag",
 	"description": "",
@@ -21,7 +21,10 @@
 		},
 		"html": true
 	},
-	"textdomain": "block-hydration-experiments",
+	"providesContext": {
+		"message": "message"
+	},
+	"textdomain": "block-hydration-experiments-parent",
 	"editorScript": "file:./index.js",
 	"editorStyle": "file:./index.css",
 	"style": "file:./style-index.css",

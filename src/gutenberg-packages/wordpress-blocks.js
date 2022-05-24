@@ -1,16 +1,19 @@
 import { useBlockProps, useInnerBlocksProps } from '@wordpress/block-editor';
 import { registerBlockType as gutenbergRegisterBlockType } from '@wordpress/blocks';
-import { getFrontendAttributes } from './utils';
+import { getBlockContext, getFrontendAttributes } from './utils';
 
 const save = ( name, Comp ) =>
 	( { attributes } ) => {
 		const blockProps = useBlockProps.save();
 		const frontendAttributes = getFrontendAttributes( name, attributes );
+		const { usesContext, providesContext } = getBlockContext( name );
 		const innerBlocksProps = useInnerBlocksProps.save();
 
 		return (
 			<gutenberg-interactive-block
 				data-gutenberg-block-type={name}
+				data-gutenberg-context-used={JSON.stringify( usesContext )}
+				data-gutenberg-context-provided={JSON.stringify( providesContext )}
 				data-gutenberg-attributes={JSON.stringify( frontendAttributes )}
 				data-gutenberg-block-props={JSON.stringify( blockProps )}
 				data-gutenberg-hydrate='idle'

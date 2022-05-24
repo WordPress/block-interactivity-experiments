@@ -1,0 +1,21 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 2,
+	"name": "bhe/block-hydration-experiments-child",
+	"version": "0.1.0",
+	"title": "BHE - Child",
+	"category": "text",
+	"icon": "flag",
+	"description": "",
+	"usesContext": ["message"],
+	"supports": {
+		"color": {
+			"text": true
+		},
+		"html": true
+	},
+	"textdomain": "block-hydration-experiments-child",
+	"editorScript": "file:./index.js",
+	"style": "file:./style-index.css",
+	"viewScript": "file:./view.js"
+}

@@ -5,7 +5,7 @@
 import '@wordpress/block-editor';
 
 import { InnerBlocks, useBlockProps } from '@wordpress/block-editor';
-import Title from '../shared/title';
+import Title from './shared/title';
 
 export default function Edit( { attributes, setAttributes } ) {
 	const blockProps = useBlockProps();
