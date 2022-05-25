@@ -1,4 +1,4 @@
-import { pickKeys } from './utils';
+import { pickKeys, matcherFromSource } from './utils';
 import { EnvContext, hydrate } from './wordpress-element';
 
 // We assign `blockTypes` to window to make sure it's a global singleton.
@@ -62,6 +62,11 @@ class GutenbergBlock extends HTMLElement {
 			const sourcedAttributes = JSON.parse(
 				this.getAttribute( 'data-gutenberg-sourced-attributes' ),
 			)
+
+			for ( const attr in sourcedAttributes ) {
+				attributes[ attr ] = matcherFromSource( sourcedAttributes[ attr ] )( this );
+			}
+
 
 			// pass the context to children if needed
 			const providedContext = pickKeys(

@@ -1,3 +1,6 @@
+import { text } from 'hpq';
+import memoize from 'memize';
+
 import { getBlockType } from '@wordpress/blocks';
 
 /**
@@ -67,3 +70,12 @@ export const pickKeys = ( obj, arr ) => {
 	}
 	return result;
 };
+
+// See https://github.com/WordPress/gutenberg/blob/trunk/packages/blocks/src/api/parser/get-block-attributes.js#L185
+export const matcherFromSource = memoize( ( sourceConfig ) => {
+	switch ( sourceConfig.source ) {
+		// TODO: Add cases for other source types.
+		case 'text':
+			return text( sourceConfig.selector );
+	}
+} );
