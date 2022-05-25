@@ -1,6 +1,10 @@
 import { useBlockProps, useInnerBlocksProps } from '@wordpress/block-editor';
 import { registerBlockType as gutenbergRegisterBlockType } from '@wordpress/blocks';
-import { getBlockContext, getFrontendAttributes, getSourcedFrontendAttributes } from './utils';
+import {
+	getBlockContext,
+	getFrontendAttributes,
+	getSourcedFrontendAttributes,
+} from './utils';
 
 const save = ( name, Comp ) =>
 	( { attributes } ) => {
@@ -16,7 +20,9 @@ const save = ( name, Comp ) =>
 				data-gutenberg-context-used={JSON.stringify( usesContext )}
 				data-gutenberg-context-provided={JSON.stringify( providesContext )}
 				data-gutenberg-attributes={JSON.stringify( frontendAttributes )}
-				data-gutenberg-sourced-attributes={JSON.stringify( sourcedFrontendAttributes )}
+				data-gutenberg-sourced-attributes={JSON.stringify(
+					sourcedFrontendAttributes,
+				)}
 				data-gutenberg-block-props={JSON.stringify( blockProps )}
 				data-gutenberg-hydrate='idle'
 			>

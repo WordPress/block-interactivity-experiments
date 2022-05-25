@@ -17,7 +17,7 @@ export const getFrontendAttributes = ( blockName, attributes ) => {
 		// If the attribute is marked as frontend in block.json,
 		// and it doesn't have a source property set,
 		// add its value to the frontendAttributes object.
-		if ( value?.frontend && ! value.source && attributes[key] !== undefined ) {
+		if ( value?.frontend && !value.source && attributes[key] !== undefined ) {
 			frontendAttributes[key] = attributes[key];
 		}
 	}
