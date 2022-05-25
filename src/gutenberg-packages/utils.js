@@ -40,7 +40,7 @@ export const getSourcedFrontendAttributes = ( blockName ) => {
 		}
 	}
 
-	return frontendAttributes;
+	return sourcedFrontendAttributes;
 };
 
 export const getBlockContext = ( blockName ) => {
