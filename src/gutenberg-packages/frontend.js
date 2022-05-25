@@ -59,6 +59,9 @@ class GutenbergBlock extends HTMLElement {
 			const attributes = JSON.parse(
 				this.getAttribute( 'data-gutenberg-attributes' ),
 			);
+			const sourcedAttributes = JSON.parse(
+				this.getAttribute( 'data-gutenberg-sourced-attributes' ),
+			)
 
 			// pass the context to children if needed
 			const providedContext = pickKeys(

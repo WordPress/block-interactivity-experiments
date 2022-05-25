@@ -12,9 +12,31 @@ export const getFrontendAttributes = ( blockName, attributes ) => {
 	// Iterate over all attributes of the block.
 	for ( const [ key, value ] of Object.entries( blockType.attributes ) ) {
 		// If the attribute is marked as frontend in block.json,
+		// and it doesn't have a source property set,
 		// add its value to the frontendAttributes object.
-		if ( value?.frontend && attributes[key] !== undefined ) {
+		if ( value?.frontend && ! value.source && attributes[key] !== undefined ) {
 			frontendAttributes[key] = attributes[key];
+		}
+	}
+
+	return frontendAttributes;
+};
+
+export const getSourcedFrontendAttributes = ( blockName ) => {
+	const blockType = getBlockType( blockName );
+
+	const sourcedFrontendAttributes = {};
+
+	// Iterate over all attributes of the block.
+	for ( const [ key, value ] of Object.entries( blockType.attributes ) ) {
+		// If the attribute is marked as frontend in block.json,
+		// and it has a source property set, add the its source and
+		// selector properties to the sourcedFrontendAttributes.
+		if ( value?.frontend && value?.source ) {
+			sourcedFrontendAttributes[key] = {
+				selector: value?.selector,
+				source: value.source,
+			};
 		}
 	}
 
