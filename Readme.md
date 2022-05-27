@@ -40,7 +40,7 @@ Feel free to inspect the code, open issues, submit PRs, ask questions...
 ### Up next
 
 - [ ] Support for Block Supports (wrapper only) – [PR in progress](https://github.com/WordPress/block-hydration-experiments/pull/3)
-- [ ] Support "static" (not hydrated) BlockContext parents.
+- [ ] Support "static" (not hydrated) BlockContext parents. - [PR in progress](https://github.com/WordPress/block-hydration-experiments/pull/28)
 - [ ] Support dynamic Block contexts.
 - [ ] Support for the Context API between different blocks.
 - [ ] Support attribute sourcing.
