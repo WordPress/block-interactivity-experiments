@@ -10,5 +10,5 @@ export const RichText = ( { tagName: Tag, children, ...props } ) => {
 				{...props}
 			/>
 		) :
-		<Tag {...props}>{children}</Tag>;
+		<Tag {...props} dangerouslySetInnerHTML={{ __html: children }} />;
 };
