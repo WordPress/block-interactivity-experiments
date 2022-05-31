@@ -81,6 +81,7 @@ class GutenbergBlock extends HTMLElement {
 			const technique = this.getAttribute( 'data-gutenberg-hydrate' );
 			const media = this.getAttribute( 'data-gutenberg-media' );
 			const hydrationOptions = { technique, media };
+			debugger;
 			hydrate(
 				<EnvContext.Provider value='frontend'>
 					<Comp
