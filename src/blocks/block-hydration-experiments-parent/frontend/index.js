@@ -1,8 +1,10 @@
 import { useState } from '../../../gutenberg-packages/wordpress-element';
-import Title from '../shared/title';
 import Button from '../shared/button';
+import Title from '../shared/title';
 
-const Frontend = ( { blockProps, attributes: { counter: initialCounter, message }, children } ) => {
+const Frontend = (
+	{ blockProps, attributes: { counter: initialCounter, message }, children },
+) => {
 	const [ show, setShow ] = useState( false );
 	const [ counter, setCounter ] = useState( initialCounter );
 
