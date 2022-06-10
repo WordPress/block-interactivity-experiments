@@ -8,6 +8,11 @@
 	"icon": "flag",
 	"description": "",
 	"attributes": {
+		"counter": {
+			"type": "number",
+			"default": 0,
+			"frontend": true
+		},
 		"message": {
 			"type": "string",
 			"source": "text",

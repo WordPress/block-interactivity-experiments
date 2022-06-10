@@ -6,17 +6,20 @@ import '@wordpress/block-editor';
 
 import { InnerBlocks, useBlockProps } from '@wordpress/block-editor';
 import Title from './shared/title';
+import Button from './shared/button';
 
-export default function Edit( { attributes, setAttributes } ) {
+export default function Edit( { attributes: { counter, message }, setAttributes } ) {
 	const blockProps = useBlockProps();
 	return (
 		<>
 			<div {...blockProps}>
 				<Title
-					value={attributes.message}
+					value={message}
 					onChange={( val ) => setAttributes( { message: val } )}
 					placeholder='Enter the Title'
 				/>
+				<Button />
+				<button onClick={() => setAttributes( { counter: counter + 1 } )}>{ counter }</button>
 				<InnerBlocks />
 			</div>
 		</>
