@@ -28,6 +28,8 @@ function bhe_block_wrapper( $block_content, $block, $instance ) {
 		return $block_content;
 	}
 
+	$block_type = $instance->block_type;
+
 	$block_wrapper = sprintf(
 		'<gutenberg-interactive-block ' .
 		'data-gutenberg-block-type="%1$s" ' .
@@ -36,8 +38,8 @@ function bhe_block_wrapper( $block_content, $block, $instance ) {
 		'data-gutenberg-attributes="%4$s" ' .
 		'data-gutenberg-hydrate="idle">',
 		esc_attr( $block['blockName'] ),
-		esc_attr( json_encode( $instance->block_type->uses_context ) ),
-		esc_attr( json_encode( $instance->block_type->provides_context ) ),
+		esc_attr( json_encode( $block_type->uses_context ) ),
+		esc_attr( json_encode( $block_type->provides_context ) ),
 		esc_attr( json_encode( $block['attrs'] ) ),
 	) . '%1$s</gutenberg-interactive-block>';
 
