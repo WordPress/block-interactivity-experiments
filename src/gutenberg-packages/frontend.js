@@ -80,7 +80,7 @@ class GutenbergBlock extends HTMLElement {
 			const blockType = this.getAttribute( 'data-gutenberg-block-type' );
 			const blockProps = {
 				className: this.children[0].className,
-				style: this.children[0].style
+				style: this.children[0].style,
 			};
 
 			const innerBlocks = this.querySelector(
