@@ -24,6 +24,9 @@
 		"color": {
 			"text": true
 		},
+		"typography": {
+			"fontSize": true
+		},
 		"html": true
 	},
 	"providesContext": {
