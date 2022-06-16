@@ -40,6 +40,11 @@ function bhe_block_wrapper( $block_content, $block, $instance ) {
 			);
 		}
 	}
+
+	$attributes = array_filter( $block['attrs'], function( $key ) use ( $attr_definitions ) {
+		return ! empty( $attr_definitions[ $key ]['frontend'] );
+	}, ARRAY_FILTER_USE_KEY );
+
 	$block_wrapper = sprintf(
 		'<gutenberg-interactive-block ' .
 		'data-gutenberg-block-type="%1$s" ' .
@@ -51,7 +56,7 @@ function bhe_block_wrapper( $block_content, $block, $instance ) {
 		esc_attr( $block['blockName'] ),
 		esc_attr( json_encode( $block_type->uses_context ) ),
 		esc_attr( json_encode( $block_type->provides_context ) ),
-		esc_attr( json_encode( $block['attrs'] ) ), // TODO: Filter by frontend === true
+		esc_attr( json_encode( $attributes ) ),
 		esc_attr( json_encode( $sourced_attributes ) )
 	) . '%1$s</gutenberg-interactive-block>';
 
