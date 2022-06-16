@@ -31,19 +31,25 @@ function bhe_block_wrapper( $block_content, $block, $instance ) {
 	$block_type = $instance->block_type;
 	$attr_definitions = $block_type->attributes;
 
+	$attributes = array();
 	$sourced_attributes = array();
 	foreach( $attr_definitions as $attr => $definition ) {
-		if ( ! empty( $definition['frontend'] ) && ! empty( $definition['source'] ) ) {
-			$sourced_attributes[ $attr ] = array(
-				"selector" => $definition['selector'], // TODO: Guard against unset.
-				"source" => $definition['source']
-			);
+		if ( ! empty( $definition['frontend'] ) ) {
+			if ( ! empty( $definition['source'] ) ) {
+				$sourced_attributes[ $attr ] = array(
+					"selector" => $definition['selector'], // TODO: Guard against unset.
+					"source" => $definition['source']
+				);
+			} else {
+				$value = $block['attrs'][$attr];
+				if ( isset ( $value ) ) {
+					$attributes[ $attr ] = $value;
+				} else if ( isset( $definition['default'] ) ) {
+					$attributes[ $attr ] = $definition['default'];
+				}
+			}
 		}
 	}
-
-	$attributes = array_filter( $block['attrs'], function( $key ) use ( $attr_definitions ) {
-		return ! empty( $attr_definitions[ $key ]['frontend'] );
-	}, ARRAY_FILTER_USE_KEY );
 
 	$block_wrapper = sprintf(
 		'<gutenberg-interactive-block ' .
