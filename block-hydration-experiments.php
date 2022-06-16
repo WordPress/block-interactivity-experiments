@@ -41,9 +41,8 @@ function bhe_block_wrapper( $block_content, $block, $instance ) {
 					"source" => $definition['source']
 				);
 			} else {
-				$value = $block['attrs'][$attr];
-				if ( isset ( $value ) ) {
-					$attributes[ $attr ] = $value;
+				if ( in_array ( $attr, $block['attrs'], true ) ) {
+					$attributes[ $attr ] = $block['attrs'][$attr];
 				} else if ( isset( $definition['default'] ) ) {
 					$attributes[ $attr ] = $definition['default'];
 				}
