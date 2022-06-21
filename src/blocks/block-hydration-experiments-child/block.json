@@ -12,6 +12,9 @@
 		"color": {
 			"text": true
 		},
+		"typography": {
+			"fontSize": true
+		},
 		"html": true
 	},
 	"textdomain": "block-hydration-experiments-child",
