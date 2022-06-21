@@ -36,6 +36,7 @@ Feel free to inspect the code, open issues, submit PRs, ask questions...
 - [x] Support useState and useEffect hook in the Save component to be able to reuse the same component in the Frontend – [PR](https://github.com/WordPress/block-hydration-experiments/pull/3)
 - [x] Implement different hydration techniques: Idle, View, Media – [PR](https://github.com/WordPress/block-hydration-experiments/pull/14)
 - [x] Support the BlockContext between different blocks – [PR](https://github.com/WordPress/block-hydration-experiments/pull/7)
+- [x] Support attribute sourcing - [PR](https://github.com/WordPress/block-hydration-experiments/pull/30)
 
 ### Up next
 
@@ -43,7 +44,6 @@ Feel free to inspect the code, open issues, submit PRs, ask questions...
 - [ ] Support "static" (not hydrated) BlockContext parents. - [PR in progress](https://github.com/WordPress/block-hydration-experiments/pull/28)
 - [ ] Support dynamic Block contexts.
 - [ ] Support for the Context API between different blocks.
-- [ ] Support attribute sourcing.
 - [ ] Make sure Frontend components are automatically hydrated even if their component is registered after the connectedCallback execution.
 - [ ] Avoid the need to populate the blockProps (useBlockProps).
 - [ ] Change hydration technique based on block attributes.
