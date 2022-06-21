@@ -68,19 +68,19 @@ class GutenbergBlock extends HTMLElement {
 			}
 
 			// pass the context to children if needed
-			const providedContext = pickKeys(
-				attributes,
-				Object.keys( providesContext ),
-			);
+			const providedContext = providesContext &&
+				pickKeys( attributes, Object.keys( providesContext ) );
 
 			// select only the parts of the context that the block declared in
 			// the `usesContext` of its block.json
 			const context = pickKeys( event.detail.context, usesContext );
 
 			const blockType = this.getAttribute( 'data-gutenberg-block-type' );
-			const blockProps = JSON.parse(
-				this.getAttribute( 'data-gutenberg-block-props' ),
-			);
+			const blockProps = {
+				className: this.children[0].className,
+				style: this.children[0].style,
+			};
+
 			const innerBlocks = this.querySelector(
 				'template.gutenberg-inner-blocks',
 			);
