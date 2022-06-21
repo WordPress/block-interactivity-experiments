@@ -68,10 +68,8 @@ class GutenbergBlock extends HTMLElement {
 			}
 
 			// pass the context to children if needed
-			const providedContext = pickKeys(
-				attributes,
-				Object.keys( providesContext ),
-			);
+			const providedContext = providesContext &&
+				pickKeys( attributes, Object.keys( providesContext ) );
 
 			// select only the parts of the context that the block declared in
 			// the `usesContext` of its block.json
