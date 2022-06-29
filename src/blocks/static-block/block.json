@@ -10,7 +10,8 @@
 	"attributes": {
 		"content": {
 			"type": "string",
-			"default": "test value"
+			"default": "test value",
+			"frontend": true
 		}
 	},
 	"providesContext": {
