@@ -12,6 +12,7 @@
 function block_hydration_experiments_init() {
 	register_block_type( plugin_dir_path( __FILE__ ) . 'build/blocks/block-hydration-experiments-child/' );
 	register_block_type( plugin_dir_path( __FILE__ ) . 'build/blocks/block-hydration-experiments-parent/' );
+	register_block_type( plugin_dir_path( __FILE__ ) . 'build/blocks/static-block/' );
 }
 add_action( 'init', 'block_hydration_experiments_init' );
 

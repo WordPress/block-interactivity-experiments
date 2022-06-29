@@ -3,9 +3,11 @@ import { registerBlockType as gutenbergRegisterBlockType } from '@wordpress/bloc
 import { Fragment } from '@wordpress/element';
 
 const save = ( name, Comp ) =>
-	( { attributes } ) => {
+	( { attributes, context } ) => {
 		const blockProps = useBlockProps.save();
 		const innerBlocksProps = useInnerBlocksProps.save();
+
+		console.log( context );
 
 		return (
 			<Fragment>
