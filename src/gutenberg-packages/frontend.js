@@ -143,11 +143,11 @@ class GutenbergBlock extends HTMLElement {
 								providedContext={providedContext}
 							/>
 						</Component>
-						<template
-							className='gutenberg-inner-blocks'
-							suppressHydrationWarning={true}
-						/>
 					</ConditionalWrapper>
+					<template
+						className='gutenberg-inner-blocks'
+						suppressHydrationWarning={true}
+					/>
 				</EnvContext.Provider>,
 				this,
 				hydrationOptions,

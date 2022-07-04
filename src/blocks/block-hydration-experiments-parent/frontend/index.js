@@ -13,13 +13,15 @@ const Frontend = (
 			<div {...blockProps}>
 				<Title message={message} />
 				<Button handler={() => setShow( !show )} />
-				<button onClick={() => setCounter( counter + 1 )}>{counter}</button>
+
+				<Counter.Consumer>
+					{/* how I pass this value to a parent Provider */}
+					{( [ count, setCount ] ) => (
+						<button onClick={() => setCount( count + 1 )}>{count}</button>
+					)}
+				</Counter.Consumer>
 				{show && children}
 			</div>
-			<Counter.Consumer>
-				{/* how I pass this value to a parent Provider */}
-				{value => console.log( value )}
-			</Counter.Consumer>
 		</Counter.Provider>
 	);
 };
