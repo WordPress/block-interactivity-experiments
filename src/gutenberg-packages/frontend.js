@@ -136,9 +136,6 @@ class GutenbergBlock extends HTMLElement {
 							blockProps={blockProps}
 							suppressHydrationWarning={true}
 							context={context}
-							ProvidedContext={options?.providesContext?.length > 0 ?
-								options?.providesContext[0] :
-								null}
 						>
 							<Children
 								value={innerBlocks && innerBlocks.innerHTML}
