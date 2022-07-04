@@ -3,13 +3,17 @@ import Button from '../shared/button';
 import Title from '../shared/title';
 
 const Frontend = (
-	{ blockProps, attributes: { counter: initialCounter, message }, children },
+	{
+		blockProps: { className },
+		attributes: { counter: initialCounter, message },
+		children,
+	},
 ) => {
 	const [ show, setShow ] = useState( false );
 	const [ counter, setCounter ] = useState( initialCounter );
 
 	return (
-		<div {...blockProps}>
+		<div className={`${className} ${show ? 'show' : 'hide'}`}>
 			<Title message={message} />
 			<Button handler={() => setShow( !show )} />
 			<button onClick={() => setCounter( counter + 1 )}>{counter}</button>
