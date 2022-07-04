@@ -13,8 +13,8 @@ if ( typeof window.blockTypes === 'undefined' ) {
 	window.blockTypes = new Map();
 }
 
-export const registerBlockType = ( name, Comp ) => {
-	window.blockTypes.set( name, Comp );
+export const registerBlockType = ( name, Comp, options ) => {
+	window.blockTypes.set( name, { Component: Comp, options } );
 };
 
 const Children = ( { value, providedContext } ) => {
@@ -84,13 +84,32 @@ class GutenbergBlock extends HTMLElement {
 			const innerBlocks = this.querySelector(
 				'template.gutenberg-inner-blocks',
 			);
-			const Comp = window.blockTypes.get( blockType );
+			const { Component, options } = window.blockTypes.get( blockType );
+			if ( options?.providesContext?.length > 0 ) {
+				// Refactor to include a forEach
+				this.addEventListener( 'react-context', ( event ) => {
+					// we compare provided and used context
+					if ( event.detail.context === options.providesContext[0] ) {
+						console.log( 'SYNC!!' );
+					}
+				} );
+			}
+			if ( options?.usesContext?.length > 0 ) {
+				// Refactor to include a forEach
+				const contextEvent = new CustomEvent( 'react-context', {
+					detail: { context: options?.usesContext[0] },
+					bubbles: true,
+					cancelable: true,
+				} );
+				this.dispatchEvent( contextEvent );
+				// Add provider
+			}
 			const technique = this.getAttribute( 'data-gutenberg-hydrate' );
 			const media = this.getAttribute( 'data-gutenberg-media' );
 			const hydrationOptions = { technique, media };
 			hydrate(
 				<EnvContext.Provider value='frontend'>
-					<Comp
+					<Component
 						attributes={attributes}
 						blockProps={blockProps}
 						suppressHydrationWarning={true}
@@ -101,7 +120,7 @@ class GutenbergBlock extends HTMLElement {
 							suppressHydrationWarning={true}
 							providedContext={providedContext}
 						/>
-					</Comp>
+					</Component>
 					<template
 						className='gutenberg-inner-blocks'
 						suppressHydrationWarning={true}
