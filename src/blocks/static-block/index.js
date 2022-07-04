@@ -1,8 +1,8 @@
-import { registerBlockType } from '../../gutenberg-packages/wordpress-blocks';
+import { registerBlockType } from '@wordpress/blocks';
 import metadata from './block.json';
 import edit from './edit';
-import frontend from './save';
+import save from './save';
 
 const { name } = metadata;
 
-registerBlockType( name, { edit, frontend } );
+registerBlockType( name, { edit, save } );
