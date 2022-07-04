@@ -39,9 +39,13 @@ const Children = ( { value, providedContext } ) => {
 };
 Children.shouldComponentUpdate = () => false;
 
+const ConditionalWrapper = ( { condition, wrapper, children } ) =>
+	condition ? wrapper( children ) : children;
+
 class GutenbergBlock extends HTMLElement {
 	connectedCallback() {
 		setTimeout( () => {
+			let UsedReactContext;
 			// ping the parent for the context
 			const event = new CustomEvent( 'gutenberg-context', {
 				detail: {},
@@ -103,28 +107,50 @@ class GutenbergBlock extends HTMLElement {
 				} );
 				this.dispatchEvent( contextEvent );
 				// Add provider
+				UsedReactContext = options.usesContext[0];
 			}
 			const technique = this.getAttribute( 'data-gutenberg-hydrate' );
 			const media = this.getAttribute( 'data-gutenberg-media' );
 			const hydrationOptions = { technique, media };
 			hydrate(
 				<EnvContext.Provider value='frontend'>
-					<Component
-						attributes={attributes}
-						blockProps={blockProps}
-						suppressHydrationWarning={true}
-						context={context}
+					<ConditionalWrapper
+						condition={UsedReactContext !== undefined}
+						wrapper={children => (
+							<UsedReactContext.Provider value={'to_sync'}>
+								{children}
+								<UsedReactContext.Consumer>
+									{
+										/* How I read this value from the Component */
+										value => (console.log(
+											'value on Consumer on child component => ',
+											value,
+										))
+									}
+								</UsedReactContext.Consumer>
+							</UsedReactContext.Provider>
+						)}
 					>
-						<Children
-							value={innerBlocks && innerBlocks.innerHTML}
+						<Component
+							attributes={attributes}
+							blockProps={blockProps}
 							suppressHydrationWarning={true}
-							providedContext={providedContext}
+							context={context}
+							ProvidedContext={options?.providesContext?.length > 0 ?
+								options?.providesContext[0] :
+								null}
+						>
+							<Children
+								value={innerBlocks && innerBlocks.innerHTML}
+								suppressHydrationWarning={true}
+								providedContext={providedContext}
+							/>
+						</Component>
+						<template
+							className='gutenberg-inner-blocks'
+							suppressHydrationWarning={true}
 						/>
-					</Component>
-					<template
-						className='gutenberg-inner-blocks'
-						suppressHydrationWarning={true}
-					/>
+					</ConditionalWrapper>
 				</EnvContext.Provider>,
 				this,
 				hydrationOptions,
