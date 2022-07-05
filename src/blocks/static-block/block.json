@@ -10,7 +10,8 @@
 	"attributes": {
 		"content": {
 			"type": "string",
-			"default": "test value",
+			"source": "text",
+			"selector": ".content",
 			"frontend": true
 		}
 	},
