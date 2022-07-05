@@ -12,6 +12,8 @@ const Edit = ( { context } ) => {
 		<div {...blockProps}>
 			<p>Child element</p>
 			{context?.message}
+
+			{context && <div>CONTEXT: {context['bhe/content'] || null}</div>}
 		</div>
 	);
 };
