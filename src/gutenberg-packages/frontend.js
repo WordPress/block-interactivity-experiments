@@ -9,9 +9,13 @@ import { EnvContext, hydrate, useEffect, useState } from './wordpress-element';
 // We COULD fix this by doing some webpack magic to spit out the code in
 // `gutenberg-packages` to a shared chunk but assigning `blockTypes` to window
 // is a cheap hack for now that will be fixed once we can merge this code into Gutenberg.
-if ( typeof window.blockTypes === 'undefined' ) {
-	window.blockTypes = new Map();
+
+export const createGlobalMap = ( mapName ) => {
+	if ( typeof window[mapName] === 'undefined' ) {
+		window[mapName] = new Map();
+	}
 }
+createGlobalMap( 'blockTypes' );
 
 export const registerBlockType = ( name, Comp, options ) => {
 	window.blockTypes.set( name, { Component: Comp, options } );
@@ -42,7 +46,10 @@ Children.shouldComponentUpdate = () => false;
 const ConditionalWrapper = ( { condition, wrapper, children } ) =>
 	condition ? wrapper( children ) : children;
 
-const subscribers = new Map();
+// We assign `subscribers` to window to not duplicate its creation.
+createGlobalMap( 'subscribers' );
+
+const subscribers = window.subscribers;
 
 const subscribeProvider = ( Context, setValue ) => {
 	if ( !subscribers.has( Context ) ) {
@@ -103,7 +110,7 @@ class GutenbergBlock extends HTMLElement {
 			};
 
 			const innerBlocks = this.querySelector(
-				'template.gutenberg-inner-blocks',
+				'gutenberg-inner-blocks',
 			);
 			const { Component, options } = window.blockTypes.get( blockType );
 			if ( options?.providesContext?.length > 0 ) {
@@ -113,7 +120,7 @@ class GutenbergBlock extends HTMLElement {
 					if ( event.detail.context === options.providesContext[0] ) {
 						const Context = options.providesContext[0];
 						const Provider = ( { children } ) => {
-							const [ value, setValue ] = useState( null );
+							const [ value, setValue ] = useState( Context._currentValue );
 
 							useEffect( () => {
 								subscribeProvider( Context, setValue );

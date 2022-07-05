@@ -37,6 +37,9 @@ export const useState = ( init ) =>
 export const useEffect = ( ...args ) =>
 	useBlockEnvironment() !== 'save' ? useReactEffect( ...args ) : noop;
 
+export const useContext = ( Context ) =>
+	useBlockEnvironment() !== 'save' ? useReactContext( Context ) : Context._currentValue;
+
 export const hydrate = ( element, container, hydrationOptions ) => {
 	const { technique, media } = hydrationOptions || {};
 	const cb = () => {
