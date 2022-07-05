@@ -12,8 +12,11 @@ const Edit = ( { context } ) => {
 		<div {...blockProps}>
 			<p>Child element</p>
 			{context?.message}
-
-			{context && <div>CONTEXT: {context['bhe/content'] || null}</div>}
+			{context && (
+				<div>
+					<b>static context</b>: {context['bhe/content']}
+				</div>
+			)}
 		</div>
 	);
 };

@@ -3,6 +3,11 @@ const Frontend = ( { blockProps, context } ) => {
 		<div {...blockProps}>
 			<p>Child element</p>
 			{context?.message}
+			{context && (
+				<div>
+					<b>static context</b>: {context['bhe/content']}
+				</div>
+			)}
 		</div>
 	);
 };
