@@ -1,5 +1,5 @@
 import { matcherFromSource, pickKeys } from './utils';
-import { EnvContext, hydrate } from './wordpress-element';
+import { EnvContext, hydrate, useEffect, useState } from './wordpress-element';
 
 // We assign `blockTypes` to window to make sure it's a global singleton.
 //
@@ -42,10 +42,27 @@ Children.shouldComponentUpdate = () => false;
 const ConditionalWrapper = ( { condition, wrapper, children } ) =>
 	condition ? wrapper( children ) : children;
 
+const subscribers = new Map();
+
+const subscribeProvider = ( Context, setValue ) => {
+	if ( !subscribers.has( Context ) ) {
+		subscribers.set( Context, new Set() );
+	}
+	subscribers.get( Context ).add( setValue );
+};
+
+const updateProviders = ( Context, value ) => {
+	if ( subscribers.has( Context ) ) {
+		setTimeout( () => {
+			subscribers.get( Context ).forEach(setValue => setValue( value ));
+		} );
+	}
+};
+
 class GutenbergBlock extends HTMLElement {
 	connectedCallback() {
 		setTimeout( () => {
-			let UsedReactContext;
+			let Provider;
 			// ping the parent for the context
 			const event = new CustomEvent( 'gutenberg-context', {
 				detail: {},
@@ -94,7 +111,20 @@ class GutenbergBlock extends HTMLElement {
 				this.addEventListener( 'react-context', ( event ) => {
 					// we compare provided and used context
 					if ( event.detail.context === options.providesContext[0] ) {
-						console.log( 'SYNC!!' );
+						const Context = options.providesContext[0];
+						const Provider = ( { children } ) => {
+							const [ value, setValue ] = useState( null );
+
+							useEffect( () => {
+								subscribeProvider( Context, setValue );
+							}, [] );
+
+							return (
+								<Context.Provider value={value}>{children}</Context.Provider>
+							);
+						};
+						event.detail.Provider = Provider;
+						event.stopPropagation();
 					}
 				} );
 			}
@@ -107,7 +137,7 @@ class GutenbergBlock extends HTMLElement {
 				} );
 				this.dispatchEvent( contextEvent );
 				// Add provider
-				UsedReactContext = options.usesContext[0];
+				Provider = contextEvent.detail.Provider;
 			}
 			const technique = this.getAttribute( 'data-gutenberg-hydrate' );
 			const media = this.getAttribute( 'data-gutenberg-media' );
@@ -115,21 +145,8 @@ class GutenbergBlock extends HTMLElement {
 			hydrate(
 				<EnvContext.Provider value='frontend'>
 					<ConditionalWrapper
-						condition={UsedReactContext !== undefined}
-						wrapper={children => (
-							<UsedReactContext.Provider value={'to_sync'}>
-								{children}
-								<UsedReactContext.Consumer>
-									{
-										/* How I read this value from the Component */
-										value => (console.log(
-											'value on Consumer on child component => ',
-											value,
-										))
-									}
-								</UsedReactContext.Consumer>
-							</UsedReactContext.Provider>
-						)}
+						condition={Provider !== undefined}
+						wrapper={children => <Provider>{children}</Provider>}
 					>
 						<Component
 							attributes={attributes}
@@ -142,6 +159,12 @@ class GutenbergBlock extends HTMLElement {
 								suppressHydrationWarning={true}
 								providedContext={providedContext}
 							/>
+							{options?.providesContext?.length > 0 &&
+								options.providesContext.map(( Context, index ) => (
+									<Context.Consumer key={index}>
+										{value => updateProviders( Context, value )}
+									</Context.Consumer>
+								))}
 						</Component>
 					</ConditionalWrapper>
 					<template

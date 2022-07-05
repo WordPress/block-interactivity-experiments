@@ -9,17 +9,11 @@ const Frontend = (
 	const [ show, setShow ] = useState( false );
 	const [ counter, setCounter ] = useState( initialCounter );
 	return (
-		<Counter.Provider value={[ counter, setCounter ]}>
+		<Counter.Provider value={counter}>
 			<div {...blockProps}>
 				<Title message={message} />
 				<Button handler={() => setShow( !show )} />
-
-				<Counter.Consumer>
-					{/* how I pass this value to a parent Provider */}
-					{( [ count, setCount ] ) => (
-						<button onClick={() => setCount( count + 1 )}>{count}</button>
-					)}
-				</Counter.Consumer>
+				<button onClick={() => setCounter( counter + 1 )}>{counter}</button>
 				{show && children}
 			</div>
 		</Counter.Provider>
