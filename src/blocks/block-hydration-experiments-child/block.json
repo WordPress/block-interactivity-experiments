@@ -1,5 +1,5 @@
 {
-	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"$schema": "../../../block-schema.json",
 	"apiVersion": 2,
 	"name": "bhe/block-hydration-experiments-child",
 	"version": "0.1.0",
@@ -7,7 +7,14 @@
 	"category": "text",
 	"icon": "flag",
 	"description": "",
-	"usesContext": ["message"],
+	"hydrate": true,
+	"attributes": {
+		"hydrate": {
+			"type": "boolean",
+			"default": true
+		}
+	},
+	"usesContext": ["message", "bhe/content"],
 	"supports": {
 		"color": {
 			"text": true
