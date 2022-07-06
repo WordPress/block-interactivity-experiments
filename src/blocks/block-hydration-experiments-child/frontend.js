@@ -1,5 +1,5 @@
-import { useContext } from '../../gutenberg-packages/wordpress-element';
 import CounterContext from '../../context/counter';
+import { useContext } from '../../gutenberg-packages/wordpress-element';
 
 const Frontend = ( { blockProps, context } ) => {
 	const value = useContext( CounterContext );

@@ -14,7 +14,7 @@ export const createGlobalMap = ( mapName ) => {
 	if ( typeof window[mapName] === 'undefined' ) {
 		window[mapName] = new Map();
 	}
-}
+};
 createGlobalMap( 'blockTypes' );
 
 export const registerBlockType = ( name, Comp, options ) => {
@@ -109,9 +109,7 @@ class GutenbergBlock extends HTMLElement {
 				style: this.children[0].style,
 			};
 
-			const innerBlocks = this.querySelector(
-				'gutenberg-inner-blocks',
-			);
+			const innerBlocks = this.querySelector( 'gutenberg-inner-blocks' );
 			const { Component, options } = window.blockTypes.get( blockType );
 			if ( options?.providesContext?.length > 0 ) {
 				// Refactor to include a forEach
