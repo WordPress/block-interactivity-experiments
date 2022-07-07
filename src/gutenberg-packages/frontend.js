@@ -10,7 +10,7 @@ import { EnvContext, hydrate, useEffect, useState } from './wordpress-element';
 // `gutenberg-packages` to a shared chunk but assigning `blockTypes` to window
 // is a cheap hack for now that will be fixed once we can merge this code into Gutenberg.
 
-export const createGlobalMap = ( mapName ) => {
+const createGlobalMap = ( mapName ) => {
 	if ( typeof window[mapName] === 'undefined' ) {
 		window[mapName] = new Map();
 	}
@@ -51,17 +51,23 @@ createGlobalMap( 'subscribers' );
 
 const subscribers = window.subscribers;
 
-const subscribeProvider = ( Context, setValue ) => {
+const subscribeProvider = ( Context, setValue, block ) => {
 	if ( !subscribers.has( Context ) ) {
 		subscribers.set( Context, new Set() );
 	}
-	subscribers.get( Context ).add( setValue );
+	subscribers.get( Context ).add( { setValue, block } );
 };
 
-const updateProviders = ( Context, value ) => {
+const updateProviders = ( Context, value, block ) => {
 	if ( subscribers.has( Context ) ) {
 		setTimeout( () => {
-			subscribers.get( Context ).forEach(setValue => setValue( value ));
+			subscribers.get( Context ).forEach(
+				( { setValue, block: subscriberBlock } ) => {
+					if ( subscriberBlock === block ) {
+						return setValue( value );
+					}
+				},
+			);
 		} );
 	}
 };
@@ -118,12 +124,11 @@ class GutenbergBlock extends HTMLElement {
 					if ( event.detail.context === options.providesContext[0] ) {
 						const Context = options.providesContext[0];
 						const Provider = ( { children } ) => {
-							const [ value, setValue ] = useState( Context._currentValue );
+							const [ value, setValue ] = useState( null );
 
 							useEffect( () => {
-								subscribeProvider( Context, setValue );
+								subscribeProvider( Context, setValue, this );
 							}, [] );
-
 							return (
 								<Context.Provider value={value}>{children}</Context.Provider>
 							);
@@ -167,7 +172,7 @@ class GutenbergBlock extends HTMLElement {
 							{options?.providesContext?.length > 0 &&
 								options.providesContext.map(( Context, index ) => (
 									<Context.Consumer key={index}>
-										{value => updateProviders( Context, value )}
+										{value => updateProviders( Context, value, this )}
 									</Context.Consumer>
 								))}
 						</Component>
