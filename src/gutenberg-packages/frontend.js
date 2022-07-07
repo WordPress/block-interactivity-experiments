@@ -27,7 +27,10 @@ const Children = ( { value, providedContext } ) => {
 				if ( el !== null ) {
 					// listen for the ping from the child
 					el.addEventListener( 'gutenberg-context', ( event ) => {
-						event.detail.context = providedContext;
+						event.detail.context = {
+							...providedContext,
+							...event?.detail?.context,
+						};
 					} );
 				}
 			}}
@@ -113,6 +116,17 @@ class GutenbergBlock extends HTMLElement {
 	}
 }
 
+class StaticContext extends HTMLElement {
+	connectedCallback() {
+		setTimeout( () => {
+			this.addEventListener( 'gutenberg-context', ( event ) => {
+				const context = JSON.parse( this.attributes.context.value );
+				event.detail.context = { ...context, ...event?.detail?.context };
+			} );
+		} );
+	}
+}
+
 // We need to wrap the element registration code in a conditional for the same
 // reason we assing `blockTypes` to window (see top of the file).
 //
@@ -121,12 +135,6 @@ class GutenbergBlock extends HTMLElement {
 if ( customElements.get( 'gutenberg-interactive-block' ) === undefined ) {
 	customElements.define( 'gutenberg-interactive-block', GutenbergBlock );
 }
-
-window.addEventListener( 'DOMContentLoaded', () => {
-	document.querySelectorAll( 'static-context' ).forEach( ( el ) => {
-		el.addEventListener( 'gutenberg-context', ( event ) => {
-			const context = JSON.parse( el.attributes.context.value );
-			event.detail.context = { ...event?.detail?.context, ...context };
-		} );
-	} );
-} );
+if ( customElements.get( 'static-context' ) === undefined ) {
+	customElements.define( 'static-context', StaticContext );
+}
