@@ -5,9 +5,6 @@ const Edit = ( { attributes, setAttributes } ) => {
 	const blockProps = useBlockProps();
 	return (
 		<div {...blockProps}>
-			<div>
-				We can use the "content" field below to change the value of the context
-			</div>
 			<RichText
 				tagName='h3'
 				className='content'
