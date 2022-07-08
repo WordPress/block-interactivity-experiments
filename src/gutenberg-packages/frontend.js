@@ -118,36 +118,36 @@ class GutenbergBlock extends HTMLElement {
 			const innerBlocks = this.querySelector( 'gutenberg-inner-blocks' );
 			const { Component, options } = window.blockTypes.get( blockType );
 			if ( options?.providesContext?.length > 0 ) {
-				// Refactor to include a forEach
-				this.addEventListener( 'react-context', ( event ) => {
-					// we compare provided and used context
-					if ( event.detail.context === options.providesContext[0] ) {
-						const Context = options.providesContext[0];
-						const Provider = ( { children } ) => {
-							const [ value, setValue ] = useState( null );
-
-							useEffect( () => {
-								subscribeProvider( Context, setValue, this );
-							}, [] );
-							return (
-								<Context.Provider value={value}>{children}</Context.Provider>
-							);
-						};
-						event.detail.Provider = Provider;
-						event.stopPropagation();
-					}
+				options?.providesContext.forEach( ( providedContext ) => {
+					this.addEventListener( 'react-context', ( event ) => {
+						// we compare provided and used context
+						if ( event.detail.context === providedContext ) {
+							const Context = providedContext;
+							const Provider = ( { children } ) => {
+								const [ value, setValue ] = useState( null );
+								useEffect( () => {
+									subscribeProvider( Context, setValue, this );
+								}, [] );
+								return (
+									<Context.Provider value={value}>{children}</Context.Provider>
+								);
+							};
+							event.detail.Provider = Provider;
+							event.stopPropagation();
+						}
+					} );
 				} );
 			}
 			if ( options?.usesContext?.length > 0 ) {
-				// Refactor to include a forEach
-				const contextEvent = new CustomEvent( 'react-context', {
-					detail: { context: options?.usesContext[0] },
-					bubbles: true,
-					cancelable: true,
+				options?.usesContext.forEach( ( usesContext ) => {
+					const contextEvent = new CustomEvent( 'react-context', {
+						detail: { context: usesContext },
+						bubbles: true,
+						cancelable: true,
+					} );
+					this.dispatchEvent( contextEvent );
+					Provider = contextEvent.detail.Provider;
 				} );
-				this.dispatchEvent( contextEvent );
-				// Add provider
-				Provider = contextEvent.detail.Provider;
 			}
 			const technique = this.getAttribute( 'data-gutenberg-hydrate' );
 			const media = this.getAttribute( 'data-gutenberg-media' );
