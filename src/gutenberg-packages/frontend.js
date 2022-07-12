@@ -10,12 +10,14 @@ import { EnvContext, hydrate, useEffect, useState } from './wordpress-element';
 // `gutenberg-packages` to a shared chunk but assigning `blockTypes` to window
 // is a cheap hack for now that will be fixed once we can merge this code into Gutenberg.
 
-const createGlobalMap = ( mapName ) => {
+// We create a variable for weakmap just to have a quick switch for testing,
+// but we can update it later on Gutenberg or other projects.
+const createGlobalMap = ( { mapName, weakmap = false } ) => {
 	if ( typeof window[mapName] === 'undefined' ) {
-		window[mapName] = new Map();
+		window[mapName] = weakmap ? new WeakMap() : new Map();
 	}
 };
-createGlobalMap( 'blockTypes' );
+createGlobalMap( { mapName: 'blockTypes' } );
 
 export const registerBlockType = ( name, Comp, options ) => {
 	window.blockTypes.set( name, { Component: Comp, options } );
@@ -47,7 +49,7 @@ const ConditionalWrapper = ( { condition, wrapper, children } ) =>
 	condition ? wrapper( children ) : children;
 
 // We assign `subscribers` to window to not duplicate its creation.
-createGlobalMap( 'subscribers' );
+createGlobalMap( { mapName: 'subscribers', weakmap: true } );
 
 const subscribers = window.subscribers;
 
@@ -60,6 +62,7 @@ const subscribeProvider = ( Context, setValue, block ) => {
 
 const updateProviders = ( Context, value, block ) => {
 	if ( subscribers.has( Context ) ) {
+		// This setTimeout prevents a React warning about calling setState in a render() function.
 		setTimeout( () => {
 			subscribers.get( Context ).forEach(
 				( { setValue, block: subscriberBlock } ) => {
