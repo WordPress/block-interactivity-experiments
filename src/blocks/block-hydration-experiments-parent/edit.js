@@ -18,7 +18,7 @@ export default function Edit(
 				<Title
 					value={message}
 					onChange={( val ) => setAttributes( { message: val } )}
-					placeholder='Enter the Title'
+					placeholder='This will be passed through context to child blocks'
 				/>
 				<Button />
 				<button onClick={() => setAttributes( { counter: counter + 1 } )}>

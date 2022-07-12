@@ -6,10 +6,10 @@ const Edit = ( { attributes, setAttributes } ) => {
 	return (
 		<div {...blockProps}>
 			<RichText
-				tagName='h3'
+				tagName='h4'
 				className='content'
 				onChange={( val ) => setAttributes( { content: val } )}
-				placeholder='Enter the content'
+				placeholder='This will be passed through context to child blocks'
 				value={attributes.content}
 			>
 				{attributes.content}

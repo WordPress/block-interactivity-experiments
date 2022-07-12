@@ -1,6 +1,20 @@
 .wp-block-bhe-block-hydration-experiments-parent {
   padding: 15px 10px 15px 50px;
-  background-color: rgb(238, 237, 237);
+  border: 1px solid rgb(31, 185, 64);
+  position: relative;
+}
+
+.wp-block-bhe-block-hydration-experiments-parent::before {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: rgb(31, 185, 64);
+  border: 1px solid rgb(31, 185, 64);
+  color: white;
+  margin: -1px;
+  padding: 0px 5px;
+  font-size: 10px;
+  content: "BHE - Parent";
 }
 
 gutenberg-block,
