@@ -40,7 +40,6 @@
 	"usesContext": ["bhe/content"],
 	"textdomain": "block-hydration-experiments-parent",
 	"editorScript": "file:./index.js",
-	"editorStyle": "file:./index.css",
 	"style": "file:./style-index.css",
 	"viewScript": "file:./view.js"
 }
