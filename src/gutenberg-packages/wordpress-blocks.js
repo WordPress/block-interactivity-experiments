@@ -25,21 +25,19 @@ const save = ( name, Comp ) =>
 		);
 	};
 
-const saveWithStaticContext = ( name, blockSave ) =>
+const saveWithStaticContext = ( name, BlockSave ) =>
 	( { attributes } ) => {
-		const blockProps = useBlockProps.save();
-		const innerBlocksProps = useInnerBlocksProps.save();
 		const blockType = getBlockType( name );
 
-		// We use the presence of any attribute with `frontend: true` as a signal
-		// here that the block should pass some context on the frontend as well.
-		//
 		// TODO: This should probably be optimized when merged into gutenberg so
 		// that we don't run this check for EVERY save() of every block.
 		const hasFrontendAttributes = Object.values( blockType?.attributes ).some(
 			attribute => attribute?.frontend
 		);
 
+		// We use the presence of any attribute with `frontend: true` as a signal
+		// here that the block should pass some context on the frontend as well.
+		//
 		if ( !attributes?.hydrate && hasFrontendAttributes ) {
 			// Only add the attributes that are explicitly declared with `frontend: true`
 			let frontendAttributes = {};
@@ -73,28 +71,22 @@ const saveWithStaticContext = ( name, blockSave ) =>
 
 			return (
 				<static-context context={JSON.stringify( context )}>
-					<div {...blockProps}>
-						<div {...innerBlocksProps} />
-					</div>
+					<BlockSave attributes={attributes} />
 				</static-context>
 			);
 		}
 
-		return (
-			<div {...blockProps}>
-				<div {...innerBlocksProps} />
-			</div>
-		);
+		return <BlockSave attributes={attributes} />;
 	};
 
 export const registerBlockType = (
 	name,
-	{ frontend, save: blockSave, edit, ...rest },
+	{ frontend, save: BlockSave, edit, ...rest },
 ) => {
 	gutenbergRegisterBlockType( name, {
 		edit,
-		save: blockSave ?
-			saveWithStaticContext( name, blockSave ) :
+		save: BlockSave ?
+			saveWithStaticContext( name, BlockSave ) :
 			save( name, frontend ),
 		...rest,
 	} );

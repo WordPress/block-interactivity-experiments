@@ -10,9 +10,9 @@ const Edit = ( { attributes, setAttributes } ) => {
 				className='content'
 				onChange={( val ) => setAttributes( { content: val } )}
 				placeholder='This will be passed through context to child blocks'
-				value={attributes.content}
+				value={attributes?.content}
 			>
-				{attributes.content}
+				{attributes?.content}
 			</RichText>
 			<InnerBlocks />
 		</div>
