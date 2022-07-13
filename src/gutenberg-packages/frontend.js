@@ -23,8 +23,6 @@ export const registerBlockType = ( name, Comp, options ) => {
 	window.blockTypes.set( name, { Component: Comp, options } );
 };
 
-window.temporaryInitialGlobalValue = null;
-
 const Children = ( { value, providedContext } ) => {
 	if ( !value ) {
 		return null;
@@ -52,8 +50,10 @@ const ConditionalWrapper = ( { condition, wrapper, children } ) =>
 
 // We assign `subscribers` to window to not duplicate its creation.
 createGlobalMap( { mapName: 'subscribers', weakmap: true } );
+createGlobalMap( { mapName: 'initialContextValues', weakmap: true } );
 
 const subscribers = window.subscribers;
+const initialContextValues = window.initialContextValues;
 
 const subscribeProvider = ( Context, setValue, block ) => {
 	if ( !subscribers.has( Context ) ) {
@@ -63,7 +63,7 @@ const subscribeProvider = ( Context, setValue, block ) => {
 };
 
 const updateProviders = ( Context, value, block ) => {
-	window.temporaryInitialGlobalValue = value;
+	initialContextValues.set( Context, value );
 	if ( subscribers.has( Context ) ) {
 		// This setTimeout prevents a React warning about calling setState in a render() function.
 		setTimeout( () => {
@@ -131,7 +131,7 @@ class GutenbergBlock extends HTMLElement {
 							const Context = providedContext;
 							const Provider = ( { children } ) => {
 								const [ value, setValue ] = useState(
-									window.temporaryInitialGlobalValue,
+									initialContextValues.get( Context ),
 								);
 								useEffect( () => {
 									subscribeProvider( Context, setValue, this );
