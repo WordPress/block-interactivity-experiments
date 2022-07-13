@@ -37,7 +37,6 @@ const saveWithStaticContext = ( name, BlockSave ) =>
 
 		// We use the presence of any attribute with `frontend: true` as a signal
 		// here that the block should pass some context on the frontend as well.
-		//
 		if ( !attributes?.hydrate && hasFrontendAttributes ) {
 			// Only add the attributes that are explicitly declared with `frontend: true`
 			let frontendAttributes = {};

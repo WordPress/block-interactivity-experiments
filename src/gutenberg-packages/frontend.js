@@ -27,6 +27,8 @@ const Children = ( { value, providedContext } ) => {
 				if ( el !== null ) {
 					// listen for the ping from the child
 					el.addEventListener( 'gutenberg-context', ( event ) => {
+						// We have to also destructure `event.detail.context` because there can
+						// already exist a property in the context with the same name.
 						event.detail.context = {
 							...providedContext,
 							...event?.detail?.context,
@@ -121,6 +123,9 @@ class StaticContext extends HTMLElement {
 		setTimeout( () => {
 			this.addEventListener( 'gutenberg-context', ( event ) => {
 				const context = JSON.parse( this.attributes.context.value );
+
+				// We have to also destructure `event.detail.context` because there can
+				// already exist a property in the context with the same name.
 				event.detail.context = { ...context, ...event?.detail?.context };
 			} );
 		} );
