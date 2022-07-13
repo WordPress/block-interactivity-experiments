@@ -120,14 +120,12 @@ class GutenbergBlock extends HTMLElement {
 
 class StaticContext extends HTMLElement {
 	connectedCallback() {
-		setTimeout( () => {
-			this.addEventListener( 'gutenberg-context', ( event ) => {
-				const context = JSON.parse( this.attributes.context.value );
+		this.addEventListener( 'gutenberg-context', ( event ) => {
+			const context = JSON.parse( this.attributes.context.value );
 
-				// We have to also destructure `event.detail.context` because there can
-				// already exist a property in the context with the same name.
-				event.detail.context = { ...context, ...event?.detail?.context };
-			} );
+			// We have to also destructure `event.detail.context` because there can
+			// already exist a property in the context with the same name.
+			event.detail.context = { ...context, ...event?.detail?.context };
 		} );
 	}
 }

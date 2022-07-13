@@ -35,8 +35,8 @@ const saveWithStaticContext = ( name, BlockSave ) =>
 			attribute => attribute?.frontend
 		);
 
+		// Only add the attributes that are explicitly declared with `frontend: true`
 		if ( hasFrontendAttributes ) {
-			// Only add the attributes that are explicitly declared with `frontend: true`
 			let frontendAttributes = {};
 			for ( const [ key, value ] of Object.entries( blockType?.attributes ) ) {
 				if (
