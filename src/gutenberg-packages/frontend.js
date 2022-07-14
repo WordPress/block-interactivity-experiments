@@ -50,10 +50,10 @@ const ConditionalWrapper = ( { condition, wrapper, children } ) =>
 
 // We assign `subscribers` to window to not duplicate its creation.
 createGlobalMap( { mapName: 'subscribers', weakmap: true } );
-createGlobalMap( { mapName: 'initialContextValues', weakmap: true } );
+createGlobalMap( { mapName: 'currentValue', weakmap: true } );
 
 const subscribers = window.subscribers;
-const initialContextValues = window.initialContextValues;
+const currentValue = window.currentValue;
 
 const subscribeProvider = ( Context, setValue, block ) => {
 	if ( !subscribers.has( block ) ) {
@@ -66,7 +66,12 @@ const subscribeProvider = ( Context, setValue, block ) => {
 };
 
 const updateProviders = ( Context, value, block ) => {
-	initialContextValues.set( Context, value );
+	if ( !currentValue.has( block ) ) {
+		currentValue.set( block, new Map() );
+	}
+	if ( !currentValue.get( block ).has( Context ) ) {
+		currentValue.get( block ).set( Context, value );
+	}
 	if ( subscribers.has( block ) && subscribers.get( block ).has( Context ) ) {
 		// This setTimeout prevents a React warning about calling setState in a render() function.
 		setTimeout( () => {
@@ -131,7 +136,7 @@ class GutenbergBlock extends HTMLElement {
 							const Context = providedContext;
 							const Provider = ( { children } ) => {
 								const [ value, setValue ] = useState(
-									initialContextValues.get( Context ),
+									currentValue.get( this ).get( Context ),
 								);
 								useEffect( () => {
 									subscribeProvider( Context, setValue, this );
