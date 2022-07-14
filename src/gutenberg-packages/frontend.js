@@ -56,24 +56,24 @@ const subscribers = window.subscribers;
 const initialContextValues = window.initialContextValues;
 
 const subscribeProvider = ( Context, setValue, block ) => {
-	if ( !subscribers.has( Context ) ) {
-		subscribers.set( Context, new Set() );
+	if ( !subscribers.has( block ) ) {
+		subscribers.set( block, new Map() );
 	}
-	subscribers.get( Context ).add( { setValue, block } );
+	if ( !subscribers.get( block ).has( Context ) ) {
+		subscribers.get( block ).set( Context, new Set() );
+	}
+	subscribers.get( block ).get( Context ).add( setValue );
 };
 
 const updateProviders = ( Context, value, block ) => {
 	initialContextValues.set( Context, value );
-	if ( subscribers.has( Context ) ) {
+	if ( subscribers.has( block ) && subscribers.get( block ).has( Context ) ) {
 		// This setTimeout prevents a React warning about calling setState in a render() function.
 		setTimeout( () => {
-			subscribers.get( Context ).forEach(
-				( { setValue, block: subscriberBlock } ) => {
-					if ( subscriberBlock === block ) {
-						return setValue( value );
-					}
-				},
-			);
+			subscribers
+				.get( block )
+				.get( Context )
+				.forEach(setValue => setValue( value ));
 		} );
 	}
 };
@@ -172,17 +172,17 @@ class GutenbergBlock extends HTMLElement {
 							suppressHydrationWarning={true}
 							context={context}
 						>
-							<Children
-								value={innerBlocks && innerBlocks.innerHTML}
-								suppressHydrationWarning={true}
-								providedContext={providedContext}
-							/>
 							{options?.providesContext?.length > 0 &&
 								options.providesContext.map(( Context, index ) => (
 									<Context.Consumer key={index}>
 										{value => updateProviders( Context, value, this )}
 									</Context.Consumer>
 								))}
+							<Children
+								value={innerBlocks && innerBlocks.innerHTML}
+								suppressHydrationWarning={true}
+								providedContext={providedContext}
+							/>
 						</Component>
 					</ConditionalWrapper>
 					<template
