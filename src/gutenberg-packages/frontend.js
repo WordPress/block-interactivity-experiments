@@ -129,8 +129,8 @@ class GutenbergBlock extends HTMLElement {
 			const innerBlocks = this.querySelector( 'gutenberg-inner-blocks' );
 			const { Component, options } = window.blockTypes.get( blockType );
 			if ( options?.providesContext?.length > 0 ) {
-				options?.providesContext.forEach( ( providedContext ) => {
-					this.addEventListener( 'react-context', ( event ) => {
+				options?.providesContext.forEach( ( providedContext, index ) => {
+					this.addEventListener( `react-context-${index}`, ( event ) => {
 						// we compare provided and used context
 						if ( event.detail.context === providedContext ) {
 							const Context = providedContext;
@@ -152,8 +152,8 @@ class GutenbergBlock extends HTMLElement {
 				} );
 			}
 			if ( options?.usesContext?.length > 0 ) {
-				options?.usesContext.forEach( ( usesContext ) => {
-					const contextEvent = new CustomEvent( 'react-context', {
+				options?.usesContext.forEach( ( usesContext, index ) => {
+					const contextEvent = new CustomEvent( `react-context-${index}`, {
 						detail: { context: usesContext },
 						bubbles: true,
 						cancelable: true,
