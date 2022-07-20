@@ -4,7 +4,7 @@ import Title from '../shared/title';
 
 const Frontend = (
 	{
-		blockProps: { className },
+		blockProps: { className, style: styleString },
 		attributes: { counter: initialCounter, message },
 		children,
 	},
@@ -12,10 +12,17 @@ const Frontend = (
 	const [ show, setShow ] = useState( false );
 	const [ counter, setCounter ] = useState( initialCounter );
 
+	const temporaryElement = document.createElement( 'div' );
+	temporaryElement.style.cssText = styleString;
+
+	const style = show ? { fontWeight: 1000 } : temporaryElement.style;
+
 	return (
-		<div className={`${className} ${show ? 'show' : 'hide'}`}>
+		<div className={`${className} ${show ? 'show' : 'hide'}`} style={style}>
 			<Title message={message} />
-			<Button handler={() => setShow( !show )} />
+			<Button
+				handler={() => setShow( !show )}
+			/>
 			<button onClick={() => setCounter( counter + 1 )}>{counter}</button>
 			{show && children}
 		</div>

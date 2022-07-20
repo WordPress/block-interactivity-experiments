@@ -25,7 +25,8 @@
 			"text": true
 		},
 		"typography": {
-			"fontSize": true
+			"fontSize": true,
+			"__experimentalFontWeight": true
 		},
 		"html": true
 	},
