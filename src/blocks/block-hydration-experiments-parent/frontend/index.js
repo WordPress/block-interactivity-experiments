@@ -4,18 +4,13 @@ import Title from '../shared/title';
 
 const Frontend = (
 	{
-		blockProps: { className, style: styleString },
+		blockProps: { className, style },
 		attributes: { counter: initialCounter, message },
 		children,
 	},
 ) => {
 	const [ show, setShow ] = useState( false );
 	const [ counter, setCounter ] = useState( initialCounter );
-
-	const temporaryElement = document.createElement( 'div' );
-	temporaryElement.style.cssText = styleString;
-
-	const style = show ? { fontWeight: 1000 } : temporaryElement.style;
 
 	return (
 		<div className={`${className} ${show ? 'show' : 'hide'}`} style={style}>

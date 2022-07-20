@@ -79,7 +79,10 @@ class GutenbergBlock extends HTMLElement {
 			const blockProps = JSON.parse(
 				this.getAttribute( 'data-gutenberg-block-props' ),
 			);
-			const { class: className, style } = blockProps;
+			const { class: className, style: styleString } = blockProps;
+
+			const temporaryElement = document.createElement( 'div' );
+			temporaryElement.style.cssText = styleString;
 
 			const innerBlocks = this.querySelector(
 				'template.gutenberg-inner-blocks',
@@ -92,7 +95,7 @@ class GutenbergBlock extends HTMLElement {
 				<EnvContext.Provider value='frontend'>
 					<Comp
 						attributes={attributes}
-						blockProps={{ className, style }}
+						blockProps={{ className, style: temporaryElement.style }}
 						suppressHydrationWarning={true}
 						context={context}
 					>
