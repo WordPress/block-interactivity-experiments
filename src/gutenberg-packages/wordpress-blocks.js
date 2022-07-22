@@ -1,15 +1,14 @@
 import { useBlockProps, useInnerBlocksProps } from '@wordpress/block-editor';
 import { registerBlockType as gutenbergRegisterBlockType } from '@wordpress/blocks';
-import { Fragment } from '@wordpress/element';
 
-const save = ( name, Comp ) =>
+const save = ( Comp ) =>
 	( { attributes } ) => {
 		const blockProps = useBlockProps.save();
 		const innerBlocksProps = useInnerBlocksProps.save();
 
 		return (
-			<Fragment>
-				<Comp blockProps={blockProps} attributes={attributes}>
+			<>
+				<Comp blockProps={blockProps} attributes={attributes} context={{}}>
 					<gutenberg-inner-blocks {...innerBlocksProps} />
 				</Comp>
 				{
@@ -17,14 +16,10 @@ const save = ( name, Comp ) =>
             if Comp doesn't render them. */
 				}
 				<template class='gutenberg-inner-blocks' {...innerBlocksProps} />
-			</Fragment>
+			</>
 		);
 	};
 
 export const registerBlockType = ( name, { frontend, edit, ...rest } ) => {
-	gutenbergRegisterBlockType( name, {
-		edit,
-		save: save( name, frontend ),
-		...rest,
-	} );
+	gutenbergRegisterBlockType( name, { edit, save: save( frontend ), ...rest } );
 };

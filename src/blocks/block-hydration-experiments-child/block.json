@@ -7,7 +7,7 @@
 	"category": "text",
 	"icon": "flag",
 	"description": "",
-	"usesContext": ["message"],
+	"usesContext": ["bhe/title"],
 	"supports": {
 		"color": {
 			"text": true
