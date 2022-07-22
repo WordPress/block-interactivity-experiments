@@ -3,7 +3,6 @@ import {
   getBlockType,
   registerBlockType as gutenbergRegisterBlockType,
 } from "@wordpress/blocks";
-import { pickKeys } from "./utils";
 
 const save = (Comp) => ({ attributes }) => {
   const blockProps = useBlockProps.save();
@@ -42,24 +41,15 @@ const saveWithStaticContext = (name, BlockSave) => ({ attributes }) => {
       }
     }
 
-    // Pick the attributes that are explicitly declared in the block's `providesContext`.
-    let context =
-      blockType?.providesContext &&
-      pickKeys(frontendAttributes, Object.values(blockType?.providesContext));
-
-    // Rename the attributes to match the context names.
-    for (const value of Object.keys(context)) {
-      const key = Object.keys(blockType?.providesContext).find(
-        (key) => blockType?.providesContext[key] === value
-      );
-      if (key) {
-        context[key] = context[value];
-        delete context[value];
-      }
-    }
+    // Pick the attributes that are explicitly declared in the block's
+    // `providesContext`.
+    const providedContext = {};
+    Object.entries(blockType.providesContext).forEach(([key, attribute]) => {
+      providedContext[key] = frontendAttributes[attribute];
+    });
 
     return (
-      <static-context context={JSON.stringify(context)}>
+      <static-context context={JSON.stringify(providedContext)}>
         <BlockSave attributes={attributes} />
       </static-context>
     );
