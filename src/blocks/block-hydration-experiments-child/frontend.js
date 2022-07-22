@@ -4,14 +4,14 @@ import { useContext } from '../../gutenberg-packages/wordpress-element';
 
 const Frontend = ( { blockProps, context } ) => {
 	const theme = useContext( ThemeContext );
-	const value = useContext( CounterContext );
+	const counter = useContext( CounterContext );
 
 	return (
 		<div {...blockProps}>
-			<p>Child element</p>
-			<p>Block Context: {context?.message}</p>
-			<p>React Context: {value}</p>
-			<p>Theme: {theme}</p>
+			<p>Child block</p>
+			<p>Block Context - "bhe/title": {context['bhe/title']}</p>
+			<p>React Context - "counter": {counter}</p>
+			<p>React Context - "theme": {theme}</p>
 		</div>
 	);
 };

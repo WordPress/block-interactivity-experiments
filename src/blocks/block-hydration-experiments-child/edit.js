@@ -7,10 +7,11 @@ import { useBlockProps } from '@wordpress/block-editor';
 
 const Edit = ( { context } ) => {
 	const blockProps = useBlockProps();
+
 	return (
 		<div {...blockProps}>
-			<p>Child element</p>
-			<p>Block Context: {context?.message}</p>
+			<p>Child block</p>
+			<p>Block Context - "bhe/title": {context['bhe/title']}</p>
 		</div>
 	);
 };
