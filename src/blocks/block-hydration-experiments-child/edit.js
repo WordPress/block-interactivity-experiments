@@ -10,16 +10,9 @@ const Edit = ( { context } ) => {
 
 	return (
 		<div {...blockProps}>
-			{context && (
-				<>
-					<div>
-						<b>context from the interactive parent</b>: {context?.message}
-					</div>
-					<div>
-						<b>context from non-interactive parent</b>: {context['bhe/content']}
-					</div>
-				</>
-			)}
+			<p>Child block</p>
+			<p>Block Context from interactive parent - "bhe/title": {context['bhe/title']}</p>
+			<p>Block Context from non-interactive parent - "bhe/content": {context['bhe/content']}</p>
 		</div>
 	);
 };

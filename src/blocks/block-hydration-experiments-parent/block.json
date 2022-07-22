@@ -30,7 +30,7 @@
 		"html": true
 	},
 	"providesContext": {
-		"message": "message"
+		"bhe/title": "message"
 	},
 	"usesContext": ["bhe/content"],
 	"textdomain": "block-hydration-experiments-parent",
