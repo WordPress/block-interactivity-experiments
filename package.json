@@ -6,7 +6,6 @@
 	"main": "build/index.js",
 	"scripts": {
 		"build": "wp-scripts build",
-		"format": "dprint fmt",
 		"test": "jest",
 		"test:watch": "jest --watch",
 		"lint:css": "wp-scripts lint-style",
@@ -25,7 +24,6 @@
 		"@wordpress/env": "^4.4.0",
 		"@wordpress/scripts": "^22.3.0",
 		"babel-jest": "^28.1.0",
-		"dprint": "^0.28.0",
 		"jest": "^28.1.0"
 	}
 }

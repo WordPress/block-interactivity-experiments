@@ -30,7 +30,7 @@
 		"html": true
 	},
 	"providesContext": {
-		"message": "message"
+		"bhe/title": "message"
 	},
 	"textdomain": "block-hydration-experiments-parent",
 	"editorScript": "file:./index.js",

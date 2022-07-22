@@ -53,8 +53,8 @@ function bhe_block_wrapper( $block_content, $block, $instance ) {
 	$block_wrapper = sprintf(
 		'<gutenberg-interactive-block ' .
 		'data-gutenberg-block-type="%1$s" ' .
-		'data-gutenberg-context-used="%2$s" ' .
-		'data-gutenberg-context-provided="%3$s" ' .
+		'data-gutenberg-uses-block-context="%2$s" ' .
+		'data-gutenberg-provides-block-context="%3$s" ' .
 		'data-gutenberg-attributes="%4$s" ' .
 		'data-gutenberg-sourced-attributes="%5$s" ' .
 		'data-gutenberg-hydrate="idle">',

@@ -10,8 +10,8 @@ const Edit = ( { context } ) => {
 
 	return (
 		<div {...blockProps}>
-			<p>Child element</p>
-			{context?.message}
+			<p>Child block</p>
+			<p>Block Context - "bhe/title": {context['bhe/title']}</p>
 		</div>
 	);
 };
