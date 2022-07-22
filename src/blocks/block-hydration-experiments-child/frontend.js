@@ -2,9 +2,9 @@ import CounterContext from '../../context/counter';
 import ThemeContext from '../../context/theme';
 import { useContext } from '../../gutenberg-packages/wordpress-element';
 
-const Frontend = ( { blockProps, context } ) => {
-	const theme = useContext( ThemeContext );
-	const counter = useContext( CounterContext );
+const Frontend = ({ blockProps, context }) => {
+	const theme = useContext(ThemeContext);
+	const counter = useContext(CounterContext);
 
 	return (
 		<div {...blockProps}>
