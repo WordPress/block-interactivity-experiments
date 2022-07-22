@@ -10,11 +10,11 @@ Ideally, the Save component should be derived from the View implementation, and 
 
 Blocks are structured using this folders/files:
 
-- `edit`: User code exclusive to the `Edit` component.
-- `view`: User code exclusive to the `View` component. It's also used as the `Save` component.
-- `shared`: User code shared between `Edit` and `View` components.
-- `gutenberg-packages`: Framework code that should be absorbed by Gutenberg packages.
-- `webpack`: Bundling configuration that should be absorbed by `@wordpress/scripts` (doesn't exist yet).
+-   `edit`: User code exclusive to the `Edit` component.
+-   `view`: User code exclusive to the `View` component. It's also used as the `Save` component.
+-   `shared`: User code shared between `Edit` and `View` components.
+-   `gutenberg-packages`: Framework code that should be absorbed by Gutenberg packages.
+-   `webpack`: Bundling configuration that should be absorbed by `@wordpress/scripts` (doesn't exist yet).
 
 ## Tracking issue and current status
 

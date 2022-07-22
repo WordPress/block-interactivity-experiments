@@ -1,23 +1,23 @@
 .wp-block-bhe-block-hydration-experiments-child {
-  padding: 15px 10px 15px 50px;
-  border: 1px solid rgb(255, 162, 0);
-  position: relative;
+	padding: 15px 10px 15px 50px;
+	border: 1px solid rgb(255, 162, 0);
+	position: relative;
 }
 
 .wp-block-bhe-block-hydration-experiments-child::before {
-  position: absolute;
-  top: 0;
-  right: 0;
-  border: 1px solid rgb(255, 162, 0);
-  background-color: rgb(255, 162, 0);
-  color: white;
-  margin: -1px;
-  padding: 0px 5px;
-  font-size: 9px;
-  content: "BHE - Child";
+	position: absolute;
+	top: 0;
+	right: 0;
+	border: 1px solid rgb(255, 162, 0);
+	background-color: rgb(255, 162, 0);
+	color: white;
+	margin: -1px;
+	padding: 0px 5px;
+	font-size: 9px;
+	content: 'BHE - Child';
 }
 
 gutenberg-block,
 gutenberg-inner-blocks {
-  display: contents;
+	display: contents;
 }

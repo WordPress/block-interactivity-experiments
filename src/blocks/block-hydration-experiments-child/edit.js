@@ -5,7 +5,7 @@
 import '@wordpress/block-editor';
 import { useBlockProps } from '@wordpress/block-editor';
 
-const Edit = ( { context } ) => {
+const Edit = ({ context }) => {
 	const blockProps = useBlockProps();
 
 	return (

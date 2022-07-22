@@ -6,7 +6,7 @@ import {
 } from '@wordpress/element';
 import { hydrate as ReactHydrate } from 'react-dom';
 
-export const EnvContext = createContext( null );
+export const EnvContext = createContext(null);
 
 /**
  * A React hook that returns the name of the environment.
@@ -19,8 +19,8 @@ export const EnvContext = createContext( null );
  */
 export const useBlockEnvironment = () => {
 	try {
-		const env = useReactContext( EnvContext );
-		if ( env === 'frontend' ) {
+		const env = useReactContext(EnvContext);
+		if (env === 'frontend') {
 			return 'frontend';
 		}
 		return 'edit';
@@ -31,32 +31,32 @@ export const useBlockEnvironment = () => {
 
 const noop = () => {};
 
-export const useState = ( init ) =>
-	useBlockEnvironment() !== 'save' ? useReactState( init ) : [ init, noop ];
+export const useState = (init) =>
+	useBlockEnvironment() !== 'save' ? useReactState(init) : [init, noop];
 
-export const useEffect = ( ...args ) =>
-	useBlockEnvironment() !== 'save' ? useReactEffect( ...args ) : noop;
+export const useEffect = (...args) =>
+	useBlockEnvironment() !== 'save' ? useReactEffect(...args) : noop;
 
-export const useContext = ( Context ) =>
-	useBlockEnvironment() !== 'save' ?
-		useReactContext( Context ) :
-		Context._currentValue;
+export const useContext = (Context) =>
+	useBlockEnvironment() !== 'save'
+		? useReactContext(Context)
+		: Context._currentValue;
 
-export const hydrate = ( element, container, hydrationOptions ) => {
+export const hydrate = (element, container, hydrationOptions) => {
 	const { technique, media } = hydrationOptions || {};
 
 	const cb = () => {
-		ReactHydrate( element, container );
+		ReactHydrate(element, container);
 	};
 
-	switch ( technique ) {
+	switch (technique) {
 		case 'media':
-			if ( media ) {
-				const mql = matchMedia( media );
-				if ( mql.matches ) {
+			if (media) {
+				const mql = matchMedia(media);
+				if (mql.matches) {
 					cb();
 				} else {
-					mql.addEventListener( 'change', cb, { once: true } );
+					mql.addEventListener('change', cb, { once: true });
 				}
 			}
 			break;
@@ -66,9 +66,9 @@ export const hydrate = ( element, container, hydrationOptions ) => {
 
 		case 'view':
 			try {
-				const io = new IntersectionObserver( ( entries ) => {
-					for ( const entry of entries ) {
-						if ( !entry.isIntersecting ) {
+				const io = new IntersectionObserver((entries) => {
+					for (const entry of entries) {
+						if (!entry.isIntersecting) {
 							continue;
 						}
 						// As soon as we hydrate, disconnect this IntersectionObserver.
@@ -76,8 +76,8 @@ export const hydrate = ( element, container, hydrationOptions ) => {
 						cb();
 						break; // Break loop on first match.
 					}
-				} );
-				io.observe( container.children[0] );
+				});
+				io.observe(container.children[0]);
 			} catch (e) {
 				cb();
 			}
@@ -86,10 +86,10 @@ export const hydrate = ( element, container, hydrationOptions ) => {
 		case 'idle':
 			// Safari does not support requestIdleCalback, we use a timeout instead.
 			// https://developer.mozilla.org/en-US/docs/Web/API/Window/requestIdleCallback
-			if ( 'requestIdleCallback' in window ) {
-				window.requestIdleCallback( cb );
+			if ('requestIdleCallback' in window) {
+				window.requestIdleCallback(cb);
 			} else {
-				setTimeout( cb, 200 );
+				setTimeout(cb, 200);
 			}
 			break;
 

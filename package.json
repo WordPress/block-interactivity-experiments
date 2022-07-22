@@ -15,6 +15,17 @@
 		"start": "wp-scripts start",
 		"wp-env": "wp-env"
 	},
+	"prettier": {
+		"useTabs": true,
+		"tabWidth": 4,
+		"printWidth": 80,
+		"singleQuote": true,
+		"trailingComma": "es5",
+		"bracketSameLine": false,
+		"bracketSpacing": true,
+		"semi": true,
+		"arrowParens": "always"
+	},
 	"devDependencies": {
 		"@babel/core": "^7.17.10",
 		"@babel/preset-env": "^7.17.10",
@@ -24,6 +35,7 @@
 		"@wordpress/env": "^4.4.0",
 		"@wordpress/scripts": "^22.3.0",
 		"babel-jest": "^28.1.0",
-		"jest": "^28.1.0"
+		"jest": "^28.1.0",
+		"prettier": "^2.7.1"
 	}
 }

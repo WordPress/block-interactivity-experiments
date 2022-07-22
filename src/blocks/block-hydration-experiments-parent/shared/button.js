@@ -1,4 +1,4 @@
-const Button = ( { handler } ) => {
+const Button = ({ handler }) => {
 	return <button onClick={handler}>Show</button>;
 };
 
