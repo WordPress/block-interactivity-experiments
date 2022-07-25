@@ -1,0 +1,30 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 2,
+	"name": "bhe/non-interactive-parent",
+	"version": "0.1.0",
+	"title": "BHE - Non Interactive Parent",
+	"category": "text",
+	"icon": "flag",
+	"description": "",
+	"attributes": {
+		"title": {
+			"type": "string",
+			"source": "text",
+			"selector": ".title",
+			"frontend": true
+		}
+	},
+	"providesContext": {
+		"bhe/non-interactive-title": "title"
+	},
+	"supports": {
+		"color": {
+			"text": true
+		},
+		"html": true
+	},
+	"textdomain": "block-hydration-experiments",
+	"editorScript": "file:./index.js",
+	"style": "file:./style-index.css"
+}

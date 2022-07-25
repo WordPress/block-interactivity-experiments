@@ -8,14 +8,14 @@ const Frontend = ({ blockProps, context }) => {
 
 	return (
 		<div {...blockProps}>
-			<p>Child block</p>
 			<p>
-				Block Context from interactive parent - "bhe/title":{' '}
-				{context['bhe/title']}
+				Block Context from interactive parent - "bhe/interactive-title":{' '}
+				{context['bhe/interactive-title']}
 			</p>
 			<p>
-				Block Context from non-interactive parent - "bhe/title":{' '}
-				{context['bhe/content']}
+				Block Context from non-interactive parent -
+				"bhe/non-interactive-title":{' '}
+				{context['bhe/non-interactive-title']}
 			</p>
 			<p>React Context - "counter": {counter}</p>
 			<p>React Context - "theme": {theme}</p>

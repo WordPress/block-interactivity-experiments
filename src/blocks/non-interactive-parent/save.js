@@ -1,8 +1,8 @@
 import { InnerBlocks, useBlockProps } from '@wordpress/block-editor';
 
-const save = ( { attributes } ) => (
+const save = ({ attributes }) => (
 	<div {...useBlockProps.save()}>
-		<p className='content'>{attributes?.content}</p>
+		<p className="title">{attributes.title}</p>
 		<InnerBlocks.Content />
 	</div>
 );

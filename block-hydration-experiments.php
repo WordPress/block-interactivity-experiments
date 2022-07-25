@@ -10,9 +10,9 @@
  * Text Domain:       block-hydration-experiments
  */
 function block_hydration_experiments_init() {
-	register_block_type( plugin_dir_path( __FILE__ ) . 'build/blocks/block-hydration-experiments-child/' );
-	register_block_type( plugin_dir_path( __FILE__ ) . 'build/blocks/block-hydration-experiments-parent/' );
-	register_block_type( plugin_dir_path( __FILE__ ) . 'build/blocks/static-block/' );
+	register_block_type( plugin_dir_path( __FILE__ ) . 'build/blocks/interactive-child/' );
+	register_block_type( plugin_dir_path( __FILE__ ) . 'build/blocks/interactive-parent/' );
+	register_block_type( plugin_dir_path( __FILE__ ) . 'build/blocks/non-interactive-parent/' );
 }
 add_action( 'init', 'block_hydration_experiments_init' );
 
@@ -21,8 +21,8 @@ function bhe_block_wrapper( $block_content, $block, $instance ) {
 	if ( ! in_array(
 		$block['blockName'],
 		array(
-			'bhe/block-hydration-experiments-parent',
-			'bhe/block-hydration-experiments-child'
+			'bhe/interactive-parent',
+			'bhe/interactive-child'
 		),
 		true
 	) ) {
@@ -70,7 +70,7 @@ function bhe_block_wrapper( $block_content, $block, $instance ) {
 
 	$empty_template = sprintf( $template_wrapper, '' );
 	$template       = sprintf( $template_wrapper, sprintf( $block_wrapper, $block_content . $empty_template ) );
-	return sprintf( $block_wrapper, $block_content . $template );
+	return sprintf( $block_wrapper, $block_content );
 }
 
 add_filter( 'render_block', 'bhe_block_wrapper', 10, 3 );

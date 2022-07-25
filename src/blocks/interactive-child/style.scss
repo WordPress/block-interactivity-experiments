@@ -1,10 +1,10 @@
-.wp-block-bhe-block-hydration-experiments-child {
+.wp-block-bhe-interactive-child {
 	padding: 15px 10px 15px 50px;
 	border: 1px solid rgb(255, 162, 0);
 	position: relative;
 }
 
-.wp-block-bhe-block-hydration-experiments-child::before {
+.wp-block-bhe-interactive-child::before {
 	position: absolute;
 	top: 0;
 	right: 0;
@@ -14,10 +14,10 @@
 	margin: -1px;
 	padding: 0px 5px;
 	font-size: 9px;
-	content: 'BHE - Child';
+	content: 'BHE - Interactive Child';
 }
 
-gutenberg-block,
+gutenberg-interactive-block,
 gutenberg-inner-blocks {
 	display: contents;
 }
