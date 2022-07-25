@@ -18,6 +18,10 @@
 			"source": "text",
 			"selector": ".title",
 			"frontend": true
+		},
+		"secret": {
+			"type": "string",
+			"default": "fa4e3d47e4e0a38c5c57533391855013"
 		}
 	},
 	"supports": {

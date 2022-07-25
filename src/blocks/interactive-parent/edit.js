@@ -8,7 +8,7 @@ import { InnerBlocks, useBlockProps } from '@wordpress/block-editor';
 import Button from './shared/button';
 import Title from './shared/title';
 
-const Edit = ({ attributes: { counter, title }, setAttributes }) => (
+const Edit = ({ attributes: { counter, title, secret }, setAttributes }) => (
 	<>
 		<div {...useBlockProps()}>
 			<Title
@@ -21,6 +21,10 @@ const Edit = ({ attributes: { counter, title }, setAttributes }) => (
 			<button onClick={() => setAttributes({ counter: counter + 1 })}>
 				{counter}
 			</button>
+			<blockquote style={{ fontSize: '10px' }}>
+				This is a secret attribute that should not be serialized:{' '}
+				{secret}
+			</blockquote>
 			<InnerBlocks />
 		</div>
 	</>
