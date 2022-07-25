@@ -171,17 +171,6 @@ class GutenbergBlock extends HTMLElement {
 	}
 }
 
-class StaticContext extends HTMLElement {
-	connectedCallback() {
-		this.addEventListener('gutenberg-block-context', (event) => {
-			const context = JSON.parse(this.attributes.context.value);
-			// We have to also destructure `event.detail.context` because there can
-			// already exist a property in the context with the same name.
-			event.detail.context = { ...context, ...event?.detail?.context };
-		});
-	}
-}
-
 // We need to wrap the element registration code in a conditional for the same
 // reason we assing `blockTypes` to window (see top of the file).
 //
@@ -189,7 +178,4 @@ class StaticContext extends HTMLElement {
 // because it throws if you try to register an element with the same name twice.
 if (customElements.get('gutenberg-interactive-block') === undefined) {
 	customElements.define('gutenberg-interactive-block', GutenbergBlock);
-}
-if (customElements.get('static-context') === undefined) {
-	customElements.define('static-context', StaticContext);
 }
