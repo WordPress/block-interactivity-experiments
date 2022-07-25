@@ -5,24 +5,25 @@ import Button from '../shared/button';
 import Title from '../shared/title';
 
 const Frontend = ({
-	blockProps: { className, style: originalStyle },
+	blockProps: {
+		className,
+		style: { fontWeight, ...otherStyle },
+	},
 	attributes: { counter: initialCounter, message },
 	children,
 }) => {
 	const [show, setShow] = useState(true);
 	const [counter, setCounter] = useState(initialCounter);
 
-	const style = {
-		...originalStyle,
-		...(show && { fontWeight: 1000 }),
-	};
-
 	return (
 		<Counter.Provider value={counter}>
 			<Theme.Provider value="cool theme">
 				<div
 					className={`${className} ${show ? 'show' : 'hide'}`}
-					style={style}
+					style={{
+						...otherStyle,
+						fontWeight: show ? 1000 : fontWeight,
+					}}
 				>
 					<Title message={message} />
 					<Button handler={() => setShow(!show)} />
