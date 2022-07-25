@@ -87,19 +87,23 @@ class GutenbergBlock extends HTMLElement {
 			if (hydration) {
 				const Providers = [];
 
-				// Get the block type, block props, inner blocks, frontend component and
-				// options.
+				// Get the block type, block props (class and style), inner blocks,
+				// frontend component and options.
 				const blockType = this.getAttribute(
 					'data-gutenberg-block-type'
 				);
-				const blockProps = {
-					className: this.children[0].className,
-					style: this.children[0].style,
-				};
 				const innerBlocks = this.querySelector(
 					'gutenberg-inner-blocks'
 				);
 				const { Component, options } = blockTypes.get(blockType);
+				const { class: className, style } = JSON.parse(
+					this.getAttribute('data-gutenberg-block-props')
+				);
+				// Temporary element to translate style strings to style objects.
+				const el = document.createElement('div');
+				el.style.cssText = style;
+				const blockProps = { className, style: el.style };
+				el.remove();
 
 				// Get the React Context from their parents.
 				options?.usesContext?.forEach((context) => {

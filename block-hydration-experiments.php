@@ -71,6 +71,13 @@ function bhe_block_wrapper($block_content, $block, $instance)
 		? 'idle'
 		: false;
 
+	// The following is a bit hacky. If we stick with this technique, we might
+	// want to change apply_block_supports() to accepts a block as its argument.
+	$previous_block_to_render = WP_Block_Supports::$block_to_render;
+	WP_Block_Supports::$block_to_render = $block;
+	$block_props = WP_Block_Supports::get_instance()->apply_block_supports();
+	WP_Block_Supports::$block_to_render = $previous_block_to_render;
+
 	$block_wrapper =
 		sprintf(
 			'<gutenberg-block ' .
@@ -79,12 +86,14 @@ function bhe_block_wrapper($block_content, $block, $instance)
 				'data-gutenberg-provides-block-context="%3$s" ' .
 				'data-gutenberg-attributes="%4$s" ' .
 				'data-gutenberg-sourced-attributes="%5$s" ' .
-				'data-gutenberg-hydration="%6$s">',
+				'data-gutenberg-block-props="%6$s" ' .
+				'data-gutenberg-hydration="%7$s">',
 			esc_attr($block['blockName']),
 			esc_attr(json_encode($block_type->uses_context)),
 			esc_attr(json_encode($block_type->provides_context)),
 			esc_attr(json_encode($attributes)),
 			esc_attr(json_encode($sourced_attributes)),
+			esc_attr(json_encode($block_props)),
 			esc_attr($hydration_technique)
 		) . '%1$s</gutenberg-block>';
 
