@@ -1,9 +1,9 @@
 import { registerBlockType } from '../../gutenberg-packages/wordpress-blocks';
 import metadata from './block.json';
 import edit from './edit';
-import save from './save';
+import frontend from './frontend';
 import './style.scss';
 
 const { name } = metadata;
 
-registerBlockType( name, { edit, save } );
+registerBlockType(name, { edit, frontend });
