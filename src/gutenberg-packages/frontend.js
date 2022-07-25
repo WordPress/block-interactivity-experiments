@@ -86,10 +86,13 @@ class GutenbergBlock extends HTMLElement {
 			// Get the block type, block props, inner blocks, frontend component and
 			// options.
 			const blockType = this.getAttribute('data-gutenberg-block-type');
-			const blockProps = {
-				className: this.children[0].className,
-				style: this.children[0].style,
-			};
+			const { class: className, style: styleString } = JSON.parse(
+				this.getAttribute('data-gutenberg-block-props')
+			);
+
+			const temporaryElement = document.createElement('div');
+			temporaryElement.style.cssText = styleString;
+
 			const innerBlocks = this.querySelector('gutenberg-inner-blocks');
 			const { Component, options } = blockTypes.get(blockType);
 
@@ -137,7 +140,10 @@ class GutenbergBlock extends HTMLElement {
 					<Wrappers wrappers={Providers}>
 						<Component
 							attributes={attributes}
-							blockProps={blockProps}
+							blockProps={{
+								className,
+								style: temporaryElement.style,
+							}}
 							context={blockContext}
 						>
 							{/* Update the value each time one of the React Contexts changes */}

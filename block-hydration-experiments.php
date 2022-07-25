@@ -50,6 +50,13 @@ function bhe_block_wrapper( $block_content, $block, $instance ) {
 		}
 	}
 
+	$previous_block_to_render = WP_Block_Supports::$block_to_render;
+	// TODO: The following is a bit hacky. If we stick with this technique, we might
+	// want to change apply_block_supports() to accepts a block as its argument.
+	WP_Block_Supports::$block_to_render = $block;
+	$block_supports_attributes = WP_Block_Supports::get_instance()->apply_block_supports();
+	WP_Block_Supports::$block_to_render = $previous_block_to_render;
+
 	$block_wrapper = sprintf(
 		'<gutenberg-interactive-block ' .
 		'data-gutenberg-block-type="%1$s" ' .
@@ -57,12 +64,14 @@ function bhe_block_wrapper( $block_content, $block, $instance ) {
 		'data-gutenberg-provides-block-context="%3$s" ' .
 		'data-gutenberg-attributes="%4$s" ' .
 		'data-gutenberg-sourced-attributes="%5$s" ' .
+		'data-gutenberg-block-props="%6$s" ' .
 		'data-gutenberg-hydrate="idle">',
 		esc_attr( $block['blockName'] ),
 		esc_attr( json_encode( $block_type->uses_context ) ),
 		esc_attr( json_encode( $block_type->provides_context ) ),
 		esc_attr( json_encode( $attributes ) ),
-		esc_attr( json_encode( $sourced_attributes ) )
+		esc_attr( json_encode( $sourced_attributes ) ),
+		esc_attr( json_encode( $block_supports_attributes ) )
 	) . '%1$s</gutenberg-interactive-block>';
 
 	$template_wrapper = '<template class="gutenberg-inner-blocks">%1$s</template>';
