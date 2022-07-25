@@ -5,12 +5,18 @@ import Button from '../shared/button';
 import Title from '../shared/title';
 
 const Frontend = ({
-	blockProps: { className, style },
+	blockProps: { className, style: originalStyle },
 	attributes: { counter: initialCounter, message },
 	children,
 }) => {
 	const [show, setShow] = useState(true);
 	const [counter, setCounter] = useState(initialCounter);
+
+	const style = {
+		...originalStyle,
+		...(show && { fontWeight: 1000 }),
+	};
+
 	return (
 		<Counter.Provider value={counter}>
 			<Theme.Provider value="cool theme">
