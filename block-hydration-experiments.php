@@ -2,8 +2,8 @@
 /**
  * Plugin Name:       block-hydration-experiments
  * Version:           0.1.0
- * Requires at least: 5.9
- * Requires PHP:      7.0
+ * Requires at least: 6.0
+ * Requires PHP:      5.6
  * Author:            Gutenberg Team
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
@@ -23,13 +23,17 @@ function block_hydration_experiments_init()
 }
 add_action('init', 'block_hydration_experiments_init');
 
-function bhe_interactive_block_wrapper($block_content, $block, $instance)
+function bhe_block_wrapper($block_content, $block, $instance)
 {
 	// We might want to use a flag from block.json as the criterion here.
 	if (
 		!in_array(
 			$block['blockName'],
-			['bhe/interactive-parent', 'bhe/interactive-child'],
+			[
+				'bhe/interactive-parent',
+				'bhe/interactive-child',
+				'bhe/non-interactive-parent',
+			],
 			true
 		)
 	) {
@@ -58,21 +62,31 @@ function bhe_interactive_block_wrapper($block_content, $block, $instance)
 		}
 	}
 
+	// We might want to use a flag from block.json as the criterion here.
+	$hydration_technique = in_array(
+		$block['blockName'],
+		['bhe/interactive-parent', 'bhe/interactive-child'],
+		true
+	)
+		? 'idle'
+		: false;
+
 	$block_wrapper =
 		sprintf(
-			'<gutenberg-interactive-block ' .
+			'<gutenberg-block ' .
 				'data-gutenberg-block-type="%1$s" ' .
 				'data-gutenberg-uses-block-context="%2$s" ' .
 				'data-gutenberg-provides-block-context="%3$s" ' .
 				'data-gutenberg-attributes="%4$s" ' .
 				'data-gutenberg-sourced-attributes="%5$s" ' .
-				'data-gutenberg-hydrate="idle">',
+				'data-gutenberg-hydration="%6$s">',
 			esc_attr($block['blockName']),
 			esc_attr(json_encode($block_type->uses_context)),
 			esc_attr(json_encode($block_type->provides_context)),
 			esc_attr(json_encode($attributes)),
-			esc_attr(json_encode($sourced_attributes))
-		) . '%1$s</gutenberg-interactive-block>';
+			esc_attr(json_encode($sourced_attributes)),
+			esc_attr($hydration_technique)
+		) . '%1$s</gutenberg-block>';
 
 	$template_wrapper =
 		'<template class="gutenberg-inner-blocks">%1$s</template>';
@@ -85,37 +99,4 @@ function bhe_interactive_block_wrapper($block_content, $block, $instance)
 	return sprintf($block_wrapper, $block_content);
 }
 
-add_filter('render_block', 'bhe_interactive_block_wrapper', 10, 3);
-
-function bhe_non_interactive_block_context($block_content, $block, $instance)
-{
-	if (!in_array($block['blockName'], ['bhe/non-interactive-parent'], true)) {
-		return $block_content;
-	}
-
-	$block_type = $instance->block_type;
-	if (!$block_type->provides_context) {
-		return $block_content;
-	}
-
-	$context = [];
-	foreach ($block_type->provides_context as $key => $attribute) {
-		if ($block_type->attributes[$attribute]['frontend']) {
-			$context[$key] = $block['attrs'][$attribute];
-		}
-	}
-
-	// Only supports div for now. Hopefully, we'll be able to do this with an
-	// upcoming WP HTML parser like
-	// https://github.com/WordPress/gutenberg/pull/42507.
-	$content = preg_replace(
-		'/(<div\b[^><]*)>/i',
-		'$1 data-gutenberg-provides-non-interactive-block-context="%1$s">',
-		$block_content,
-		1
-	);
-
-	return sprintf($content, esc_attr(json_encode($context)));
-}
-
-add_filter('render_block', 'bhe_non_interactive_block_context', 10, 3);
+add_filter('render_block', 'bhe_block_wrapper', 10, 3);
