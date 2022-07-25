@@ -29,7 +29,9 @@
 			"text": true
 		},
 		"typography": {
-			"fontSize": true
+			"fontSize": true,
+			"__experimentalFontWeight": true,
+			"__experimentalLetterSpacing": true
 		},
 		"html": true
 	},

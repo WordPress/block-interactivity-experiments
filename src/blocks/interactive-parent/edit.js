@@ -17,7 +17,7 @@ const Edit = ({ attributes: { counter, title, secret }, setAttributes }) => (
 			>
 				{title}
 			</Title>
-			<Button />
+			<Button>Show</Button>
 			<button onClick={() => setAttributes({ counter: counter + 1 })}>
 				{counter}
 			</button>

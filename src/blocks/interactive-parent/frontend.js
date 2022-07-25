@@ -13,6 +13,7 @@ const Frontend = ({
 	children,
 }) => {
 	const [show, setShow] = useState(true);
+	const [bold, setBold] = useState(true);
 	const [counter, setCounter] = useState(initialCounter);
 
 	return (
@@ -22,11 +23,12 @@ const Frontend = ({
 					className={`${className} ${show ? 'show' : 'hide'}`}
 					style={{
 						...style,
-						fontWeight: show ? 900 : fontWeight,
+						fontWeight: bold ? 900 : fontWeight,
 					}}
 				>
 					<Title>{title}</Title>
-					<Button handler={() => setShow(!show)} />
+					<Button handler={() => setShow(!show)}>Show</Button>
+					<Button handler={() => setBold(!bold)}>Bold</Button>
 					<button onClick={() => setCounter(counter + 1)}>
 						{counter}
 					</button>
