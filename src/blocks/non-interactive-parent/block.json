@@ -10,8 +10,6 @@
 	"attributes": {
 		"title": {
 			"type": "string",
-			"source": "text",
-			"selector": ".title",
 			"frontend": true
 		}
 	},

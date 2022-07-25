@@ -86,3 +86,36 @@ function bhe_interactive_block_wrapper($block_content, $block, $instance)
 }
 
 add_filter('render_block', 'bhe_interactive_block_wrapper', 10, 3);
+
+function bhe_non_interactive_block_context($block_content, $block, $instance)
+{
+	if (!in_array($block['blockName'], ['bhe/non-interactive-parent'], true)) {
+		return $block_content;
+	}
+
+	$block_type = $instance->block_type;
+	if (!$block_type->provides_context) {
+		return $block_content;
+	}
+
+	$context = [];
+	foreach ($block_type->provides_context as $key => $attribute) {
+		if ($block_type->attributes[$attribute]['frontend']) {
+			$context[$key] = $block['attrs'][$attribute];
+		}
+	}
+
+	// Only supports div for now. Hopefully, we'll be able to do this with an
+	// upcoming WP HTML parser like
+	// https://github.com/WordPress/gutenberg/pull/42507.
+	$content = preg_replace(
+		'/(<div\b[^><]*)>/i',
+		'$1 data-gutenberg-provides-non-interactive-block-context="%1$s">',
+		$block_content,
+		1
+	);
+
+	return sprintf($content, esc_attr(json_encode($context)));
+}
+
+add_filter('render_block', 'bhe_non_interactive_block_context', 10, 3);
