@@ -1,10 +1,9 @@
 import { registerBlockType } from '../../gutenberg-packages/wordpress-blocks';
 import Edit from './edit';
-import Frontend from './frontend';
+import View from './view';
 import './style.scss';
 
 registerBlockType('bhe/interactive-parent', {
 	edit: Edit,
-	// The Save component is derived from the Frontend component.
-	frontend: Frontend,
+	view: View, // The Save component is derived from the View component.
 });

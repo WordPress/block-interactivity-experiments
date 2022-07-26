@@ -42,5 +42,5 @@
 	"textdomain": "block-hydration-experiments",
 	"editorScript": "file:./index.js",
 	"style": "file:./style-index.css",
-	"viewScript": "file:./view.js"
+	"viewScript": "file:./frontend.js"
 }

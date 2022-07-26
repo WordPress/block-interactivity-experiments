@@ -18,10 +18,10 @@ const Wrapper =
 			</>
 		);
 
-export const registerBlockType = (name, { frontend, edit, ...rest }) => {
+export const registerBlockType = (name, { edit, view, ...rest }) => {
 	gutenbergRegisterBlockType(name, {
 		edit,
-		save: Wrapper(frontend),
+		save: Wrapper(view),
 		...rest,
 	});
 };
