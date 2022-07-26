@@ -1,9 +1,9 @@
 {
 	"$schema": "https://schemas.wp.org/trunk/block.json",
 	"apiVersion": 2,
-	"name": "bhe/block-hydration-experiments-parent",
+	"name": "bhe/interactive-parent",
 	"version": "0.1.0",
-	"title": "BHE - Parent",
+	"title": "BHE - Interactive Parent",
 	"category": "text",
 	"icon": "flag",
 	"description": "",
@@ -13,11 +13,15 @@
 			"default": 0,
 			"frontend": true
 		},
-		"message": {
+		"title": {
 			"type": "string",
 			"source": "text",
 			"selector": ".title",
 			"frontend": true
+		},
+		"secret": {
+			"type": "string",
+			"default": "fa4e3d47e4e0a38c5c57533391855013"
 		}
 	},
 	"supports": {
@@ -26,16 +30,17 @@
 		},
 		"typography": {
 			"fontSize": true,
-			"__experimentalFontWeight": true
+			"__experimentalFontWeight": true,
+			"__experimentalLetterSpacing": true
 		},
 		"html": true
 	},
 	"providesContext": {
-		"bhe/title": "message"
+		"bhe/interactive-title": "title"
 	},
-	"textdomain": "block-hydration-experiments-parent",
+	"usesContext": ["bhe/non-interactive-title"],
+	"textdomain": "block-hydration-experiments",
 	"editorScript": "file:./index.js",
-	"editorStyle": "file:./index.css",
 	"style": "file:./style-index.css",
 	"viewScript": "file:./view.js"
 }

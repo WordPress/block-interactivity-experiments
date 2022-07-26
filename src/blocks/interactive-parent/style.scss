@@ -1,0 +1,23 @@
+.wp-block-bhe-interactive-parent {
+	padding: 15px 10px 15px 50px;
+	border: 1px solid rgb(31, 185, 64);
+	position: relative;
+}
+
+.wp-block-bhe-interactive-parent::before {
+	position: absolute;
+	top: 0;
+	right: 0;
+	background-color: rgb(31, 185, 64);
+	border: 1px solid rgb(31, 185, 64);
+	color: white;
+	margin: -1px;
+	padding: 0px 5px;
+	font-size: 10px;
+	content: 'BHE - Interactive Parent';
+}
+
+gutenberg-block,
+gutenberg-inner-blocks {
+	display: contents;
+}

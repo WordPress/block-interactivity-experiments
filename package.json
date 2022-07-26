@@ -24,11 +24,13 @@
 		"bracketSameLine": false,
 		"bracketSpacing": true,
 		"semi": true,
-		"arrowParens": "always"
+		"arrowParens": "always",
+		"phpVersion": "5.6"
 	},
 	"devDependencies": {
 		"@babel/core": "^7.17.10",
 		"@babel/preset-env": "^7.17.10",
+		"@prettier/plugin-php": "^0.18.9",
 		"@types/jest": "^27.5.1",
 		"@wordpress/blocks": "^11.7.0",
 		"@wordpress/element": "^4.3.0",

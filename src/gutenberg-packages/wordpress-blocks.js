@@ -1,31 +1,27 @@
 import { useBlockProps, useInnerBlocksProps } from '@wordpress/block-editor';
 import { registerBlockType as gutenbergRegisterBlockType } from '@wordpress/blocks';
 
-const save =
+const Wrapper =
 	(Comp) =>
-	({ attributes }) => {
-		const blockProps = useBlockProps.save();
-		const innerBlocksProps = useInnerBlocksProps.save();
-
-		return (
+	({ attributes }) =>
+		(
 			<>
+				{/* Block Context is not available during save
+				https://wordpress.slack.com/archives/C02QB2JS7/p1649347999484329 */}
 				<Comp
-					blockProps={blockProps}
+					blockProps={useBlockProps.save()}
 					attributes={attributes}
 					context={{}}
 				>
-					<gutenberg-inner-blocks {...innerBlocksProps} />
+					<gutenberg-inner-blocks {...useInnerBlocksProps.save()} />
 				</Comp>
-				{/* Render InnerBlocks inside a template, to avoid losing them
-            if Comp doesn't render them. */}
-				<template
-					class="gutenberg-inner-blocks"
-					{...innerBlocksProps}
-				/>
 			</>
 		);
-	};
 
 export const registerBlockType = (name, { frontend, edit, ...rest }) => {
-	gutenbergRegisterBlockType(name, { edit, save: save(frontend), ...rest });
+	gutenbergRegisterBlockType(name, {
+		edit,
+		save: Wrapper(frontend),
+		...rest,
+	});
 };

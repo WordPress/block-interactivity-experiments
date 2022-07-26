@@ -1,13 +1,13 @@
 {
 	"$schema": "https://schemas.wp.org/trunk/block.json",
 	"apiVersion": 2,
-	"name": "bhe/block-hydration-experiments-child",
+	"name": "bhe/interactive-child",
 	"version": "0.1.0",
-	"title": "BHE - Child",
+	"title": "BHE - Interactive Child",
 	"category": "text",
 	"icon": "flag",
 	"description": "",
-	"usesContext": ["bhe/title"],
+	"usesContext": ["bhe/interactive-title", "bhe/non-interactive-title"],
 	"supports": {
 		"color": {
 			"text": true
@@ -17,7 +17,7 @@
 		},
 		"html": true
 	},
-	"textdomain": "block-hydration-experiments-child",
+	"textdomain": "block-hydration-experiments",
 	"editorScript": "file:./index.js",
 	"style": "file:./style-index.css",
 	"viewScript": "file:./view.js"
