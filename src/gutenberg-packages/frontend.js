@@ -24,7 +24,7 @@ const Wrappers = ({ wrappers, children }) => {
 	return result;
 };
 
-class GutenbergBlock extends HTMLElement {
+class WpBlock extends HTMLElement {
 	connectedCallback() {
 		setTimeout(() => {
 			// Get the block attributes.
@@ -194,5 +194,5 @@ class GutenbergBlock extends HTMLElement {
 // We need to ensure that the component registration code is only run once
 // because it throws if you try to register an element with the same name twice.
 if (customElements.get('gutenberg-block') === undefined) {
-	customElements.define('gutenberg-block', GutenbergBlock);
+	customElements.define('gutenberg-block', WpBlock);
 }
