@@ -46,7 +46,7 @@ function bhe_block_wrapper($block_content, $block, $instance)
 	$attributes = [];
 	$sourced_attributes = [];
 	foreach ($attr_definitions as $attr => $definition) {
-		if (!empty($definition['frontend'])) {
+		if (!empty($definition['public'])) {
 			if (!empty($definition['source'])) {
 				$sourced_attributes[$attr] = [
 					'selector' => $definition['selector'], // TODO: Guard against unset.

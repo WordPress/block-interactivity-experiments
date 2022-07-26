@@ -11,13 +11,13 @@
 		"counter": {
 			"type": "number",
 			"default": 0,
-			"frontend": true
+			"public": true
 		},
 		"title": {
 			"type": "string",
 			"source": "text",
 			"selector": ".title",
-			"frontend": true
+			"public": true
 		},
 		"secret": {
 			"type": "string",
