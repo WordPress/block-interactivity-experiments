@@ -13,7 +13,7 @@ const Wrapper =
 					attributes={attributes}
 					context={{}}
 				>
-					<gutenberg-inner-blocks {...useInnerBlocksProps.save()} />
+					<wp-inner-blocks {...useInnerBlocksProps.save()} />
 				</Comp>
 			</>
 		);

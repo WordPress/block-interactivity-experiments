@@ -80,14 +80,14 @@ function bhe_block_wrapper($block_content, $block, $instance)
 
 	$block_wrapper =
 		sprintf(
-			'<gutenberg-block ' .
-				'data-gutenberg-block-type="%1$s" ' .
-				'data-gutenberg-uses-block-context="%2$s" ' .
-				'data-gutenberg-provides-block-context="%3$s" ' .
-				'data-gutenberg-attributes="%4$s" ' .
-				'data-gutenberg-sourced-attributes="%5$s" ' .
-				'data-gutenberg-block-props="%6$s" ' .
-				'data-gutenberg-hydration="%7$s">',
+			'<wp-block ' .
+				'data-wp-block-type="%1$s" ' .
+				'data-wp-block-uses-block-context="%2$s" ' .
+				'data-wp-block-provides-block-context="%3$s" ' .
+				'data-wp-block-attributes="%4$s" ' .
+				'data-wp-block-sourced-attributes="%5$s" ' .
+				'data-wp-block-props="%6$s" ' .
+				'data-wp-block-hydration="%7$s">',
 			esc_attr($block['blockName']),
 			esc_attr(json_encode($block_type->uses_context)),
 			esc_attr(json_encode($block_type->provides_context)),
@@ -95,10 +95,9 @@ function bhe_block_wrapper($block_content, $block, $instance)
 			esc_attr(json_encode($sourced_attributes)),
 			esc_attr(json_encode($block_props)),
 			esc_attr($hydration_technique)
-		) . '%1$s</gutenberg-block>';
+		) . '%1$s</wp-block>';
 
-	$template_wrapper =
-		'<template class="gutenberg-inner-blocks">%1$s</template>';
+	$template_wrapper = '<template class="wp-inner-blocks">%1$s</template>';
 
 	$empty_template = sprintf($template_wrapper, '');
 	$template = sprintf(
