@@ -12,7 +12,7 @@
 			"type": "string",
 			"source": "text",
 			"selector": ".title",
-			"frontend": true
+			"public": true
 		}
 	},
 	"providesContext": {

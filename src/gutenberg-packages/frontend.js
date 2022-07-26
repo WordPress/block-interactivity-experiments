@@ -2,14 +2,14 @@ import { Consumer, createProvider } from './react-context';
 import { createGlobal, matcherFromSource } from './utils';
 import { EnvContext, hydrate } from './wordpress-element';
 
-const blockTypes = createGlobal('gutenbergBlockTypes', new Map());
+const blockTypes = createGlobal('wpBlockTypes', new Map());
 
 export const registerBlockType = (name, Component, options) => {
 	blockTypes.set(name, { Component, options });
 };
 
 const Children = ({ value }) => (
-	<gutenberg-inner-blocks
+	<wp-inner-blocks
 		suppressHydrationWarning={true}
 		dangerouslySetInnerHTML={{ __html: value }}
 	/>
@@ -24,17 +24,17 @@ const Wrappers = ({ wrappers, children }) => {
 	return result;
 };
 
-class GutenbergBlock extends HTMLElement {
+class WpBlock extends HTMLElement {
 	connectedCallback() {
 		setTimeout(() => {
 			// Get the block attributes.
 			const attributes = JSON.parse(
-				this.getAttribute('data-gutenberg-attributes')
+				this.getAttribute('data-wp-block-attributes')
 			);
 
 			// Add the sourced attributes to the attributes object.
 			const sourcedAttributes = JSON.parse(
-				this.getAttribute('data-gutenberg-sourced-attributes')
+				this.getAttribute('data-wp-block-sourced-attributes')
 			);
 			for (const attr in sourcedAttributes) {
 				attributes[attr] = matcherFromSource(sourcedAttributes[attr])(
@@ -45,10 +45,10 @@ class GutenbergBlock extends HTMLElement {
 			// Get the Block Context from their parents.
 			const blockContext = {};
 			const usesBlockContext = JSON.parse(
-				this.getAttribute('data-gutenberg-uses-block-context')
+				this.getAttribute('data-wp-block-uses-block-context')
 			);
 			if (usesBlockContext) {
-				const event = new CustomEvent('gutenberg-block-context', {
+				const event = new CustomEvent('wp-block-context', {
 					detail: { context: {} },
 					bubbles: true,
 					cancelable: true,
@@ -64,10 +64,10 @@ class GutenbergBlock extends HTMLElement {
 
 			// Share the Block Context with their children.
 			const providesBlockContext = JSON.parse(
-				this.getAttribute('data-gutenberg-provides-block-context')
+				this.getAttribute('data-wp-block-provides-block-context')
 			);
 			if (providesBlockContext) {
-				this.addEventListener('gutenberg-block-context', (event) => {
+				this.addEventListener('wp-block-context', (event) => {
 					// Select only the parts of the context that the block declared in
 					// the `providesContext` of its block.json.
 					Object.entries(providesBlockContext).forEach(
@@ -82,22 +82,18 @@ class GutenbergBlock extends HTMLElement {
 			}
 
 			// Hydrate the interactive blocks.
-			const hydration = this.getAttribute('data-gutenberg-hydration');
+			const hydration = this.getAttribute('data-wp-block-hydration');
 
 			if (hydration) {
 				const Providers = [];
 
 				// Get the block type, block props (class and style), inner blocks,
 				// frontend component and options.
-				const blockType = this.getAttribute(
-					'data-gutenberg-block-type'
-				);
-				const innerBlocks = this.querySelector(
-					'gutenberg-inner-blocks'
-				);
+				const blockType = this.getAttribute('data-wp-block-type');
+				const innerBlocks = this.querySelector('wp-inner-blocks');
 				const { Component, options } = blockTypes.get(blockType);
 				const { class: className, style } = JSON.parse(
-					this.getAttribute('data-gutenberg-block-props')
+					this.getAttribute('data-wp-block-props')
 				);
 				// Temporary element to translate style strings to style objects.
 				const el = document.createElement('div');
@@ -107,7 +103,7 @@ class GutenbergBlock extends HTMLElement {
 
 				// Get the React Context from their parents.
 				options?.usesContext?.forEach((context) => {
-					const event = new CustomEvent('gutenberg-react-context', {
+					const event = new CustomEvent('wp-react-context', {
 						detail: { context },
 						bubbles: true,
 						cancelable: true,
@@ -118,31 +114,28 @@ class GutenbergBlock extends HTMLElement {
 
 				// Share the React Context with their children.
 				if (options?.providesContext?.length > 0) {
-					this.addEventListener(
-						'gutenberg-react-context',
-						(event) => {
-							for (const context of options.providesContext) {
-								// We compare the provided context with the received context.
-								if (event.detail.context === context) {
-									// If there's a match, we stop propagation.
-									event.stopPropagation();
+					this.addEventListener('wp-react-context', (event) => {
+						for (const context of options.providesContext) {
+							// We compare the provided context with the received context.
+							if (event.detail.context === context) {
+								// If there's a match, we stop propagation.
+								event.stopPropagation();
 
-									// We return a Provider that is subscribed to the parent Provider.
-									event.detail.Provider = createProvider({
-										element: this,
-										context,
-									});
+								// We return a Provider that is subscribed to the parent Provider.
+								event.detail.Provider = createProvider({
+									element: this,
+									context,
+								});
 
-									// We can stop the iteration.
-									break;
-								}
+								// We can stop the iteration.
+								break;
 							}
 						}
-					);
+					});
 				}
 
 				const media = this.getAttribute(
-					'data-gutenberg-hydration-media'
+					'data-wp-block-hydration-media'
 				);
 
 				hydrate(
@@ -176,7 +169,7 @@ class GutenbergBlock extends HTMLElement {
 						</Wrappers>
 
 						<template
-							className="gutenberg-inner-blocks"
+							className="wp-inner-blocks"
 							suppressHydrationWarning={true}
 						/>
 					</EnvContext.Provider>,
@@ -193,6 +186,6 @@ class GutenbergBlock extends HTMLElement {
 //
 // We need to ensure that the component registration code is only run once
 // because it throws if you try to register an element with the same name twice.
-if (customElements.get('gutenberg-block') === undefined) {
-	customElements.define('gutenberg-block', GutenbergBlock);
+if (customElements.get('wp-block') === undefined) {
+	customElements.define('wp-block', WpBlock);
 }

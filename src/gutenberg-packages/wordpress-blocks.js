@@ -13,15 +13,15 @@ const Wrapper =
 					attributes={attributes}
 					context={{}}
 				>
-					<gutenberg-inner-blocks {...useInnerBlocksProps.save()} />
+					<wp-inner-blocks {...useInnerBlocksProps.save()} />
 				</Comp>
 			</>
 		);
 
-export const registerBlockType = (name, { frontend, edit, ...rest }) => {
+export const registerBlockType = (name, { edit, view, ...rest }) => {
 	gutenbergRegisterBlockType(name, {
 		edit,
-		save: Wrapper(frontend),
+		save: Wrapper(view),
 		...rest,
 	});
 };
