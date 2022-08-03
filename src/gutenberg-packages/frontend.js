@@ -1,6 +1,7 @@
 import { Consumer, createProvider } from './react-context';
 import { createGlobal, matcherFromSource } from './utils';
 import { EnvContext, hydrate } from './wordpress-element';
+import { unmountComponentAtNode } from 'react-dom';
 
 const blockTypes = createGlobal('wpBlockTypes', new Map());
 
@@ -178,6 +179,11 @@ class WpBlock extends HTMLElement {
 				);
 			}
 		});
+	}
+
+	disconnectedCallback() {
+		// Unmount the React component, running callbacks and cleaning up its state.
+		unmountComponentAtNode(this);
 	}
 }
 
