@@ -22,7 +22,10 @@
 		"color": {
 			"text": true
 		},
-		"html": true
+		"html": true,
+		"view": {
+			"hydration": false
+		}
 	},
 	"textdomain": "block-hydration-experiments",
 	"editorScript": "file:./index.js",
