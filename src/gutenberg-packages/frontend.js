@@ -110,7 +110,9 @@ class WpBlock extends HTMLElement {
 						cancelable: true,
 					});
 					this.dispatchEvent(event);
-					Providers.push(event.detail.Provider);
+					if (typeof event.detail.Provider === 'function') {
+						Providers.push(event.detail.Provider);
+					}
 				});
 
 				// Share the React Context with their children.
