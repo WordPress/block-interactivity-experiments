@@ -15,7 +15,8 @@
 		"typography": {
 			"fontSize": true
 		},
-		"html": true
+		"html": true,
+		"view": true
 	},
 	"textdomain": "block-hydration-experiments",
 	"editorScript": "file:./index.js",

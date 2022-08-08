@@ -25,22 +25,12 @@ add_action('init', 'block_hydration_experiments_init');
 
 function bhe_block_wrapper($block_content, $block, $instance)
 {
-	// We might want to use a flag from block.json as the criterion here.
-	if (
-		!in_array(
-			$block['blockName'],
-			[
-				'bhe/interactive-parent',
-				'bhe/interactive-child',
-				'bhe/non-interactive-parent',
-			],
-			true
-		)
-	) {
+	$block_type = $instance->block_type;
+
+	if ( ! block_has_support( $block_type, [ 'view' ] ) ) {
 		return $block_content;
 	}
 
-	$block_type = $instance->block_type;
 	$attr_definitions = $block_type->attributes;
 
 	$attributes = [];
@@ -63,13 +53,7 @@ function bhe_block_wrapper($block_content, $block, $instance)
 	}
 
 	// We might want to use a flag from block.json as the criterion here.
-	$hydration_technique = in_array(
-		$block['blockName'],
-		['bhe/interactive-parent', 'bhe/interactive-child'],
-		true
-	)
-		? 'idle'
-		: false;
+	$hydration_technique = $block_type->supports['view']['hydration'] ?? 'idle';
 
 	// The following is a bit hacky. If we stick with this technique, we might
 	// want to change apply_block_supports() to accepts a block as its argument.

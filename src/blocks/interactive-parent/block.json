@@ -33,7 +33,8 @@
 			"__experimentalFontWeight": true,
 			"__experimentalLetterSpacing": true
 		},
-		"html": true
+		"html": true,
+		"view": true
 	},
 	"providesContext": {
 		"bhe/interactive-title": "title"
