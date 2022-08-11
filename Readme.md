@@ -20,6 +20,13 @@ Blocks are structured using this folders/files:
 
 [You can follow the ongoing tasks an video updates of the current status on the Tracking issue.](https://github.com/WordPress/block-hydration-experiments/issues/39)
 
+## Block Requirements
+
+If you want to use this experiments on your blocks, they will need:
+
+- To have a `block.json` file.
+- To be registered on the server-side.
+
 ## Collaborate!
 
 Feel free to clone this repository and inspect the code, open issues, submit PRs, suggest features or ask questions!
