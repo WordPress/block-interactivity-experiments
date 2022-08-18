@@ -5,7 +5,7 @@ import { unmountComponentAtNode } from 'react-dom';
 
 const blockTypes = createGlobal('wpBlockTypes', new Map());
 
-export const registerBlockType = (name, Component, options) => {
+export const registerBlockTypeFrontend = (name, Component, options) => {
 	blockTypes.set(name, { Component, options });
 };
 
