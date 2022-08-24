@@ -9,12 +9,11 @@ export const matcherFromSource = (sourceConfig) => {
 	}
 };
 
-// We have to do this because of the way we are currently bundling the code in
-// this repo, each block gets its own copy of this file, but this won't happen
-// if/when we do this in Gutenberg.
 export const createGlobal = (name, initialValue) => {
-	if (typeof window[name] === 'undefined') {
-		window[name] = initialValue;
-	}
-	return window[name];
+	['wp', 'view', name].reduce((obj, name, i) => {
+		if (typeof obj[name] === 'undefined')
+			obj[name] = i === 2 ? initialValue : {};
+		return obj[name];
+	}, window);
+	return window.wp.view[name];
 };
