@@ -82,7 +82,7 @@ class WpBlock extends HTMLElement {
 		const media = this.getAttribute('data-wp-block-hydration-media');
 
 		hydrate(
-			<EnvContext.Provider value="frontend">
+			<EnvContext.Provider value="view">
 				{/* Wrap the component with all the React Providers */}
 				<Wrappers wrappers={Providers}>
 					<Component

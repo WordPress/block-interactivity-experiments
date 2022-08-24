@@ -12,16 +12,16 @@ export const EnvContext = createContext(null);
  * A React hook that returns the name of the environment.
  *
  * This is still a bit hacky. Ideally, Save components should support React
- * hooks and all the environments (Edit, Save and Frontend) should populate a
+ * hooks and all the environments (Edit, Save and View) should populate a
  * normal context. Also, more environments could be added in the future.
  *
- * @returns {"edit" | "save" | "frontend"}
+ * @returns {"edit" | "save" | "view"}
  */
 export const useBlockEnvironment = () => {
 	try {
 		const env = useReactContext(EnvContext);
-		if (env === 'frontend') {
-			return 'frontend';
+		if (env === 'view') {
+			return 'view';
 		}
 		return 'edit';
 	} catch (e) {
