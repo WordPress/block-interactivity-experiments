@@ -1,0 +1,36 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 2,
+	"name": "bhe/dynamic-interactive-child",
+	"version": "0.1.0",
+	"title": "BHE - Dynamic Interactive Child",
+	"category": "text",
+	"icon": "flag",
+	"description": "",
+	"usesContext": [
+		"bhe/dynamic-interactive-title",
+		"bhe/dynamic-non-interactive-title"
+	],
+	"attributes": {
+		"date": {
+			"type": "string",
+			"public": true,
+			"source": "text",
+			"selector": ".dynamic-child-block-date"
+		}
+	},
+	"supports": {
+		"color": {
+			"text": true
+		},
+		"typography": {
+			"fontSize": true
+		},
+		"html": true
+	},
+	"textdomain": "bhe",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./style.css",
+	"style": "file:./style-index.css",
+	"viewScript": "file:./frontend.js"
+}

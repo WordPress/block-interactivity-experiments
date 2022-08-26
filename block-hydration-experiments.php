@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Plugin Name:       block-hydration-experiments
  * Version:           0.1.0
@@ -20,6 +21,28 @@ function block_hydration_experiments_init()
 	register_block_type(
 		plugin_dir_path(__FILE__) . 'build/blocks/non-interactive-parent/'
 	);
+	// Dynamic blocks
+	require_once __DIR__ . '/src/blocks/dynamic-interactive-parent/index.php';
+	register_block_type(
+		plugin_dir_path(__FILE__) . 'build/blocks/dynamic-interactive-parent/',
+		array(
+			'render_callback' => 'render_block_dynamic_interactive_parent_bhe'
+		)
+	);
+	require_once __DIR__ . '/src/blocks/dynamic-interactive-child/index.php';
+	register_block_type(
+		plugin_dir_path(__FILE__) . 'build/blocks/dynamic-interactive-child/',
+		array(
+			'render_callback' => 'render_block_dynamic_interactive_child_bhe'
+		)
+	);
+	require_once __DIR__ . '/src/blocks/dynamic-non-interactive-parent/index.php';
+	register_block_type(
+		plugin_dir_path(__FILE__) . 'build/blocks/dynamic-non-interactive-parent/',
+		array(
+			'render_callback' => 'render_block_dynamic_non_interactive_parent_bhe'
+		)
+	);
 }
 add_action('init', 'block_hydration_experiments_init');
 
@@ -27,7 +50,7 @@ function bhe_block_wrapper($block_content, $block, $instance)
 {
 	$block_type = $instance->block_type;
 
-	if ( ! block_has_support( $block_type, [ 'view' ] ) ) {
+	if (!block_has_support($block_type, ['view'])) {
 		return $block_content;
 	}
 

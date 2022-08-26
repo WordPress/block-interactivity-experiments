@@ -1,0 +1,51 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 2,
+	"name": "bhe/dynamic-interactive-parent",
+	"version": "0.1.0",
+	"title": "BHE - Dynamic Interactive Parent",
+	"category": "text",
+	"icon": "flag",
+	"description": "",
+	"usesContext": [
+		"postId",
+		"postType",
+		"queryId"
+	],
+	"attributes": {
+		"counter": {
+			"type": "number",
+			"default": 0,
+			"public": true
+		},
+		"title": {
+			"type": "string",
+			"source": "text",
+			"selector": "h2",
+			"public": true,
+			"default": "Default Interactive Title"
+		},
+		"secret": {
+			"type": "string",
+			"default": "fa4e3d47e4e0a38c5c57533391855013"
+		}
+	},
+	"supports": {
+		"color": {
+			"text": true
+		},
+		"typography": {
+			"fontSize": true,
+			"__experimentalFontWeight": true,
+			"__experimentalLetterSpacing": true
+		},
+		"html": true
+	},
+	"providesContext": {
+		"bhe/dynamic-interactive-title": "title"
+	},
+	"textdomain": "bhe",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./style.css",
+	"style": "file:./style-index.css"
+}

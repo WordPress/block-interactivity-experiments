@@ -1,0 +1,33 @@
+{
+	"apiVersion": 2,
+	"title": "BHE - Dynamic Non Interactive Parent",
+	"name": "bhe/dynamic-non-interactive-parent",
+	"category": "text",
+	"icon": "flag",
+	"usesContext": [
+		"postId",
+		"postType",
+		"queryId"
+	],
+	"attributes": {
+		"title": {
+			"type": "string",
+			"source": "text",
+			"selector": "h2",
+			"public": true,
+			"default": "Default Non Interactive Title"
+		}
+	},
+	"providesContext": {
+		"bhe/dynamic-non-interactive-title": "title"
+	},
+	"supports": {
+		"color": {
+			"text": true
+		},
+		"html": true
+	},
+	"textdomain": "bhe",
+	"editorScript": "file:./index.js",
+	"style": "file:./style-index.css"
+}
