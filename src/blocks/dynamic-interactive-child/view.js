@@ -1,9 +1,15 @@
-const View = ({ blockProps }) => {
+import CounterContext from '../../context/counter';
+import ThemeContext from '../../context/theme';
+import { useContext } from '../../gutenberg-packages/wordpress-element';
+
+const View = ({ blockProps, attributes }) => {
+    const counter = useContext(CounterContext);
+
     return (
         <div {...blockProps}>
-            <p>
-                Hola
-            </p>
+            <p>Pooooost Date: {attributes.date}</p>
+            <p>State: {attributes.state}</p>
+            <p>Counter: {counter}</p>
         </div>
     );
 };

@@ -17,6 +17,12 @@
 			"public": true,
 			"source": "text",
 			"selector": ".dynamic-child-block-date"
+		},
+		"state": {
+			"type": "object",
+			"public": true,
+			"source": "attribute",
+			"attribute": "state"
 		}
 	},
 	"supports": {
@@ -26,7 +32,8 @@
 		"typography": {
 			"fontSize": true
 		},
-		"html": true
+		"html": true,
+		"view": true
 	},
 	"textdomain": "bhe",
 	"editorScript": "file:./index.js",

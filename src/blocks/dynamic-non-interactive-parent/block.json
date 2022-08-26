@@ -25,7 +25,8 @@
 		"color": {
 			"text": true
 		},
-		"html": true
+		"html": true,
+		"view": true
 	},
 	"textdomain": "bhe",
 	"editorScript": "file:./index.js",

@@ -39,7 +39,8 @@
 			"__experimentalFontWeight": true,
 			"__experimentalLetterSpacing": true
 		},
-		"html": true
+		"html": true,
+		"view": true
 	},
 	"providesContext": {
 		"bhe/dynamic-interactive-title": "title"
