@@ -21,3 +21,25 @@ wp-block,
 wp-inner-blocks {
 	display: contents;
 }
+
+div.animation {
+	width: 20px;
+	height: 20px;
+	background: red;
+	position: relative;
+	animation: animate 3s infinite;
+	animation-direction: alternate;
+}
+
+@keyframes animate {
+	0% {
+		background: red;
+		left: 0px;
+		top: 0px;
+	}
+	100% {
+		background: yellow;
+		left: 300px;
+		top: 0px;
+	}
+}

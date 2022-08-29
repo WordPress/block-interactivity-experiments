@@ -7,4 +7,4 @@ setTimeout(() => {
 	registerBlockView('bhe/interactive-child', View, {
 		usesContext: [ThemeContext, CounterContext],
 	});
-}, 3000);
+}, 2000);
