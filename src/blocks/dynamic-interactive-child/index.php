@@ -6,8 +6,7 @@ function render_block_dynamic_interactive_child_bhe($attributes, $content, $bloc
 
     $post = get_post();
     $date   = $post->post_date;
-    $state = array('prop' => 'hola');
-    $wrapper_attributes = get_block_wrapper_attributes(array('class' => $align_class_name, 'state' => json_encode($state)));
+    $wrapper_attributes = get_block_wrapper_attributes(array('class' => $align_class_name, 'statePatata' => $state));
 
     return sprintf(
         '<div %1$s>

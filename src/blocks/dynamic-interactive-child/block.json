@@ -17,12 +17,6 @@
 			"public": true,
 			"source": "text",
 			"selector": ".dynamic-child-block-date"
-		},
-		"state": {
-			"type": "object",
-			"public": true,
-			"source": "attribute",
-			"attribute": "state"
 		}
 	},
 	"supports": {
@@ -39,5 +33,5 @@
 	"editorScript": "file:./index.js",
 	"editorStyle": "file:./style.css",
 	"style": "file:./style-index.css",
-	"viewScript": "file:./frontend.js"
+	"viewScript": "file:./register-view.js"
 }
