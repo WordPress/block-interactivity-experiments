@@ -2,6 +2,8 @@
 
 function render_block_dynamic_interactive_parent_bhe($attributes, $content, $block)
 {
+    wp_enqueue_script('bhe-dynamic-interactive-parent-view-script');
+
     $post = get_post();
     $title   = $post->post_title;
     $counter = $attributes['counter'];
@@ -17,13 +19,14 @@ function render_block_dynamic_interactive_parent_bhe($attributes, $content, $blo
             <h2>Post Title: %2$s</h2>
             <button>Show</button>
             <button>Bold</button>
-            <button></button>
-            <div>
-                %3$s
-            </div>
+            <button>%3$s</button>
+            <wp-inner-blocks>
+                %4$s
+            </wp-inner-blocks>
         </div>',
         $wrapper_attributes,
         $title,
+        $counter,
         $inner_blocks_html
     );
 }

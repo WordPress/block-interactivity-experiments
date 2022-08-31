@@ -6,14 +6,22 @@ function render_block_dynamic_interactive_child_bhe($attributes, $content, $bloc
 
     $post = get_post();
     $date   = $post->post_date;
-    $wrapper_attributes = get_block_wrapper_attributes(array('class' => $align_class_name, 'statePatata' => $state));
+    $counter = 5;
+    $wrapper_attributes = get_block_wrapper_attributes(array('class' => $align_class_name));
+    $state = [
+        "date" => $date,
+        "counter" => $counter
+    ];
 
     return sprintf(
         '<div %1$s>
-            <p>Post Date: <span class="dynamic-child-block-date">%2$s</span></p>
-            <p>Counter: </p>
+            <p>Post Date: %2$s</p>
+            <p>Counter: %3$s</p>
+            <script class="dynamic-child-block-state" type="application/json">%4$s</script>
         </div>',
         $wrapper_attributes,
-        $date
+        $date,
+        $counter,
+        wp_json_encode($state)
     );
 }

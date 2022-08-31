@@ -10,7 +10,8 @@
 	"usesContext": [
 		"postId",
 		"postType",
-		"queryId"
+		"queryId",
+		"bhe/dynamic-non-interactive-title"
 	],
 	"attributes": {
 		"counter": {
@@ -48,5 +49,6 @@
 	"textdomain": "bhe",
 	"editorScript": "file:./index.js",
 	"editorStyle": "file:./style.css",
-	"style": "file:./style-index.css"
+	"style": "file:./style-index.css",
+	"viewScript": "file:./register-view.js"
 }

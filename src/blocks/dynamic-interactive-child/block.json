@@ -12,11 +12,11 @@
 		"bhe/dynamic-non-interactive-title"
 	],
 	"attributes": {
-		"date": {
+		"state": {
 			"type": "string",
 			"public": true,
 			"source": "text",
-			"selector": ".dynamic-child-block-date"
+			"selector": ".dynamic-child-block-state"
 		}
 	},
 	"supports": {
