@@ -22,26 +22,14 @@ function block_hydration_experiments_init()
 		plugin_dir_path(__FILE__) . 'build/blocks/non-interactive-parent/'
 	);
 	// Dynamic blocks
-	require_once __DIR__ . '/src/blocks/dynamic-interactive-parent/index.php';
-	register_block_type(
-		plugin_dir_path(__FILE__) . 'build/blocks/dynamic-interactive-parent/',
-		array(
-			'render_callback' => 'render_block_dynamic_interactive_parent_bhe'
-		)
-	);
-	require_once __DIR__ . '/src/blocks/dynamic-interactive-child/index.php';
 	register_block_type(
 		plugin_dir_path(__FILE__) . 'build/blocks/dynamic-interactive-child/',
-		array(
-			'render_callback' => 'render_block_dynamic_interactive_child_bhe'
-		)
 	);
-	require_once __DIR__ . '/src/blocks/dynamic-non-interactive-parent/index.php';
+	register_block_type(
+		plugin_dir_path(__FILE__) . 'build/blocks/dynamic-interactive-parent/',
+	);
 	register_block_type(
 		plugin_dir_path(__FILE__) . 'build/blocks/dynamic-non-interactive-parent/',
-		array(
-			'render_callback' => 'render_block_dynamic_non_interactive_parent_bhe'
-		)
 	);
 }
 add_action('init', 'block_hydration_experiments_init');

@@ -1,16 +1,16 @@
 .wp-block-bhe-dynamic-non-interactive-parent {
-    border: 1px solid rgb(34, 168, 235);
+    border: 1px solid rgb(0, 86, 129);
     position: relative;
     padding: 25px 10px;
 }
 
 .wp-block-bhe-dynamic-non-interactive-parent::before {
-    content: 'BHE - Non Interactive Parent';
+    content: 'BHE - Dynamic Non Interactive Parent';
     position: absolute;
     top: 0;
     right: 0;
-    border: 1px solid rgb(34, 168, 235);
-    background-color: rgb(34, 168, 235);
+    border: 1px solid rgb(0, 86, 129);
+    background-color: rgb(0, 86, 129);
     color: white;
     margin: -1px;
     padding: 0px 5px;
