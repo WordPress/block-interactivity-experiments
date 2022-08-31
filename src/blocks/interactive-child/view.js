@@ -17,7 +17,7 @@ const View = ({ blockProps, context }) => {
 				"bhe/non-interactive-title":{' '}
 				{context['bhe/non-interactive-title']}
 			</p>
-			<div class="animation"></div>
+			<div className="animation"></div>
 			<p>React Context - "counter": {counter}</p>
 			<p>React Context - "theme": {theme}</p>
 		</div>
