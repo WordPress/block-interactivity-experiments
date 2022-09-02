@@ -6,8 +6,12 @@ import '@wordpress/block-editor';
 import { InnerBlocks, useBlockProps } from '@wordpress/block-editor';
 import { useEntityProp } from '@wordpress/core-data';
 
+import Button from './shared/button';
+import Title from './shared/title';
+
 const Edit = ({ attributes, setAttributes, context }) => {
     const blockProps = useBlockProps();
+    const { counter, blockTitle, secret } = attributes;
     const { postType, postId, queryId } = context;
 
     const [rawTitle = '', setTitle, fullTitle] = useEntityProp(
@@ -20,9 +24,22 @@ const Edit = ({ attributes, setAttributes, context }) => {
     return (
         <div {...blockProps}>
             <h2>Post Title: {fullTitle?.rendered}</h2>
-            <button onClick={() => setAttributes({ counter: attributes.counter + 1 })}>
-                {attributes.counter}
+            <Title
+                value={blockTitle}
+                onChange={(blockTitle) => setAttributes({ blockTitle })}
+                placeholder="This will be passed through context to child blocks"
+                className="dynamic-interactive-parent-block-title"
+            >
+                {blockTitle}
+            </Title>
+            <Button>Show</Button>
+            <button onClick={() => setAttributes({ counter: counter + 1 })}>
+                {counter}
             </button>
+            <blockquote style={{ fontSize: '10px' }}>
+                This is a secret attribute that should not be serialized:{' '}
+                {secret}
+            </blockquote>
             <InnerBlocks />
         </div>
     )

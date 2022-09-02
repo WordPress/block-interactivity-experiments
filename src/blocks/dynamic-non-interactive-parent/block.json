@@ -10,16 +10,21 @@
 		"queryId"
 	],
 	"attributes": {
-		"title": {
+		"postTitle": {
 			"type": "string",
 			"source": "text",
 			"selector": "h2",
-			"public": true,
-			"default": "Default Non Interactive Title"
+			"public": true
+		},
+		"blockTitle": {
+			"type": "string",
+			"source": "text",
+			"selector": ".dynamic-non-interactive-parent-block-title",
+			"public": true
 		}
 	},
 	"providesContext": {
-		"bhe/dynamic-non-interactive-title": "title"
+		"bhe/dynamic-non-interactive-title": "blockTitle"
 	},
 	"supports": {
 		"color": {

@@ -5,6 +5,7 @@
 import '@wordpress/block-editor';
 import { InnerBlocks, useBlockProps } from '@wordpress/block-editor';
 import { useEntityProp } from '@wordpress/core-data';
+import { RichText } from '../../gutenberg-packages/wordpress-blockeditor';
 
 const Edit = ({ attributes, setAttributes, context }) => {
     const blockProps = useBlockProps();
@@ -20,6 +21,15 @@ const Edit = ({ attributes, setAttributes, context }) => {
     return (
         <div {...blockProps}>
             <h2>Post Title: {fullTitle?.rendered}</h2>
+            <RichText
+                tagName="h4"
+                className="dynamic-non-interactive-parent-block-title"
+                onChange={(val) => setAttributes({ blockTitle: val })}
+                placeholder="This will be passed through context to child blocks"
+                value={attributes.blockTitle}
+            >
+                {attributes.blockTitle}
+            </RichText>
             <InnerBlocks />
         </div>
     )

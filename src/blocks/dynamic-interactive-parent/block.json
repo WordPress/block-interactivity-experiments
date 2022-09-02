@@ -19,12 +19,18 @@
 			"default": 0,
 			"public": true
 		},
-		"title": {
+		"postTitle": {
 			"type": "string",
 			"source": "text",
 			"selector": "h2",
+			"public": true
+		},
+		"blockTitle": {
+			"type": "string",
+			"source": "text",
+			"selector": ".dynamic-interactive-parent-block-title",
 			"public": true,
-			"default": "Default Interactive Title"
+			"default": "Default Title"
 		},
 		"secret": {
 			"type": "string",
