@@ -13,7 +13,10 @@ function block_hydration_experiments_init()
 {
 	wp_register_script(
 		'hydration',
-		plugin_dir_url(__FILE__) . 'build/gutenberg-packages/hydration.js'
+		plugin_dir_url(__FILE__) . 'build/gutenberg-packages/hydration.js',
+		[],
+		'1.0.0',
+		true
 	);
 
 	register_block_type(

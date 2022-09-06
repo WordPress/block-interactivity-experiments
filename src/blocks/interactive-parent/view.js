@@ -40,6 +40,4 @@ const View = ({
 	);
 };
 
-console.log('parent');
-
 export default View;
