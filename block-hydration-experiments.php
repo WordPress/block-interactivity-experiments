@@ -28,6 +28,24 @@ function block_hydration_experiments_init()
 }
 add_action('init', 'block_hydration_experiments_init');
 
+add_filter('render_block_bhe/interactive-child', function ($content) {
+	wp_enqueue_script(
+		'bhe/interactive-child/view',
+		plugin_dir_url(__FILE__) .
+			'build/blocks/interactive-child/register-view.js'
+	);
+	return $content;
+});
+
+add_filter('render_block_bhe/interactive-parent', function ($content) {
+	wp_enqueue_script(
+		'bhe/interactive-parent/view',
+		plugin_dir_url(__FILE__) .
+			'build/blocks/interactive-parent/register-view.js'
+	);
+	return $content;
+});
+
 function bhe_block_wrapper($block_content, $block, $instance)
 {
 	$block_type = $instance->block_type;

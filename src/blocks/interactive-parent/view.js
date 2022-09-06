@@ -1,8 +1,9 @@
-import Counter from '../../context/counter';
-import Theme from '../../context/theme';
-import { useState } from '../../gutenberg-packages/wordpress-element';
+import { createContext, useState } from 'preact/compat';
 import Button from './shared/button';
 import Title from './shared/title';
+
+const Counter = createContext(null);
+const Theme = createContext(null);
 
 const View = ({
 	blockProps: {
@@ -38,5 +39,7 @@ const View = ({
 		</Counter.Provider>
 	);
 };
+
+console.log('parent');
 
 export default View;

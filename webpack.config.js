@@ -16,6 +16,10 @@ module.exports = [
 		entry: {
 			'gutenberg-packages/hydration':
 				'./src/gutenberg-packages/hydration.js',
+			'blocks/interactive-child/register-view':
+				'./src/blocks/interactive-child/register-view.js',
+			'blocks/interactive-parent/register-view':
+				'./src/blocks/interactive-parent/register-view.js',
 		},
 		module: {
 			rules: [
