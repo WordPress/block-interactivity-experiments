@@ -41,6 +41,7 @@
 		"prettier": "^2.7.1"
 	},
 	"dependencies": {
-		"hpq": "^1.3.0"
+		"hpq": "^1.3.0",
+		"preact": "^10.10.6"
 	}
 }

@@ -10,6 +10,7 @@ const createGlobal = (name, initialValue) => {
 };
 
 const blockViews = createGlobal('blockViews', new Map());
+const elementsToHydrate = createGlobal('elementsToHydrate', new Map());
 
 export default (name, Component, options) => {
 	blockViews.set(name, { Component, options });
