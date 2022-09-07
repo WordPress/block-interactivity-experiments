@@ -1,4 +1,4 @@
-# Block Hydration Experiments
+# Block Hydration Experiments (Full vDOM Hydration branch)
 
 This repository aims to explore block hydration patterns with the goal of absorbing as much complexity as possible from the final developers.
 
@@ -8,7 +8,7 @@ _It's not a goal to do an in-depth analysis of the patterns, only to experiment 
 
 - 🏝 **Island Hydration**
 
-  - Main branch: `main-island-hydration`
+  - Main branch: `main-island-hydration` ([Switch to that branch](https://github.com/WordPress/block-hydration-experiments/tree/main-island-hydration)) 
   - Tracking Issue: [Tracking issue: Island Hydration 🏝](https://github.com/WordPress/block-hydration-experiments/issues/39)
 
   This hydration method is based on custom elements (`<wp-block>`) that hydrates isolated islands. It interconnects those islands through synchronized bridges for APIs like `context`, `Suspense` or `ErrorBoundary`.
