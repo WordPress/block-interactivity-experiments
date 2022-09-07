@@ -15,7 +15,7 @@ _It's not a goal to do an in-depth analysis of the patterns, only to experiment 
 
 - ⚛️ **Full vDOM Hydration**
 
-  - Main branch: `main-full-vdom-hydration`
+  - Main branch: `main-full-vdom-hydration` ([Switch to that branch](https://github.com/WordPress/block-hydration-experiments/tree/main-full-vdom-hydration))
   - Tracking Issue: [Tracking issue: Full vDOM Hydration ⚛](https://github.com/WordPress/block-hydration-experiments/issues/64)
 
   This hydration method is based on the creation of a static virtual DOM from the root, where only the interactive components are replaced by P/React components. It behaves like a single P/React application.
