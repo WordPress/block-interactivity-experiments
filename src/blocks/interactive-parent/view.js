@@ -5,27 +5,16 @@ import Title from './shared/title';
 const Counter = createContext(null);
 const Theme = createContext(null);
 
-const View = ({
-	blockProps: {
-		className,
-		style: { fontWeight, ...style },
-	},
-	attributes: { counter: initialCounter, title },
-	children,
-}) => {
+const View = ({ children }) => {
 	const [show, setShow] = useState(true);
 	const [bold, setBold] = useState(true);
-	const [counter, setCounter] = useState(initialCounter);
+	const [counter, setCounter] = useState(0);
 
 	return (
 		<Counter.Provider value={counter}>
 			<Theme.Provider value="cool theme">
 				<div
 					className={`${className} ${show ? 'show' : 'hide'}`}
-					style={{
-						...style,
-						fontWeight: bold ? 900 : fontWeight,
-					}}
 				>
 					<Title>{title}</Title>
 					<Button handler={() => setShow(!show)}>Show</Button>
