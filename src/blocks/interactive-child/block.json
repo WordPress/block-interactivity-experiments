@@ -20,6 +20,5 @@
 	},
 	"textdomain": "block-hydration-experiments",
 	"editorScript": "file:./index.js",
-	"style": "file:./style-index.css",
-	"viewScript": "file:./register-view.js"
+	"style": "file:./style-index.css"
 }

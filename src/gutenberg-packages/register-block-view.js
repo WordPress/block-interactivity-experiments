@@ -1,7 +1,3 @@
-// We are importing manually the hydration code here, but this should not be
-// included on each block bundle, it should be sent only once.
-import './hydration';
-
 // These functions need to be included in each block bundle because block
 // bundles must not have any hard dependency.
 const createGlobal = (name, initialValue) => {

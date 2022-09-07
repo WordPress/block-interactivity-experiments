@@ -11,6 +11,14 @@
  */
 function block_hydration_experiments_init()
 {
+	wp_register_script(
+		'hydration',
+		plugin_dir_url(__FILE__) . 'build/gutenberg-packages/hydration.js',
+		[],
+		'1.0.0',
+		true
+	);
+
 	register_block_type(
 		plugin_dir_path(__FILE__) . 'build/blocks/interactive-child/'
 	);
@@ -23,13 +31,33 @@ function block_hydration_experiments_init()
 }
 add_action('init', 'block_hydration_experiments_init');
 
+add_filter('render_block_bhe/interactive-child', function ($content) {
+	wp_enqueue_script(
+		'bhe/interactive-child/view',
+		plugin_dir_url(__FILE__) .
+			'build/blocks/interactive-child/register-view.js'
+	);
+	return $content;
+});
+
+add_filter('render_block_bhe/interactive-parent', function ($content) {
+	wp_enqueue_script(
+		'bhe/interactive-parent/view',
+		plugin_dir_url(__FILE__) .
+			'build/blocks/interactive-parent/register-view.js'
+	);
+	return $content;
+});
+
 function bhe_block_wrapper($block_content, $block, $instance)
 {
 	$block_type = $instance->block_type;
 
-	if ( ! block_has_support( $block_type, [ 'view' ] ) ) {
+	if (!block_has_support($block_type, ['view'])) {
 		return $block_content;
 	}
+
+	wp_enqueue_script('hydration');
 
 	$attr_definitions = $block_type->attributes;
 
