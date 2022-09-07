@@ -1,4 +1,4 @@
-# Block Hydration Experiments (Full vDOM Hydration branch)
+# Block Hydration Experiments
 
 This repository aims to explore block hydration patterns with the goal of absorbing as much complexity as possible from the final developers.
 
