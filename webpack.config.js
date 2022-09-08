@@ -1,5 +1,7 @@
 const defaultConfig = require('@wordpress/scripts/config/webpack.config');
 
+delete defaultConfig.optimization.minimizer;
+
 module.exports = [
 	defaultConfig,
 	{
@@ -20,6 +22,17 @@ module.exports = [
 				'./src/blocks/interactive-child/register-view.js',
 			'blocks/interactive-parent/register-view':
 				'./src/blocks/interactive-parent/register-view.js',
+		},
+		optimization: {
+			splitChunks: {
+				cacheGroups: {
+					vendor: {
+						test: /[\\/]node_modules[\\/]/,
+						name: 'vendors',
+						chunks: 'all',
+					},
+				},
+			},
 		},
 		module: {
 			rules: [
