@@ -11,11 +11,7 @@
  */
 function block_hydration_experiments_init()
 {
-	wp_enqueue_script(
-		'vendors',
-		plugin_dir_url(__FILE__) .
-			'build/vendors.js'
-	);
+	wp_enqueue_script('vendors', plugin_dir_url(__FILE__) . 'build/vendors.js');
 
 	wp_register_script(
 		'hydration',
