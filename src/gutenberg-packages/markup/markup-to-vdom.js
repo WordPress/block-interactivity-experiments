@@ -49,28 +49,28 @@ function visitor(node) {
 }
 
 function processWpBlock(node, map) {
-	// const componentName = node.props['data-wp-block-type'];
-	// const attributes = JSON.parse(node.props['data-wp-block-attributes']) || {};
-	// const blockProps = JSON.parse(node.props['data-wp-block-props']) || {};
+	const blockType = node.props['data-wp-block-type'];
+	const attributes = JSON.parse(node.props['data-wp-block-attributes']) || {};
+	const blockProps = JSON.parse(node.props['data-wp-block-props']) || {};
 
-	const Component = map['wp-block'];
+	const Component = map[blockType];
 
 	if (!Component) return node;
 
 	node.type = Component;
-	// node.props = {
-	// 	...node.props,
-	// 	attributes,
-	// 	blockProps,
-	// 	context: {},
-	// };
+	node.props = {
+		...node.props,
+		attributes,
+		blockProps,
+		context: {},
+	};
 
-	// // Get component children from wrapper.
-	// const children = getChildrenFromWrapper(node.props.children);
-	// if (children) {
-	// 	console.log(children);
-	// 	node.props.children = children;
-	// }
+	// Get component children from wrapper.
+	const children = getChildrenFromWrapper(node.props.children);
+	if (children) {
+		console.log(children);
+		node.props.children = children;
+	}
 }
 
 function getChildrenFromWrapper(children) {
