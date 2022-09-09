@@ -1,28 +1,49 @@
-export default function processWpBlock(node, map) {
-	const blockType = node.props['data-wp-block-type'];
+import { matcherFromSource } from '../utils';
+
+export default function processWpBlock({ vNode, domNode, map }) {
+	const blockType = vNode.props['data-wp-block-type'];
 	const Component = map[blockType];
 
-	if (!Component) return node;
+	if (!Component) return vNode;
 
-	node.type = Component;
-	node.props = {
-		// ...node.props,
-		attributes: {},
+	vNode.type = Component;
+	vNode.props = {
+		// ...vNode.props,
+		attributes: getAttributes(vNode, domNode),
 		context: {},
-		blockProps: getBlockProps(node),
-		children: getChildren(node),
+		blockProps: getBlockProps(vNode),
+		children: getChildren(vNode),
 	};
 }
 
-function getBlockProps(node) {
+function getBlockProps(vNode) {
 	const { class: className, style } = JSON.parse(
-		node.props['data-wp-block-props']
+		vNode.props['data-wp-block-props']
 	);
 	return { className, style: getStyleProp(style) };
 }
 
-function getChildren(node) {
-	return getChildrenFromWrapper(node.props.children) || node.props.children;
+function getAttributes(vNode, domNode) {
+	// Get the block attributes.
+	const attributes = JSON.parse(
+		vNode.props['data-wp-block-attributes']
+	);
+
+	// Add the sourced attributes to the attributes object.
+	const sourcedAttributes = JSON.parse(
+		vNode.props['data-wp-block-sourced-attributes']
+	);
+	for (const attr in sourcedAttributes) {
+		attributes[attr] = matcherFromSource(sourcedAttributes[attr])(
+			domNode
+		);
+	}
+
+    return attributes;
+}
+
+function getChildren(vNode) {
+	return getChildrenFromWrapper(vNode.props.children) || vNode.props.children;
 }
 
 function getChildrenFromWrapper(children) {
@@ -38,8 +59,8 @@ function getChildrenFromWrapper(children) {
 	);
 }
 
-function isChildrenWrapper(node) {
-	return node.type === 'wp-inner-blocks';
+function isChildrenWrapper(vNode) {
+	return vNode.type === 'wp-inner-blocks';
 }
 
 function toCamelCase(name) {

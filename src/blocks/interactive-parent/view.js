@@ -7,11 +7,12 @@ const View = ({
 		className,
 		style: { fontWeight, ...style },
 	},
+	attributes: { counter: initialCounter, title },
 	children,
 }) => {
 	const [show, setShow] = useState(true);
 	const [bold, setBold] = useState(true);
-	const [counter, setCounter] = useState(0);
+	const [counter, setCounter] = useState(initialCounter);
 
 	return (
 		<div
@@ -21,7 +22,7 @@ const View = ({
 				fontWeight: bold ? 900 : fontWeight,
 			}}
 		>
-			<Title>Title</Title>
+			<Title>{title}</Title>
 			<Button handler={() => setShow(!show)}>Show</Button>
 			<Button handler={() => setBold(!bold)}>Bold</Button>
 			<button onClick={() => setCounter(counter + 1)}>{counter}</button>

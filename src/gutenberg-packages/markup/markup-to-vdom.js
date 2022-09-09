@@ -1,5 +1,5 @@
 import parseMarkup from 'preact-markup/src/parse-markup';
-import toVdom from 'preact-markup/src/to-vdom';
+import toVdom from './to-vdom';
 import processWpBlock from './process-wp-block';
 
 const EMPTY_OBJ = {};
@@ -29,22 +29,22 @@ function toCamelCase(name) {
 	return name.replace(/-(.)/g, (match, letter) => letter.toUpperCase());
 }
 
-function visitor(node) {
-	let name = (node.type || '').toLowerCase(),
+function visitor(vNode, domNode) {
+	let name = (vNode.type || '').toLowerCase(),
 		map = visitor.map;
 
 	// eslint-disable-next-line no-prototype-builtins
 	if (name === 'wp-block' && map) {
-		processWpBlock(node, map);
-		// node.type = WpBlock;
-		node.props = Object.keys(node.props || {}).reduce((attrs, attrName) => {
+		processWpBlock({ vNode, domNode, map });
+		// vNode.type = WpBlock;
+		vNode.props = Object.keys(vNode.props || {}).reduce((attrs, attrName) => {
 			const key = !attrName.startsWith('data-')
 				? toCamelCase(attrName)
 				: attrName;
-			attrs[key] = node.props[attrName];
+			attrs[key] = vNode.props[attrName];
 			return attrs;
 		}, {});
 	} else {
-		node.type = name.replace(/[^a-z0-9-]/i, '');
+		vNode.type = name.replace(/[^a-z0-9-]/i, '');
 	}
 }
