@@ -1,4 +1,4 @@
-import { useState } from 'preact/compat';
+import { useState } from '../../gutenberg-packages/wordpress-element';
 import Button from './shared/button';
 import Title from './shared/title';
 
