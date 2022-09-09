@@ -1,5 +1,6 @@
 import parseMarkup from 'preact-markup/src/parse-markup';
 import toVdom from 'preact-markup/src/to-vdom';
+import processWpBlock from './process-wp-block';
 
 const EMPTY_OBJ = {};
 
@@ -46,46 +47,4 @@ function visitor(node) {
 	} else {
 		node.type = name.replace(/[^a-z0-9-]/i, '');
 	}
-}
-
-function processWpBlock(node, map) {
-	const blockType = node.props['data-wp-block-type'];
-	const attributes = JSON.parse(node.props['data-wp-block-attributes']) || {};
-	const blockProps = JSON.parse(node.props['data-wp-block-props']) || {};
-
-	const Component = map[blockType];
-
-	if (!Component) return node;
-
-	node.type = Component;
-	node.props = {
-		...node.props,
-		attributes,
-		blockProps,
-		context: {},
-	};
-
-	// Get component children from wrapper.
-	const children = getChildrenFromWrapper(node.props.children);
-	if (children) {
-		console.log(children);
-		node.props.children = children;
-	}
-}
-
-function getChildrenFromWrapper(children) {
-	if (!children?.length) return null;
-
-	for (const child of children) {
-		if (isChildrenWrapper(child)) return child.props?.children || [];
-	}
-
-	// Try with the next nesting level.
-	return getChildrenFromWrapper(
-		[].concat(...children.map((child) => child?.props?.children || []))
-	);
-}
-
-function isChildrenWrapper(node) {
-	return node.type === 'wp-inner-blocks';
 }

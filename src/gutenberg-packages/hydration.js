@@ -1,4 +1,4 @@
-import { hydrate } from 'preact';
+import { hydrate } from 'preact/compat';
 import { createGlobal } from './utils';
 import Markup from './markup';
 
