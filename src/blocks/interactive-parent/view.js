@@ -1,5 +1,4 @@
 import { useState } from '../../gutenberg-packages/wordpress-element';
-import Button from './shared/button';
 import Title from './shared/title';
 
 const View = ({
@@ -23,8 +22,8 @@ const View = ({
 			}}
 		>
 			<Title>{title}</Title>
-			<Button handler={() => setShow(!show)}>Show</Button>
-			<Button handler={() => setBold(!bold)}>Bold</Button>
+			<button onClick={() => setShow(!show)}>Show</button>
+			<button onClick={() => setBold(!bold)}>Bold</button>
 			<button onClick={() => setCounter(counter + 1)}>{counter}</button>
 			{show && children}
 		</div>

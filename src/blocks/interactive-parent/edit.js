@@ -5,7 +5,6 @@
 import '@wordpress/block-editor';
 
 import { InnerBlocks, useBlockProps } from '@wordpress/block-editor';
-import Button from './shared/button';
 import Title from './shared/title';
 
 const Edit = ({ attributes: { counter = 0, title, secret }, setAttributes }) => (
@@ -17,7 +16,7 @@ const Edit = ({ attributes: { counter = 0, title, secret }, setAttributes }) => 
 			>
 				{title}
 			</Title>
-			<Button>Show</Button>
+			<button>Show</button>
 			<button onClick={() => setAttributes({ counter: counter + 1 })}>
 				{counter}
 			</button>
