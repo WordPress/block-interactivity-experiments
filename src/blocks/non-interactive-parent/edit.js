@@ -1,5 +1,4 @@
-import { InnerBlocks, useBlockProps } from '@wordpress/block-editor';
-import { RichText } from '../../gutenberg-packages/wordpress-blockeditor';
+import { InnerBlocks, useBlockProps, RichText } from '@wordpress/block-editor';
 
 const Edit = ({ attributes, setAttributes }) => (
 	<div {...useBlockProps()}>
@@ -9,9 +8,7 @@ const Edit = ({ attributes, setAttributes }) => (
 			onChange={(val) => setAttributes({ title: val })}
 			placeholder="This will be passed through context to child blocks"
 			value={attributes.title}
-		>
-			{attributes.title}
-		</RichText>
+		/>
 		<InnerBlocks />
 	</div>
 );

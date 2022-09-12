@@ -4,18 +4,21 @@
 // the site.
 import '@wordpress/block-editor';
 
-import { InnerBlocks, useBlockProps } from '@wordpress/block-editor';
-import Title from './shared/title';
+import { InnerBlocks, useBlockProps, RichText } from '@wordpress/block-editor';
 
-const Edit = ({ attributes: { counter = 0, title, secret }, setAttributes }) => (
+const Edit = ({
+	attributes: { counter = 0, title, secret },
+	setAttributes,
+}) => (
 	<>
 		<div {...useBlockProps()}>
-			<Title
+			<RichText
+				tagName="h2"
+				className="title"
+				value={title}
 				onChange={(val) => setAttributes({ title: val })}
 				placeholder="This will be passed through context to child blocks"
-			>
-				{title}
-			</Title>
+			/>
 			<button>Show</button>
 			<button onClick={() => setAttributes({ counter: counter + 1 })}>
 				{counter}
