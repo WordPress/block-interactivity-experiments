@@ -1,6 +1,6 @@
 const View = ({ attributes, blockProps, children }) => (
 	<div {...blockProps}>
-		<p className="title">{attributes.title}</p>
+		<h4 className="title">{attributes.title}</h4>
 		{children}
 	</div>
 );

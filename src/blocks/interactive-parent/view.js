@@ -1,5 +1,4 @@
 import { useState } from '../../gutenberg-packages/wordpress-element';
-import Title from './shared/title';
 
 const View = ({
 	blockProps: {
@@ -21,7 +20,7 @@ const View = ({
 				fontWeight: bold ? 900 : fontWeight,
 			}}
 		>
-			<Title>{title}</Title>
+			<h2 className="title">{title}</h2>
 			<button onClick={() => setShow(!show)}>Show</button>
 			<button onClick={() => setBold(!bold)}>Bold</button>
 			<button onClick={() => setCounter(counter + 1)}>{counter}</button>
