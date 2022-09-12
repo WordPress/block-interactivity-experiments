@@ -1,18 +1,33 @@
-import { matcherFromSource } from '../utils';
+import { createElement as h } from "preact/compat";
+import { matcherFromSource } from './utils';
 
-export default function processWpBlock({ vNode, domNode, map }) {
+export default function visitor(vNode, domNode) {
+	const name = (vNode.type || '').toLowerCase();
+	const map = visitor.map;
+
+	if (name === 'wp-block' && map) {
+		processWpBlock({ vNode, domNode, map });
+	} else {
+		vNode.type = name.replace(/[^a-z0-9-]/i, '');
+	}
+}
+
+function processWpBlock({ vNode, domNode, map }) {
 	const blockType = vNode.props['data-wp-block-type'];
 	const Component = map[blockType];
 
 	if (!Component) return vNode;
 
-	vNode.type = Component;
-	vNode.props = {
-		// ...vNode.props,
+	const block = h(Component, {
 		attributes: getAttributes(vNode, domNode),
 		context: {},
 		blockProps: getBlockProps(vNode),
 		children: getChildren(vNode),
+	}); 
+
+	vNode.props = {
+		...vNode.props,
+		children: [block]
 	};
 }
 

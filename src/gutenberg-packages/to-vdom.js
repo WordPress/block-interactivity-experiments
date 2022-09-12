@@ -25,11 +25,8 @@ function walk(n, index, arr) {
 				);
 			}
 			// skip leading/trailing whitespace
-			// if (!text || text===' ' && arr.length>1 && (index===0 || index===arr.length-1)) return null;
 			if ((!text || text === ' ') && arr.length > 1 && isFirstOrLast)
 				return null;
-			// if (!text && arr.length>1 && (index===0 || index===arr.length-1)) return null;
-			// if (!text || text===' ') return null;
 		}
 		return text;
 	}

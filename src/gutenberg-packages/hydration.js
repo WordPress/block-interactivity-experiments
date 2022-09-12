@@ -1,21 +1,16 @@
-import { hydrate } from 'preact/compat';
+import { hydrate, createElement } from 'preact/compat';
 import { createGlobal } from './utils';
-import Markup from './markup';
+import toVdom from './to-vdom';
+import visitor from './visitor';
 
 const blockViews = createGlobal('blockViews', new Map());
-const container = document.querySelector('.wp-site-blocks');
 
 const components = Object.fromEntries(
 	[...blockViews.entries()].map(([k, v]) => [k, v.Component])
 );
 
-hydrate(
-	<Markup
-		markup={container}
-		type="dom"
-		wrap={false}
-		trim={false}
-		components={components}
-	/>,
-	container
-);
+visitor.map = components;
+
+const dom = document.querySelector('.wp-site-blocks');
+const vdom = toVdom(dom, visitor, createElement, {}).props.children;
+hydrate(vdom, dom);
