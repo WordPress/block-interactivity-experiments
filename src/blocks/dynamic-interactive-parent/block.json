@@ -10,8 +10,7 @@
 	"usesContext": [
 		"postId",
 		"postType",
-		"queryId",
-		"bhe/dynamic-non-interactive-title"
+		"queryId"
 	],
 	"attributes": {
 		"counter": {

@@ -10,7 +10,6 @@ import Button from './shared/button';
 import Title from './shared/title';
 
 const Edit = ({ attributes, setAttributes, context }) => {
-    const blockProps = useBlockProps();
     const { counter, blockTitle, secret } = attributes;
     const { postType, postId, queryId } = context;
 
@@ -22,7 +21,7 @@ const Edit = ({ attributes, setAttributes, context }) => {
     );
 
     return (
-        <div {...blockProps}>
+        <div {...useBlockProps()}>
             <h2>Post Title: {fullTitle?.rendered}</h2>
             <Title
                 value={blockTitle}
