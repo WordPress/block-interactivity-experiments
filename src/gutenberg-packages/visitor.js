@@ -1,4 +1,4 @@
-import { createElement as h } from "preact/compat";
+import { h } from "preact";
 import { matcherFromSource } from './utils';
 
 export default function visitor(vNode, domNode) {
@@ -23,11 +23,11 @@ function processWpBlock({ vNode, domNode, map }) {
 		context: {},
 		blockProps: getBlockProps(vNode),
 		children: getChildren(vNode),
-	}); 
+	});
 
 	vNode.props = {
 		...vNode.props,
-		children: [block]
+		children: ['\n', block, '\n']
 	};
 }
 
@@ -65,7 +65,7 @@ function getChildrenFromWrapper(children) {
 	if (!children?.length) return null;
 
 	for (const child of children) {
-		if (isChildrenWrapper(child)) return child.props?.children || [];
+		if (isChildrenWrapper(child)) return [child] || [];
 	}
 
 	// Try with the next nesting level.

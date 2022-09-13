@@ -13,4 +13,5 @@ visitor.map = components;
 
 const dom = document.querySelector('.wp-site-blocks');
 const vdom = toVdom(dom, visitor, createElement, {}).props.children;
-hydrate(vdom, dom);
+
+setTimeout(() => console.log('hydrated', hydrate(vdom, dom)), 3000);

@@ -8,28 +8,8 @@ export default function toVdom(node, visitor, h, options) {
 	return walk(node);
 }
 
-function walk(n, index, arr) {
-	if (n.nodeType === 3) {
-		let text = 'textContent' in n ? n.textContent : n.nodeValue || '';
-
-		if (walk.options.trim !== false) {
-			let isFirstOrLast = index === 0 || index === arr.length - 1;
-
-			// trim strings but don't entirely collapse whitespace
-			if (text.match(/^[\s\n]+$/g) && walk.options.trim !== 'all') {
-				text = ' ';
-			} else {
-				text = text.replace(
-					/(^[\s\n]+|[\s\n]+$)/g,
-					walk.options.trim === 'all' || isFirstOrLast ? '' : ' '
-				);
-			}
-			// skip leading/trailing whitespace
-			if ((!text || text === ' ') && arr.length > 1 && isFirstOrLast)
-				return null;
-		}
-		return text;
-	}
+function walk(n) {
+	if (n.nodeType === 3) return n.data;
 	if (n.nodeType !== 1) return null;
 	let nodeName = String(n.nodeName).toLowerCase();
 
