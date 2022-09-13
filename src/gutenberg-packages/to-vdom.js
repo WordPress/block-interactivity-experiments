@@ -1,10 +1,6 @@
-const EMPTY_OBJ = {};
-
-// deeply convert an XML DOM to VDOM
-export default function toVdom(node, visitor, h, options) {
+export default function toVdom(node, visitor, h) {
 	walk.visitor = visitor;
 	walk.h = h;
-	walk.options = options || EMPTY_OBJ;
 	return walk(node);
 }
 
@@ -13,8 +9,8 @@ function walk(n) {
 	if (n.nodeType !== 1) return null;
 	let nodeName = String(n.nodeName).toLowerCase();
 
-	// Do not allow script tags unless explicitly specified
-	if (nodeName === 'script' && !walk.options.allowScripts) return null;
+	// Do not allow script tags (for now).
+	if (nodeName === 'script') return null;
 
 	let out = walk.h(
 		nodeName,
@@ -32,9 +28,6 @@ function getProps(attrs) {
 	let props = {};
 	for (let i = 0; i < len; i++) {
 		let { name, value } = attrs[i];
-		if (name.substring(0, 2) === 'on' && walk.options.allowEvents) {
-			value = new Function(value); // eslint-disable-line no-new-func
-		}
 		props[name] = value;
 	}
 	return props;
