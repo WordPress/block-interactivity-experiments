@@ -42,7 +42,6 @@
 	},
 	"dependencies": {
 		"hpq": "^1.3.0",
-		"preact": "^10.10.6",
-		"preact-markup": "^2.1.1"
+		"preact": "^10.10.6"
 	}
 }
