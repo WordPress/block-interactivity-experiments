@@ -26,7 +26,7 @@ const Edit = ({ attributes, setAttributes, context }) => {
             <h2>Post Title: {fullTitle?.rendered}</h2>
             <Title
                 value={blockTitle}
-                onChange={(blockTitle) => setAttributes({ blockTitle })}
+                onChange={(val) => setAttributes({ blockTitle: val })}
                 placeholder="This will be passed through context to child blocks"
                 className="dynamic-interactive-parent-block-title"
             >

@@ -19,18 +19,11 @@
 			"default": 0,
 			"public": true
 		},
-		"postTitle": {
-			"type": "string",
-			"source": "text",
-			"selector": "h2",
-			"public": true
-		},
 		"blockTitle": {
 			"type": "string",
 			"source": "text",
 			"selector": ".dynamic-interactive-parent-block-title",
-			"public": true,
-			"default": "Default Title"
+			"public": true
 		},
 		"secret": {
 			"type": "string",
@@ -50,7 +43,7 @@
 		"view": true
 	},
 	"providesContext": {
-		"bhe/dynamic-interactive-title": "title"
+		"bhe/dynamic-interactive-title": "blockTitle"
 	},
 	"textdomain": "bhe",
 	"editorScript": "file:./index.js",

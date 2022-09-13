@@ -10,12 +10,6 @@
 		"queryId"
 	],
 	"attributes": {
-		"postTitle": {
-			"type": "string",
-			"source": "text",
-			"selector": "h2",
-			"public": true
-		},
 		"blockTitle": {
 			"type": "string",
 			"source": "text",

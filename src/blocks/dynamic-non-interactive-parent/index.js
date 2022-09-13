@@ -13,7 +13,7 @@ registerBlockType('bhe/dynamic-non-interactive-parent', {
     save: ({ attributes }) => {
         return (
             <>
-                <RichText.Content tagName="h2" className="dynamic-non-interactive-parent-block-title" value={attributes.title} />
+                <RichText.Content tagName="h2" className="dynamic-non-interactive-parent-block-title" value={attributes.blockTitle} />
                 <InnerBlocks.Content />
             </>
         )
