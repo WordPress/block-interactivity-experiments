@@ -9,12 +9,13 @@ const View = ({
         className,
         style: { fontWeight, ...style },
     },
-    attributes: { counter: initialCounter, blockTitle },
+    attributes: { counter: initialCounter, blockTitle, state },
     children,
 }) => {
     const [show, setShow] = useState(true);
     const [bold, setBold] = useState(false);
     const [counter, setCounter] = useState(initialCounter);
+    const { title } = JSON.parse(state);
 
     return (
         <Counter.Provider value={counter}>
@@ -26,6 +27,7 @@ const View = ({
                         fontWeight: bold ? 900 : fontWeight,
                     }}
                 >
+                    <h2>Post Title: {title}</h2>
                     <Title>Block Title: {blockTitle}</Title>
                     <Button handler={() => setShow(!show)}>Show</Button>
                     <Button handler={() => setBold(!bold)}>Bold</Button>

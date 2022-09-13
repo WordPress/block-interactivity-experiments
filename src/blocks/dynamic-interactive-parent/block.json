@@ -20,9 +20,13 @@
 		},
 		"blockTitle": {
 			"type": "string",
-			"source": "text",
-			"selector": ".dynamic-interactive-parent-block-title",
 			"public": true
+		},
+		"state": {
+			"type": "string",
+			"public": true,
+			"source": "text",
+			"selector": ".dynamic-parent-block-state"
 		},
 		"secret": {
 			"type": "string",

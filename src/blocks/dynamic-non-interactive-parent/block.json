@@ -12,8 +12,6 @@
 	"attributes": {
 		"blockTitle": {
 			"type": "string",
-			"source": "text",
-			"selector": ".dynamic-non-interactive-parent-block-title",
 			"public": true
 		}
 	},
