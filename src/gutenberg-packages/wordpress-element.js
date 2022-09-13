@@ -1,28 +1,26 @@
 import {
 	createContext,
-	useContext as useReactContext,
-	useEffect as useReactEffect,
-	useState as useReactState,
-} from '@wordpress/element';
+	useContext as usePreactContext,
+	useEffect as usePreactEffect,
+	useState as usePreactState,
+} from 'preact/compat';
 
-export const EnvContext = createContext(null);
+export const EnvContext = createContext('view');
 
 /**
  * A React hook that returns the name of the environment.
  *
- * This is still a bit hacky. Ideally, Save components should support React
- * hooks and all the environments (Edit, Save and View) should populate a
- * normal context. Also, more environments could be added in the future.
+ * Based on the workaround used for the Island Hydration approach, but only to differentiate between
+ * Save and View, so this function and related hooks cannot be used inside Edit.
+ * 
+ * Note that the other approach was a bit hacky; this is a bit more hacky.
  *
- * @returns {"edit" | "save" | "view"}
+ * @returns {"save" | "view"}
  */
 export const useBlockEnvironment = () => {
 	try {
-		const env = useReactContext(EnvContext);
-		if (env === 'view') {
-			return 'view';
-		}
-		return 'edit';
+		// This will fail if the hook runs inside something that's not a Preact component.
+		return usePreactContext(EnvContext);
 	} catch (e) {
 		return 'save';
 	}
@@ -30,13 +28,13 @@ export const useBlockEnvironment = () => {
 
 const noop = () => {};
 
-export const useState = (init) =>
-	useBlockEnvironment() !== 'save' ? useReactState(init) : [init, noop];
+export const useState = (init) => 
+	useBlockEnvironment() !== 'save' ? usePreactState(init) : [init, noop];
 
 export const useEffect = (...args) =>
-	useBlockEnvironment() !== 'save' ? useReactEffect(...args) : noop;
+	useBlockEnvironment() !== 'save' ? usePreactEffect(...args) : noop;
 
 export const useContext = (Context) =>
 	useBlockEnvironment() !== 'save'
-		? useReactContext(Context)
+		? usePreactContext(Context)
 		: Context._currentValue;

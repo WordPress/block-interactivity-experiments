@@ -4,15 +4,6 @@ module.exports = [
 	defaultConfig,
 	{
 		...defaultConfig,
-		resolve: {
-			alias: {
-				'@wordpress/element': 'preact/compat',
-				react: 'preact/compat',
-				'react-dom/test-utils': 'preact/test-utils',
-				'react-dom': 'preact/compat', // Must be below test-utils
-				'react/jsx-runtime': 'preact/jsx-runtime',
-			},
-		},
 		entry: {
 			'gutenberg-packages/hydration':
 				'./src/gutenberg-packages/hydration.js',
@@ -20,6 +11,20 @@ module.exports = [
 				'./src/blocks/interactive-child/register-view.js',
 			'blocks/interactive-parent/register-view':
 				'./src/blocks/interactive-parent/register-view.js',
+		},
+		optimization: {
+			runtimeChunk: {
+				name: 'vendors',
+			},
+			splitChunks: {
+				cacheGroups: {
+					vendor: {
+						test: /[\\/]node_modules[\\/]/,
+						name: 'vendors',
+						chunks: 'all',
+					},
+				},
+			},
 		},
 		module: {
 			rules: [

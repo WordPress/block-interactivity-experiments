@@ -11,6 +11,8 @@
  */
 function block_hydration_experiments_init()
 {
+	wp_enqueue_script('vendors', plugin_dir_url(__FILE__) . 'build/vendors.js');
+
 	wp_register_script(
 		'hydration',
 		plugin_dir_url(__FILE__) . 'build/gutenberg-packages/hydration.js',
@@ -116,7 +118,12 @@ function bhe_block_wrapper($block_content, $block, $instance)
 		$template_wrapper,
 		sprintf($block_wrapper, $block_content . $empty_template)
 	);
-	return sprintf($block_wrapper, $block_content);
+
+	// The block content comes between two line breaks that seem to be included during block
+	// serialization, corresponding to those between the block markup and the block content.
+	//
+	// They need to be removed here; otherwise, the preact hydration fails.
+	return sprintf($block_wrapper, substr($block_content, 1, -1));
 }
 
 add_filter('render_block', 'bhe_block_wrapper', 10, 3);

@@ -1,9 +1,6 @@
-import { createContext, useState } from 'preact/compat';
-import Button from './shared/button';
-import Title from './shared/title';
-
-const Counter = createContext(null);
-const Theme = createContext(null);
+import Counter from '../../context/counter';
+import Theme from '../../context/theme';
+import { useState } from '../../gutenberg-packages/wordpress-element';
 
 const View = ({
 	blockProps: {
@@ -27,9 +24,9 @@ const View = ({
 						fontWeight: bold ? 900 : fontWeight,
 					}}
 				>
-					<Title>{title}</Title>
-					<Button handler={() => setShow(!show)}>Show</Button>
-					<Button handler={() => setBold(!bold)}>Bold</Button>
+					<h2 className="title">{title}</h2>
+					<button onClick={() => setShow(!show)}>Show</button>
+					<button onClick={() => setBold(!bold)}>Bold</button>
 					<button onClick={() => setCounter(counter + 1)}>
 						{counter}
 					</button>
