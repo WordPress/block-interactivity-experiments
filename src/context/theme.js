@@ -1,7 +1,11 @@
-import { createContext } from '@wordpress/element';
+import { createContext } from 'preact/compat';
 
-if (typeof window.themeReactContext === 'undefined') {
-	window.themeReactContext = createContext(null);
+if (typeof window.themeContext === 'undefined') {
+	window.themeContext = window.wp.element
+		? window.wp.element.createContext('initial')
+		: createContext('initial');
+
+	window.themeContext.displayName = 'ThemeContext';
 }
-window.themeReactContext.displayName = 'ThemeContext';
-export default window.themeReactContext;
+
+export default window.themeContext;

@@ -1,6 +1,10 @@
+import CounterContext from '../../context/counter';
+import ThemeContext from '../../context/theme';
+import { useContext } from '../../gutenberg-packages/wordpress-element';
+
 const View = ({ blockProps, context }) => {
-	const theme = 'cool theme';
-	const counter = 0;
+	const theme = useContext(ThemeContext);
+	const counter = useContext(CounterContext);
 
 	return (
 		<div {...blockProps}>
