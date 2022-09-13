@@ -118,7 +118,7 @@ function bhe_block_wrapper($block_content, $block, $instance)
 		$template_wrapper,
 		sprintf($block_wrapper, $block_content . $empty_template)
 	);
-	return sprintf($block_wrapper, $block_content);
+	return sprintf($block_wrapper, substr($block_content, 1, -1));
 }
 
 add_filter('render_block', 'bhe_block_wrapper', 10, 3);

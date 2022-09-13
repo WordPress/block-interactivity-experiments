@@ -27,7 +27,7 @@ function processWpBlock({ vNode, domNode, map }) {
 
 	vNode.props = {
 		...vNode.props,
-		children: ['\n', block, '\n']
+		children: [block]
 	};
 }
 
