@@ -1,7 +1,5 @@
 const defaultConfig = require('@wordpress/scripts/config/webpack.config');
 
-delete defaultConfig.optimization.minimizer;
-
 module.exports = [
 	defaultConfig,
 	{
