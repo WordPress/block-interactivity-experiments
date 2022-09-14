@@ -1,41 +1,41 @@
-export default function toVdom(node, visitor, h) {
-	walk.visitor = visitor;
-	walk.h = h;
-	return walk(node);
+import { h } from 'preact';
+
+// Callbacks to run after node -> vNode tranform.
+const hooks = {};
+
+// Expose function to add hooks.
+export const addHook = (name, cb) => {
+	hooks[name] = cb;
 }
 
-function walk(n) {
+// Recursive function that transfoms a DOM tree into vDOM.
+export default function toVdom(n) {
 	if (n.nodeType === 3) return n.data;
 	if (n.nodeType !== 1) return null;
-	let nodeName = String(n.nodeName).toLowerCase();
+	
+	// Get the node type.
+	const type = String(n.nodeName).toLowerCase();
 
-	// Do not allow script tags (for now).
-	if (nodeName === 'script') return null;
+	if (type === 'script') return null;
 
-	let out = walk.h(
-		nodeName,
-		getProps(n.attributes),
-		walkChildren(n.childNodes)
-	);
-	if (walk.visitor) walk.visitor(out, n);
-
-	return out;
-}
-
-function getProps(attrs) {
-	let len = attrs && attrs.length;
-	if (!len) return null;
-	let props = {};
-	for (let i = 0; i < len; i++) {
-		let { name, value } = attrs[i];
+	// Extract props from node attributes.
+	const props = {};
+	for (const { name, value } of n.attributes) {
 		props[name] = value;
 	}
-	return props;
+
+	// Walk child nodes and return vDOM children.
+	const children = [].map.call(n.childNodes, toVdom).filter(exists)
+
+	// Create vNode.
+	const vNode = h( type, props, children );
+
+	// Run toVdom hooks, passing node and vNode.
+	for (const name in hooks) {
+		hooks[name](vNode, n);
+	}
+
+	return vNode;
 }
 
-function walkChildren(children) {
-	let c = children && Array.prototype.map.call(children, walk).filter(exists);
-	return c && c.length ? c : null;
-}
-
-let exists = (x) => x;
+const exists = (x) => x;

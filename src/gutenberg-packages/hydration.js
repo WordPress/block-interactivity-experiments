@@ -1,6 +1,6 @@
 import { hydrate, createElement } from 'preact/compat';
 import { createGlobal } from './utils';
-import toVdom from './to-vdom';
+import toVdom, { addHook } from './to-vdom';
 import visitor from './visitor';
 
 const blockViews = createGlobal('blockViews', new Map());
@@ -10,6 +10,8 @@ const components = Object.fromEntries(
 );
 
 visitor.map = components;
+
+addHook('wp-blocks', visitor);
 
 const dom = document.querySelector('.wp-site-blocks');
 const vdom = toVdom(dom, visitor, createElement).props.children;
