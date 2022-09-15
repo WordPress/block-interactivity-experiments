@@ -1,19 +1,31 @@
 import { hydrate, createElement } from 'preact/compat';
 import { createGlobal } from './utils';
-import toVdom, { addHook } from './to-vdom';
-import visitor from './visitor';
+import toVdom from './to-vdom';
+import { directive } from './directives';
 
 const blockViews = createGlobal('blockViews', new Map());
 
-const components = Object.fromEntries(
-	[...blockViews.entries()].map(([k, v]) => [k, v.Component])
-);
+// Handle block components.
+directive('type', (props) => {
+	const {
+		type,
+		attributes,
+		context = {},
+		props: blockProps,
+		innerBlocks: children,
+	} = props.wpBlock;
 
-visitor.map = components;
+	// Do nothing if there's no component for this block.
+	if (!blockViews.has(type)) return;
 
-addHook('wp-blocks', visitor);
+	const { Component } = blockViews.get(type);
+
+	props.children = [
+		createElement(Component, { context, attributes, blockProps, children }),
+	];
+});
 
 const dom = document.querySelector('.wp-site-blocks');
-const vdom = toVdom(dom, visitor, createElement).props.children;
+const vdom = toVdom(dom).props.children;
 
 setTimeout(() => console.log('hydrated', hydrate(vdom, dom)), 3000);
