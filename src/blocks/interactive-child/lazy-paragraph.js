@@ -1,0 +1,1 @@
+export default ({ children }) => <p>Lazy-loaded content: {children}</p>

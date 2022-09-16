@@ -3,6 +3,9 @@ import {
 	useContext as usePreactContext,
 	useEffect as usePreactEffect,
 	useState as usePreactState,
+	Suspense as PreactSuspense,
+	lazy as preactLazy,
+	createElement as h
 } from 'preact/compat';
 
 import { useErrorBoundary as usePreactErrorBoundary } from 'preact/hooks';
@@ -45,3 +48,8 @@ export const useErrorBoundary = (cb) =>
 	useBlockEnvironment() !== 'save'
 		? usePreactErrorBoundary(cb)
 		: [false, noop];
+
+export const Suspense = (props) =>
+	useBlockEnvironment() !== 'save' ? h(PreactSuspense, props) : props.fallback;
+
+export const lazy = preactLazy;
