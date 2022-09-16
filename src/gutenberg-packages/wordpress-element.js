@@ -5,6 +5,8 @@ import {
 	useState as usePreactState,
 } from 'preact/compat';
 
+import { useErrorBoundary as usePreactErrorBoundary } from 'preact/hooks';
+
 export const EnvContext = createContext('view');
 
 /**
@@ -12,7 +14,7 @@ export const EnvContext = createContext('view');
  *
  * Based on the workaround used for the Island Hydration approach, but only to differentiate between
  * Save and View, so this function and related hooks cannot be used inside Edit.
- * 
+ *
  * Note that the other approach was a bit hacky; this is a bit more hacky.
  *
  * @returns {"save" | "view"}
@@ -28,7 +30,7 @@ export const useBlockEnvironment = () => {
 
 const noop = () => {};
 
-export const useState = (init) => 
+export const useState = (init) =>
 	useBlockEnvironment() !== 'save' ? usePreactState(init) : [init, noop];
 
 export const useEffect = (...args) =>
@@ -38,3 +40,8 @@ export const useContext = (Context) =>
 	useBlockEnvironment() !== 'save'
 		? usePreactContext(Context)
 		: Context._currentValue;
+
+export const useErrorBoundary = (cb) =>
+	useBlockEnvironment() !== 'save'
+		? usePreactErrorBoundary(cb)
+		: [false, noop];
