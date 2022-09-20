@@ -1,13 +1,6 @@
 import CounterContext from '../../context/counter';
 import ThemeContext from '../../context/theme';
-import {
-	useContext,
-	useState,
-	Suspense,
-	lazy,
-} from '../../gutenberg-packages/wordpress-element';
-
-const LazyParagraph = lazy(() => import('./lazy-paragraph'));
+import { useContext, useState } from '../../gutenberg-packages/wordpress-element';
 
 const View = ({ blockProps, context }) => {
 	const theme = useContext(ThemeContext);
@@ -32,17 +25,6 @@ const View = ({ blockProps, context }) => {
 			<div className="animation"></div>
 			<p>React Context - "counter": {counter}</p>
 			<p>React Context - "theme": {theme}</p>
-			<Suspense
-				fallback={
-					<p key="suspense">
-						<div>Loading...</div>
-					</p>
-				}
-			>
-				<div key="suspense">
-					<LazyParagraph>Hello!</LazyParagraph>
-				</div>
-			</Suspense>
 		</div>
 	);
 };
