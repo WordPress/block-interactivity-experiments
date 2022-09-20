@@ -15,7 +15,7 @@ export default function toVdom(n) {
 	// Get the node type.
 	const type = String(n.nodeName).toLowerCase();
 
-	if (type === 'script') return null;
+	if (type === 'script') return h('script');
 
 	// Extract props from node attributes.
 	const props = {};
