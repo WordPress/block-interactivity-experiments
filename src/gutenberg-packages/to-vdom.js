@@ -47,7 +47,7 @@ export default function toVdom(n) {
 	const children = [].map.call(n.childNodes, toVdom).filter(exists);
 
 	// Add inner blocks.
-	if (type === 'wp-block' && innerBlocksFound) {
+	if (wpBlock.type && innerBlocksFound) {
 		wpBlock.innerBlocks = innerBlocksFound;
 		innerBlocksFound = null;
 
