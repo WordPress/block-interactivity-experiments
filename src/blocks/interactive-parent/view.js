@@ -1,6 +1,9 @@
 import Counter from '../../context/counter';
 import Theme from '../../context/theme';
-import { useState } from '../../gutenberg-packages/wordpress-element';
+import {
+	useState,
+	useErrorBoundary,
+} from '../../gutenberg-packages/wordpress-element';
 
 const View = ({
 	blockProps: {
@@ -13,6 +16,8 @@ const View = ({
 	const [show, setShow] = useState(true);
 	const [bold, setBold] = useState(true);
 	const [counter, setCounter] = useState(initialCounter);
+
+	const [error, resetError] = useErrorBoundary();
 
 	return (
 		<Counter.Provider value={counter}>
@@ -30,7 +35,15 @@ const View = ({
 					<button onClick={() => setCounter(counter + 1)}>
 						{counter}
 					</button>
-					{show && children}
+					{!error && show && children}
+					{error && (
+						<div>
+							<p>{error.toString()}</p>
+							<button onClick={resetError}>
+								Attempt recovery
+							</button>
+						</div>
+					)}
 				</div>
 			</Theme.Provider>
 		</Counter.Provider>
