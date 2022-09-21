@@ -1,4 +1,3 @@
-import { createElement as h } from 'preact/compat'; 
 import { createGlobal } from '../gutenberg-packages/utils';
 import { directive } from '../gutenberg-packages/directives';
 
