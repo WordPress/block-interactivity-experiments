@@ -4,7 +4,7 @@ import { matcherFromSource } from './utils';
 // Prefix used by WP directives.
 const prefix = 'data-wp-block-';
 
-// Reference to the last <inner-blocks> wrapper found.
+// Reference to the last <wp-inner-blocks> wrapper found.
 let innerBlocksFound = null;
 
 // Recursive function that transfoms a DOM tree into vDOM.
@@ -58,7 +58,7 @@ export default function toVdom(n) {
 	// Create vNode. Note that all `wpBlock` props should exist now to make directives work.
 	const vNode = h(type, props, children);
 
-	// Save a renference to this vNode if it's an <inner-blocks>` wrapper.
+	// Save a renference to this vNode if it's an <wp-inner-blocks>` wrapper.
 	if (type === 'wp-inner-blocks') {
 		innerBlocksFound = vNode;
 	}
