@@ -119,11 +119,20 @@ function bhe_block_wrapper($block_content, $block, $instance)
 
 	// Append all wp block attributes after the class attribute containing the block class name.
 	// Elements with that class name are supposed to be those with the wrapper attributes.
-	// Note that $class_pattern could not cover some edge cases.
 	//
 	// We could use `WP_HTML_Walker` (see https://github.com/WordPress/gutenberg/pull/42485) in the
 	// future if that PR is finally merged.
-	$class_pattern     = '/class="[\w\s-]*wp-block-[\w-]+[\w\s-]*"/';
+
+	// This replace is similar to the one used in Gutenberg (see
+	// https://github.com/WordPress/gutenberg/blob/1582c723f31ce0f728cd4dcc1af37821342eeaaa/packages/blocks/src/api/serializer.js#L41-L44).
+	$block_classname = 'wp-block-' . preg_replace(
+		['/\//', '/^core-/'],
+		['-', ''],
+		$instance->name
+	);
+
+	// Be aware that this pattern could not cover some edge cases.
+	$class_pattern     = '/class="\s*(?:[\w\s-]\s+)*' . $block_classname . '(?:\s+[\w-]+)*\s*"/';
 	$class_replacement = '$0 ' . $block_wrapper_attributes;
 	$block_content     = preg_replace( $class_pattern, $class_replacement, $block_content, 1 );
 
