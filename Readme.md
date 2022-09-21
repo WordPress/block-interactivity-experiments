@@ -36,6 +36,7 @@ If you want to use these experiments on your blocks, they will need:
 
 - To have a `block.json` file.
 - To be registered on the server.
+- A single node wrapper.
 
 ## Collaborate!
 

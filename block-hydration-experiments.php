@@ -92,16 +92,16 @@ function bhe_block_wrapper($block_content, $block, $instance)
 	$block_props = WP_Block_Supports::get_instance()->apply_block_supports();
 	WP_Block_Supports::$block_to_render = $previous_block_to_render;
 
-	$block_wrapper =
+	// Generate all required wrapper attributes.
+	$block_wrapper_attributes =
 		sprintf(
-			'<wp-block ' .
-				'data-wp-block-type="%1$s" ' .
-				'data-wp-block-uses-block-context="%2$s" ' .
-				'data-wp-block-provides-block-context="%3$s" ' .
-				'data-wp-block-attributes="%4$s" ' .
-				'data-wp-block-sourced-attributes="%5$s" ' .
-				'data-wp-block-props="%6$s" ' .
-				'data-wp-block-hydration="%7$s">',
+			'data-wp-block-type="%1$s" ' .
+			'data-wp-block-uses-block-context="%2$s" ' .
+			'data-wp-block-provides-block-context="%3$s" ' .
+			'data-wp-block-attributes="%4$s" ' .
+			'data-wp-block-sourced-attributes="%5$s" ' .
+			'data-wp-block-props="%6$s" ' .
+			'data-wp-block-hydration="%7$s"',
 			esc_attr($block['blockName']),
 			esc_attr(json_encode($block_type->uses_context)),
 			esc_attr(json_encode($block_type->provides_context)),
@@ -109,21 +109,34 @@ function bhe_block_wrapper($block_content, $block, $instance)
 			esc_attr(json_encode($sourced_attributes)),
 			esc_attr(json_encode($block_props)),
 			esc_attr($hydration_technique)
-		) . '%1$s</wp-block>';
-
-	$template_wrapper = '<template class="wp-inner-blocks">%1$s</template>';
-
-	$empty_template = sprintf($template_wrapper, '');
-	$template = sprintf(
-		$template_wrapper,
-		sprintf($block_wrapper, $block_content . $empty_template)
-	);
+		);
 
 	// The block content comes between two line breaks that seem to be included during block
 	// serialization, corresponding to those between the block markup and the block content.
 	//
 	// They need to be removed here; otherwise, the preact hydration fails.
-	return sprintf($block_wrapper, substr($block_content, 1, -1));
+	$block_content = substr($block_content, 1, -1);
+
+	// Append all wp block attributes after the class attribute containing the block class name.
+	// Elements with that class name are supposed to be those with the wrapper attributes.
+	//
+	// We could use `WP_HTML_Walker` (see https://github.com/WordPress/gutenberg/pull/42485) in the
+	// future if that PR is finally merged.
+
+	// This replace is similar to the one used in Gutenberg (see
+	// https://github.com/WordPress/gutenberg/blob/1582c723f31ce0f728cd4dcc1af37821342eeaaa/packages/blocks/src/api/serializer.js#L41-L44).
+	$block_classname = 'wp-block-' . preg_replace(
+		['/\//', '/^core-/'],
+		['-', ''],
+		$instance->name
+	);
+
+	// Be aware that this pattern could not cover some edge cases.
+	$class_pattern     = '/class="\s*(?:[\w\s-]\s+)*' . $block_classname . '(?:\s+[\w-]+)*\s*"/';
+	$class_replacement = '$0 ' . $block_wrapper_attributes;
+	$block_content     = preg_replace( $class_pattern, $class_replacement, $block_content, 1 );
+
+	return $block_content;
 }
 
 add_filter('render_block', 'bhe_block_wrapper', 10, 3);
