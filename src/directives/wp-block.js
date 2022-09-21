@@ -19,7 +19,12 @@ directive('type', (props) => {
 
 	const { Component } = blockViews.get(type);
 
-	props.children = [
-		h(Component, { context, attributes, blockProps, children }),
-	];
+	// The `tag` prop is used as the new component.
+	props.tag = Component;
+
+	// Set component properties.
+	props.context = context;
+	props.attributes = attributes;
+	props.blockProps = blockProps;
+	props.children = children;
 });

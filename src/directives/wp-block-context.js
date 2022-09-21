@@ -71,15 +71,14 @@ const withBlockContext = (Comp, { uses }) => {
 
 directive('providesBlockContext', (props) => {
 	const { providesBlockContext: provides, attributes } = props.wpBlock;
-	const [block] = props.children;
 
 	// The property `provides` can be null...
 	if (!provides || !Object.keys(provides).length) return;
 
-	block.props.children = h(
+	props.children = h(
 		BlockContextProvider,
 		{ provides, attributes },
-		block.props.children
+		props.children
 	);
 });
 
@@ -88,6 +87,5 @@ directive('usesBlockContext', (props) => {
 
 	if (!uses.length) return;
 
-	const [block] = props.children;
-	block.type = withBlockContext(block.type, { uses });
+	props.tag = withBlockContext(props.tag, { uses });
 });
