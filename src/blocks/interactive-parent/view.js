@@ -29,7 +29,12 @@ const View = ({
 						fontWeight: bold ? 900 : fontWeight,
 					}}
 				>
-					<h2 className="title">{title}</h2>
+					<h2
+						data-wp-block-log="the header of interactive-parent was rendered"
+						className="title"
+					>
+						{title}
+					</h2>
 					<button onClick={() => setShow(!show)}>Show</button>
 					<button onClick={() => setBold(!bold)}>Bold</button>
 					<button onClick={() => setCounter(counter + 1)}>
