@@ -28,5 +28,5 @@
 	"textdomain": "bhe",
 	"editorScript": "file:./index.js",
 	"style": "file:./style-index.css",
-	"render": "file:../../../src/blocks/dynamic-non-interactive-parent/render.php"
+	"render": "file:./render.php"
 }

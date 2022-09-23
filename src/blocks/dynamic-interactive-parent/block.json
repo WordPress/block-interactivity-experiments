@@ -53,5 +53,5 @@
 	"editorStyle": "file:./style.css",
 	"style": "file:./style-index.css",
 	"viewScript": "file:./register-view.js",
-	"render": "file:../../../src/blocks/dynamic-interactive-parent/render.php"
+	"render": "file:./render.php"
 }

@@ -35,7 +35,7 @@
 		"@wordpress/blocks": "^11.7.0",
 		"@wordpress/element": "^4.3.0",
 		"@wordpress/env": "^4.4.0",
-		"@wordpress/scripts": "^22.3.0",
+		"@wordpress/scripts": "^24.0.0",
 		"babel-jest": "^28.1.0",
 		"jest": "^28.1.0",
 		"prettier": "^2.7.1"
