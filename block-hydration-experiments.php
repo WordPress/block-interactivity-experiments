@@ -54,7 +54,7 @@ add_filter('render_block_bhe/interactive-parent', function ($content) {
 function bhe_block_wrapper($block_content, $block, $instance)
 {
 	// Append the `wp-inner-block` attribute for inner blocks of interactive blocks.
-	if ( isset($instance->parsed_block['isInnerBlock']) ) {
+	if (isset($instance->parsed_block['isInnerBlock'])) {
 		$block_content = bhe_append_block_attributes(
 			$instance->name,
 			$block_content,
@@ -102,23 +102,22 @@ function bhe_block_wrapper($block_content, $block, $instance)
 	WP_Block_Supports::$block_to_render = $previous_block_to_render;
 
 	// Generate all required wrapper attributes.
-	$block_wrapper_attributes =
-		sprintf(
-			'data-wp-block-type="%1$s" ' .
+	$block_wrapper_attributes = sprintf(
+		'data-wp-block-type="%1$s" ' .
 			'data-wp-block-uses-block-context="%2$s" ' .
 			'data-wp-block-provides-block-context="%3$s" ' .
 			'data-wp-block-attributes="%4$s" ' .
 			'data-wp-block-sourced-attributes="%5$s" ' .
 			'data-wp-block-props="%6$s" ' .
 			'data-wp-block-hydration="%7$s"',
-			esc_attr($block['blockName']),
-			esc_attr(json_encode($block_type->uses_context)),
-			esc_attr(json_encode($block_type->provides_context)),
-			esc_attr(json_encode($attributes)),
-			esc_attr(json_encode($sourced_attributes)),
-			esc_attr(json_encode($block_props)),
-			esc_attr($hydration_technique)
-		);
+		esc_attr($block['blockName']),
+		esc_attr(json_encode($block_type->uses_context)),
+		esc_attr(json_encode($block_type->provides_context)),
+		esc_attr(json_encode($attributes)),
+		esc_attr(json_encode($sourced_attributes)),
+		esc_attr(json_encode($block_props)),
+		esc_attr($hydration_technique)
+	);
 
 	// Append block wrapper attributes.
 	$block_content = bhe_append_block_attributes(
@@ -134,7 +133,6 @@ function bhe_block_wrapper($block_content, $block, $instance)
 	$block_content = substr($block_content, 1, -1);
 
 	return $block_content;
-	
 }
 
 add_filter('render_block', 'bhe_block_wrapper', 10, 3);
@@ -142,7 +140,8 @@ add_filter('render_block', 'bhe_block_wrapper', 10, 3);
 /**
  * Add a flag to mark inner blocks of interactive blocks.
  */
-function bhe_inner_blocks($parsed_block, $source_block, $parent_block) {
+function bhe_inner_blocks($parsed_block, $source_block, $parent_block)
+{
 	$parent_block_type = $parent_block->block_type;
 
 	if (block_has_support($parent_block_type, ['view'])) {
@@ -161,19 +160,24 @@ add_filter('render_block_data', 'bhe_inner_blocks', 10, 3);
  * TODO: use `WP_HTML_Tag_Processor` (see https://github.com/WordPress/gutenberg/pull/42485) once
  * the API is released.
  */
-function bhe_append_block_attributes($block_name, $block_content, $attributes) {
+function bhe_append_block_attributes($block_name, $block_content, $attributes)
+{
 	// Generate block class name, using a replace similar to the one used in Gutenberg (see
 	// https://github.com/WordPress/gutenberg/blob/1582c723f31ce0f728cd4dcc1af37821342eeaaa/packages/blocks/src/api/serializer.js#L41-L44).
-	$block_classname = 'wp-block-' . preg_replace(
-		['/\//', '/^core-/'],
-		['-', ''],
-		$block_name
-	);
+	$block_classname =
+		'wp-block-' .
+		preg_replace(['/\//', '/^core-/'], ['-', ''], $block_name);
 
 	// Be aware that this pattern could not cover some edge cases.
-	$class_pattern     = '/class="\s*(?:[\w\s-]\s+)*' . $block_classname . '(?:\s+[\w-]+)*\s*"/';
+	$class_pattern =
+		'/class="\s*(?:[\w\s-]\s+)*' . $block_classname . '(?:\s+[\w-]+)*\s*"/';
 	$class_replacement = '$0 ' . $attributes;
-	$block_content     = preg_replace( $class_pattern, $class_replacement, $block_content, 1 );
+	$block_content = preg_replace(
+		$class_pattern,
+		$class_replacement,
+		$block_content,
+		1
+	);
 
 	return $block_content;
 }
