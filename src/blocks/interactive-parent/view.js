@@ -30,7 +30,7 @@ const View = ({
 					}}
 				>
 					<h2
-						data-wp-block-log="the header of interactive-parent was rendered"
+						wp-log="the header of interactive-parent was rendered"
 						className="title"
 					>
 						{title}

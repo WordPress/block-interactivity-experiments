@@ -93,23 +93,22 @@ function bhe_block_wrapper($block_content, $block, $instance)
 	WP_Block_Supports::$block_to_render = $previous_block_to_render;
 
 	// Generate all required wrapper attributes.
-	$block_wrapper_attributes =
-		sprintf(
-			'data-wp-block-type="%1$s" ' .
-			'data-wp-block-uses-block-context="%2$s" ' .
-			'data-wp-block-provides-block-context="%3$s" ' .
-			'data-wp-block-attributes="%4$s" ' .
-			'data-wp-block-sourced-attributes="%5$s" ' .
-			'data-wp-block-props="%6$s" ' .
-			'data-wp-block-hydration="%7$s"',
-			esc_attr($block['blockName']),
-			esc_attr(json_encode($block_type->uses_context)),
-			esc_attr(json_encode($block_type->provides_context)),
-			esc_attr(json_encode($attributes)),
-			esc_attr(json_encode($sourced_attributes)),
-			esc_attr(json_encode($block_props)),
-			esc_attr($hydration_technique)
-		);
+	$block_wrapper_attributes = sprintf(
+		'wp-block-type="%1$s" ' .
+			'wp-block-uses-block-context="%2$s" ' .
+			'wp-block-provides-block-context="%3$s" ' .
+			'wp-block-attributes="%4$s" ' .
+			'wp-block-sourced-attributes="%5$s" ' .
+			'wp-block-props="%6$s" ' .
+			'wp-block-hydration="%7$s"',
+		esc_attr($block['blockName']),
+		esc_attr(json_encode($block_type->uses_context)),
+		esc_attr(json_encode($block_type->provides_context)),
+		esc_attr(json_encode($attributes)),
+		esc_attr(json_encode($sourced_attributes)),
+		esc_attr(json_encode($block_props)),
+		esc_attr($hydration_technique)
+	);
 
 	// The block content comes between two line breaks that seem to be included during block
 	// serialization, corresponding to those between the block markup and the block content.
@@ -120,21 +119,25 @@ function bhe_block_wrapper($block_content, $block, $instance)
 	// Append all wp block attributes after the class attribute containing the block class name.
 	// Elements with that class name are supposed to be those with the wrapper attributes.
 	//
-	// We could use `WP_HTML_Walker` (see https://github.com/WordPress/gutenberg/pull/42485) in the
+	// We could use `WP_HTML_Tag_Processor` (see https://github.com/WordPress/gutenberg/pull/42485) in the
 	// future if that PR is finally merged.
 
 	// This replace is similar to the one used in Gutenberg (see
 	// https://github.com/WordPress/gutenberg/blob/1582c723f31ce0f728cd4dcc1af37821342eeaaa/packages/blocks/src/api/serializer.js#L41-L44).
-	$block_classname = 'wp-block-' . preg_replace(
-		['/\//', '/^core-/'],
-		['-', ''],
-		$instance->name
-	);
+	$block_classname =
+		'wp-block-' .
+		preg_replace(['/\//', '/^core-/'], ['-', ''], $instance->name);
 
 	// Be aware that this pattern could not cover some edge cases.
-	$class_pattern     = '/class="\s*(?:[\w\s-]\s+)*' . $block_classname . '(?:\s+[\w-]+)*\s*"/';
+	$class_pattern =
+		'/class="\s*(?:[\w\s-]\s+)*' . $block_classname . '(?:\s+[\w-]+)*\s*"/';
 	$class_replacement = '$0 ' . $block_wrapper_attributes;
-	$block_content     = preg_replace( $class_pattern, $class_replacement, $block_content, 1 );
+	$block_content = preg_replace(
+		$class_pattern,
+		$class_replacement,
+		$block_content,
+		1
+	);
 
 	return $block_content;
 }

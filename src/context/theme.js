@@ -1,4 +1,4 @@
-import { createContext } from 'preact/compat';
+import { createContext } from 'preact';
 
 if (typeof window.themeContext === 'undefined') {
 	window.themeContext = window.wp.element

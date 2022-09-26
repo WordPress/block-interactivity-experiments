@@ -1,36 +1,32 @@
-import {
-	createContext,
-	useContext,
-	useMemo,
-	createElement as h,
-} from 'preact/compat';
+import { createContext, h } from 'preact';
+import { useContext, useMemo } from 'preact/hooks';
 import { directive } from '../gutenberg-packages/directives';
 
-// Single context reused by all providers. 
+// Single context reused by all providers.
 const blockContexts = createContext({});
 blockContexts.displayName = 'blockContexts';
 
 /**
  * Wrapper that provides the specified attributes. If there are ancestor that are also providers, it
  * merges all context together.
- * 
+ *
  * @param {*} props            Component props.
  * @param {*} props.provides   Map of context names and block attributes.
  * @param {*} props.attributes Block attributes.
- * 
+ *
  * @returns Block context provider.
  */
 const BlockContextProvider = ({ provides, attributes, children }) => {
-    // Get previous context.
+	// Get previous context.
 	const allContexts = useContext(blockContexts);
 
-    // Get provided context from attributes.
+	// Get provided context from attributes.
 	const context = {};
 	for (const key in provides) {
 		context[key] = attributes[provides[key]];
 	}
 
-    // Provide merged contexts.
+	// Provide merged contexts.
 	return (
 		<blockContexts.Provider value={{ ...allContexts, ...context }}>
 			{children}
@@ -40,18 +36,18 @@ const BlockContextProvider = ({ provides, attributes, children }) => {
 
 /**
  * HOC that injects only the required attributes from `blockContexts` value.
- * 
+ *
  * @param {*} Comp         Component.
  * @param {*} options      Options.
  * @param {*} options.uses Array of required contexts.
- * 
+ *
  * @returns HOC function.
  */
 const withBlockContext = (Comp, { uses }) => {
 	const hoc = (props) => {
 		const allContexts = useContext(blockContexts);
 
-        // Memoize only those attributes that are needed.
+		// Memoize only those attributes that are needed.
 		const context = useMemo(
 			() =>
 				uses.reduce((acc, attribute) => {
@@ -61,7 +57,7 @@ const withBlockContext = (Comp, { uses }) => {
 			uses.map((attribute) => allContexts[attribute])
 		);
 
-        // Inject context.
+		// Inject context.
 		return <Comp {...props} context={context} />;
 	};
 
@@ -69,8 +65,9 @@ const withBlockContext = (Comp, { uses }) => {
 	return hoc;
 };
 
-directive('providesBlockContext', (props) => {
-	const { providesBlockContext: provides, attributes } = props.wpBlock;
+directive('blockProvidesBlockContext', (props) => {
+	const { blockProvidesBlockContext: provides, blockAttributes: attributes } =
+		props.wp;
 
 	// The property `provides` can be null...
 	if (!provides || !Object.keys(provides).length) return;
@@ -82,8 +79,8 @@ directive('providesBlockContext', (props) => {
 	);
 });
 
-directive('usesBlockContext', (props) => {
-	const { usesBlockContext: uses } = props.wpBlock;
+directive('blockUsesBlockContext', (props) => {
+	const { blockUsesBlockContext: uses } = props.wp;
 
 	if (!uses.length) return;
 

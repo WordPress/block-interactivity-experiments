@@ -1,113 +1,55 @@
 import { h } from 'preact';
-import { matcherFromSource } from './utils';
-
-// Prefix used by WP directives.
-const prefix = 'data-wp-block-';
+import { rename } from './directives';
 
 // Reference to the last <wp-inner-blocks> wrapper found.
 let innerBlocksFound = null;
 
 // Recursive function that transfoms a DOM tree into vDOM.
-export default function toVdom(n) {
-	if (n.nodeType === 3) return n.data;
-	if (n.nodeType !== 1) return null;
+export default function toVdom(node) {
+	const props = { _static: true }; // Mark vnode as static.
+	const attributes = node.attributes;
+	const type = node.localName;
+	const wpDirectives = { ref: node }; // Pass node as ref
 
-	// Get the node type.
-	const type = String(n.nodeName).toLowerCase();
+	let hasWpDirectives = false;
 
+	if (node.nodeType === 3) return node.data;
+	if (node.nodeType === 8) return null;
 	if (type === 'script') return h('script');
 
-	// Extract props from node attributes.
-	const props = {};
-	const wpBlock = {};
-	for (const { name, value } of n.attributes) {
-		// Store block directives in `wpBlock`.
-		if (name.startsWith(prefix)) {
-			const propName = getWpBlockPropName(name);
+	for (let i = 0; i < attributes.length; i++) {
+		const name = attributes[i].name;
+		if (name.startsWith('wp-')) {
+			hasWpDirectives = true;
+			let value = attributes[i].value;
 			try {
-				wpBlock[propName] = JSON.parse(value);
-			} catch (e) {
-				wpBlock[propName] = value;
-			}
+				value = JSON.parse(value);
+			} catch (e) {}
+			wpDirectives[rename(name)] = value;
+		} else {
+			props[name] = attributes[i].value;
 		}
-		// Add the original property, and the rest of them.
-		props[name] = value;
 	}
 
-	// Include wpBlock prop if needed.
-	if (Object.keys(wpBlock).length) {
-		props.wpBlock = wpBlock;
+	const children = [].map.call(node.childNodes, toVdom).filter(exists);
 
-		// Handle special cases with wpBlock props.
-		handleSourcedAttributes(props, n);
-		handleBlockProps(props);
-	}
-
-	// Walk child nodes and return vDOM children.
-	const children = [].map.call(n.childNodes, toVdom).filter(exists);
-
-	// Add inner blocks.
-	if (wpBlock.type && innerBlocksFound) {
-		wpBlock.innerBlocks = innerBlocksFound;
+	// Add a reference to the inner blocks vnode.
+	if (hasWpDirectives && wpDirectives.blockType && innerBlocksFound) {
+		wpDirectives.innerBlocks = innerBlocksFound;
 		innerBlocksFound = null;
-
-		// Set wpBlock prop again, just in case it's missing.
-		props.wpBlock = wpBlock;
 	}
 
-	// Create vNode. Note that all `wpBlock` props should exist now to make directives work.
-	const vNode = h(type, props, children);
+	if (hasWpDirectives) props.wp = wpDirectives;
 
-	// Save a renference to this vNode if it's an <wp-inner-blocks>` wrapper.
+	const vnode = h(type, props, children);
+
+	// Save a reference to this vnode if it's an <wp-inner-blocks>` wrapper.
 	if (type === 'wp-inner-blocks') {
-		innerBlocksFound = vNode;
+		innerBlocksFound = vnode;
 	}
 
-	return vNode;
+	return vnode;
 }
 
-const getWpBlockPropName = (name) => toCamelCase(name.replace(prefix, ''));
-
-// Get sourced attributes and place them in `attributes`.
-const handleSourcedAttributes = ({ wpBlock }, domNode) => {
-	if (wpBlock && wpBlock.sourcedAttributes) {
-		const { sourcedAttributes, attributes = {} } = wpBlock;
-		for (const attr in sourcedAttributes) {
-			attributes[attr] = matcherFromSource(sourcedAttributes[attr])(
-				domNode
-			);
-		}
-		wpBlock.attributes = attributes;
-	}
-};
-
-// Adapt block props to React/Preact format.
-const handleBlockProps = ({ wpBlock }) => {
-	if (!wpBlock.props) return;
-
-	const { class: className, style } = wpBlock.props;
-	wpBlock.props = { className, style: cssObject(style) };
-};
-
-// Return an object of camelCased CSS properties.
-const cssObject = (cssText) => {
-	if (!cssText) return {};
-
-	const el = document.createElement('div');
-	const { style } = el;
-	style.cssText = cssText;
-
-	const output = {};
-	for (let i = 0; i < style.length; i += 1) {
-		const key = style.item(0);
-		output[toCamelCase(key)] = style.getPropertyValue(key);
-	}
-
-	el.remove();
-	return output;
-};
-
+// Filter existing items.
 const exists = (x) => x;
-
-const toCamelCase = (str) =>
-	str.replace(/-(.)/g, (_, initial) => initial.toUpperCase());
