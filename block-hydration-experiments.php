@@ -55,7 +55,7 @@ function bhe_block_wrapper($block_content, $block, $instance)
 {
 	// Append the `wp-inner-block` attribute for inner blocks of interactive blocks.
 	if (isset($instance->parsed_block['isInnerBlock'])) {
-		$block_content = bhe_append_block_attributes(
+		$block_content = bhe_append_attributes(
 			$instance->name,
 			$block_content,
 			'wp-inner-block'
@@ -120,7 +120,7 @@ function bhe_block_wrapper($block_content, $block, $instance)
 	);
 
 	// Append block wrapper attributes.
-	$block_content = bhe_append_block_attributes(
+	$block_content = bhe_append_attributes(
 		$instance->name,
 		$block_content,
 		$block_wrapper_attributes
@@ -142,9 +142,10 @@ add_filter('render_block', 'bhe_block_wrapper', 10, 3);
  */
 function bhe_inner_blocks($parsed_block, $source_block, $parent_block)
 {
-	$parent_block_type = $parent_block->block_type;
-
-	if (block_has_support($parent_block_type, ['view'])) {
+	if (
+		isset($parent_block) &&
+		block_has_support($parent_block->block_type, ['view'])
+	) {
 		$parsed_block['isInnerBlock'] = true;
 	}
 
@@ -154,30 +155,17 @@ function bhe_inner_blocks($parsed_block, $source_block, $parent_block)
 add_filter('render_block_data', 'bhe_inner_blocks', 10, 3);
 
 /**
- * Append attributes after the class attribute containing the block class name. Elements with that
- * class name are supposed to be those with the wrapper attributes.
+ * Append attributes to the block wrapper element, which is assumed to be the first one.
  *
  * TODO: use `WP_HTML_Tag_Processor` (see https://github.com/WordPress/gutenberg/pull/42485) once
  * the API is released.
  */
-function bhe_append_block_attributes($block_name, $block_content, $attributes)
+function bhe_append_attributes($block_name, $block_content, $attributes)
 {
-	// Generate block class name, using a replace similar to the one used in Gutenberg (see
-	// https://github.com/WordPress/gutenberg/blob/1582c723f31ce0f728cd4dcc1af37821342eeaaa/packages/blocks/src/api/serializer.js#L41-L44).
-	$block_classname =
-		'wp-block-' .
-		preg_replace(['/\//', '/^core-/'], ['-', ''], $block_name);
-
 	// Be aware that this pattern could not cover some edge cases.
-	$class_pattern =
-		'/class="\s*(?:[\w\s-]\s+)*' . $block_classname . '(?:\s+[\w-]+)*\s*"/';
-	$class_replacement = '$0 ' . $attributes;
-	$block_content = preg_replace(
-		$class_pattern,
-		$class_replacement,
-		$block_content,
-		1
-	);
+	$pattern = '/^\s*<[^>]+/';
+	$replacement = '$0 ' . $attributes;
+	$block_content = preg_replace($pattern, $replacement, $block_content, 1);
 
 	return $block_content;
 }
