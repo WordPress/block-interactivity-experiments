@@ -126,11 +126,11 @@ function bhe_block_wrapper($block_content, $block, $instance)
 		$block_wrapper_attributes
 	);
 
-	// The block content comes between two line breaks that seem to be included during block
+	// The block content comes between line breaks that seem to be included during block
 	// serialization, corresponding to those between the block markup and the block content.
 	//
 	// They need to be removed here; otherwise, the preact hydration fails.
-	$block_content = substr($block_content, 1, -1);
+	$block_content = trim($block_content);
 
 	return $block_content;
 }
