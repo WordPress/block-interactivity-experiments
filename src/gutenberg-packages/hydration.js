@@ -2,7 +2,7 @@ import 'preact/debug';
 import { hydrate } from 'preact';
 import toVdom from './to-vdom';
 import '../directives/wp-block';
-import '../directives/wp-block-context';
+import '../directives/wp-block-provides-context';
 import '../directives/wp-log';
 
 const dom = document.querySelector('.wp-site-blocks');

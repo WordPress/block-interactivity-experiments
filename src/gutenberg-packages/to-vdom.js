@@ -9,7 +9,7 @@ export default function toVdom(node) {
 	const props = { _static: true }; // Mark vnode as static.
 	const attributes = node.attributes;
 	const type = node.localName;
-	const wpDirectives = { ref: node }; // Pass node as ref
+	const wpDirectives = { initialRef: node }; // Pass down original static node.
 
 	let hasWpDirectives = false;
 

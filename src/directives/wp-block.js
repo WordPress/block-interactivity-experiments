@@ -1,4 +1,5 @@
-import { useMemo } from 'preact/hooks';
+import { useMemo, useContext } from 'preact/hooks';
+import blockContext from './block-context';
 import { createGlobal, matcherFromSource } from '../gutenberg-packages/utils';
 import { directive } from '../gutenberg-packages/directives';
 
@@ -26,16 +27,16 @@ const toCamelCase = (str) =>
 	str.replace(/-(.)/g, (_, initial) => initial.toUpperCase());
 
 // Handle block components.
-directive('blockType', (props) => {
+directive('blockType', (wp, props, { vnode }) => {
 	const {
 		blockType,
 		blockAttributes,
 		blockSourcedAttributes,
-		context = {},
+		blockUsesBlockContext,
 		blockProps,
-		innerBlocks: children,
-		ref,
-	} = props.wp;
+		innerBlocks,
+		initialRef,
+	} = wp;
 
 	props.blockProps = useMemo(
 		() => ({
@@ -45,24 +46,38 @@ directive('blockType', (props) => {
 		[blockProps.class, blockProps.style]
 	);
 
-	props.attributes = blockAttributes;
-	useMemo(() => {
-		for (const attr in blockSourcedAttributes) {
-			props.attributes[attr] = matcherFromSource(
-				blockSourcedAttributes[attr]
-			)(ref);
-		}
-	}, [blockSourcedAttributes]);
+	if (!vnode._blockAttributes) {
+		vnode._blockAttributes = blockAttributes || {};
+		useMemo(() => {
+			for (const attr in blockSourcedAttributes) {
+				vnode._blockAttributes[attr] = matcherFromSource(
+					blockSourcedAttributes[attr]
+				)(initialRef);
+			}
+		}, [blockAttributes, blockSourcedAttributes]);
+	}
+	props.attributes = vnode._blockAttributes;
 
-	// Do nothing if there's no component for this block.
+	// TODO: Replace with `lazy()` to pause hydration until the component is
+	// downloaded.
 	if (!blockViews.has(blockType)) return;
 
 	const { Component } = blockViews.get(blockType);
 
-	// The `tag` prop is used as the new component.
-	props.tag = Component;
+	if (blockUsesBlockContext.length) {
+		const allContexts = useContext(blockContext);
 
-	// Set component properties.
-	props.context = context;
-	props.children = children;
+		// Filter and memoize the attributes that are needed.
+		props.context = useMemo(
+			() =>
+				blockUsesBlockContext.reduce((ctx, attribute) => {
+					const value = allContexts[attribute];
+					if (value) ctx[attribute] = value;
+					return ctx;
+				}, {}),
+			blockUsesBlockContext.map((attribute) => allContexts[attribute])
+		);
+	}
+
+	return <Component {...props}>{innerBlocks}</Component>;
 });
