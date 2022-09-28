@@ -46,6 +46,15 @@ export default function toVdom(n) {
 	// Walk child nodes and return vDOM children.
 	const children = [].map.call(n.childNodes, toVdom).filter(exists);
 
+	// Create an array of inner blocks if they are found in children. All nodes in between (e.g.,
+	// line breaks, white spaces, etc.) are preserved in order to prevent hydration failure.
+	const isInnerBlock = ({ props }) => props && 'wp-inner-block' in props;
+	if (children.some(isInnerBlock)) {
+		const first = children.findIndex(isInnerBlock);
+		const last = children.findLastIndex(isInnerBlock);
+		innerBlocksFound = children.slice(first, last + 1);
+	}
+
 	// Add inner blocks.
 	if (wpBlock.type && innerBlocksFound) {
 		wpBlock.innerBlocks = innerBlocksFound;
@@ -57,11 +66,6 @@ export default function toVdom(n) {
 
 	// Create vNode. Note that all `wpBlock` props should exist now to make directives work.
 	const vNode = h(type, props, children);
-
-	// Save a renference to this vNode if it's an <wp-inner-blocks>` wrapper.
-	if (type === 'wp-inner-blocks') {
-		innerBlocksFound = vNode;
-	}
 
 	return vNode;
 }
