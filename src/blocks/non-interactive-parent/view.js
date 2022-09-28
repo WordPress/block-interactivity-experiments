@@ -1,4 +1,4 @@
-const View = ({ attributes, blockProps, children }) => (
+const NonInteractiveParent = ({ attributes, blockProps, children }) => (
 	<div {...blockProps}>
 		<h4
 			wp-log="the header of non-interactive-parent was rendered"
@@ -10,4 +10,4 @@ const View = ({ attributes, blockProps, children }) => (
 	</div>
 );
 
-export default View;
+export default NonInteractiveParent;

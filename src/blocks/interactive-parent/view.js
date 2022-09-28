@@ -5,7 +5,7 @@ import {
 	useErrorBoundary,
 } from '../../gutenberg-packages/wordpress-element';
 
-const View = ({
+const InteractiveParent = ({
 	blockProps: {
 		className,
 		style: { fontWeight, ...style },
@@ -55,4 +55,4 @@ const View = ({
 	);
 };
 
-export default View;
+export default InteractiveParent;
