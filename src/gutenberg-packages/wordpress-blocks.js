@@ -5,17 +5,14 @@ const Wrapper =
 	(Comp) =>
 	({ attributes }) =>
 		(
-			<>
-				{/* Block Context is not available during save
-				https://wordpress.slack.com/archives/C02QB2JS7/p1649347999484329 */}
-				<Comp
-					blockProps={useBlockProps.save()}
-					attributes={attributes}
-					context={{}}
-				>
-					<wp-inner-blocks {...useInnerBlocksProps.save()} />
-				</Comp>
-			</>
+			// Block Context is not available during save
+			// https://wordpress.slack.com/archives/C02QB2JS7/p1649347999484329
+			<Comp
+				blockProps={useBlockProps.save()}
+				attributes={attributes}
+				context={{}}
+				{...useInnerBlocksProps.save()}
+			/>
 		);
 
 export const registerBlockType = (name, { edit, view, ...rest }) => {
