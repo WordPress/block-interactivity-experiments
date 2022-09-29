@@ -46,15 +46,18 @@ directive('blockType', (wp, props, { vnode }) => {
 		[blockProps.class, blockProps.style]
 	);
 
+	// We using `vnode` as a storing medium here because it's the only thing that
+	// is stable when a parent block hides and then shows this part of the DOM.
+	// If we don't store the source attributes, we won't have access to them when
+	// this is shown again, because the vnodes are created before the real DOM
+	// nodes.
 	if (!vnode._blockAttributes) {
 		vnode._blockAttributes = blockAttributes || {};
-		useMemo(() => {
-			for (const attr in blockSourcedAttributes) {
-				vnode._blockAttributes[attr] = matcherFromSource(
-					blockSourcedAttributes[attr]
-				)(initialRef);
-			}
-		}, [blockAttributes, blockSourcedAttributes]);
+		for (const attr in blockSourcedAttributes) {
+			vnode._blockAttributes[attr] = matcherFromSource(
+				blockSourcedAttributes[attr]
+			)(initialRef);
+		}
 	}
 	props.attributes = vnode._blockAttributes;
 
