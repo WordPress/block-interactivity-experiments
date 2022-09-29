@@ -1,3 +1,5 @@
+import BlockViews from '../gutenberg-packages/block-views';
+
 // These functions need to be included in each block bundle because block
 // bundles must not have any hard dependency.
 const createGlobal = (name, initialValue) => {
@@ -9,15 +11,11 @@ const createGlobal = (name, initialValue) => {
 	return window.wp.view[name];
 };
 
-const blockViews = createGlobal('blockViews', new Map());
-const elementsToHydrate = createGlobal('elementsToHydrate', new Map());
+const blockViews = createGlobal('blockViews', new BlockViews());
 
-export default (name, Component, options) => {
-	blockViews.set(name, { Component, options });
-
-	if (elementsToHydrate.has(name)) {
-		for (const element of elementsToHydrate.get(name)) {
-			element.hydrate();
-		}
-	}
+export default (name, Component) => {
+	setTimeout(() => {
+		blockViews.set(name, Component);
+		console.log('registered view', name);
+	}, 5000);
 };

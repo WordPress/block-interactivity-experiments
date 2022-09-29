@@ -1,9 +1,11 @@
+import { Suspense, lazy } from 'preact/compat';
 import { useMemo, useContext } from 'preact/hooks';
 import blockContext from './block-context';
 import { createGlobal, matcherFromSource } from '../gutenberg-packages/utils';
 import { directive } from '../gutenberg-packages/directives';
+import BlockViews from '../gutenberg-packages/block-views';
 
-const blockViews = createGlobal('blockViews', new Map());
+const blockViews = createGlobal('blockViews', new BlockViews());
 
 // Return an object of camelCased CSS properties.
 const cssObject = (cssText) => {
@@ -33,6 +35,7 @@ directive('blockType', (wp, props, { vnode }) => {
 		blockAttributes,
 		blockSourcedAttributes,
 		blockUsesBlockContext,
+		blockHydration,
 		blockProps,
 		innerBlocks,
 		initialRef,
@@ -61,11 +64,11 @@ directive('blockType', (wp, props, { vnode }) => {
 	}
 	props.attributes = vnode._blockAttributes;
 
-	// TODO: Replace with `lazy()` to pause hydration until the component is
-	// downloaded.
-	if (!blockViews.has(blockType)) return;
+	if (!blockHydration) return;
 
-	const { Component } = blockViews.get(blockType);
+	// Use `lazy()` to pause hydration until the component is
+	// downloaded.
+	const Component = lazy(() => blockViews.get(blockType));
 
 	if (blockUsesBlockContext.length) {
 		const allContexts = useContext(blockContext);
@@ -82,5 +85,9 @@ directive('blockType', (wp, props, { vnode }) => {
 		);
 	}
 
-	return <Component {...props}>{innerBlocks}</Component>;
+	return (
+		<Suspense>
+			<Component {...props}>{innerBlocks}</Component>
+		</Suspense>
+	);
 });
