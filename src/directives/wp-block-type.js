@@ -66,8 +66,7 @@ directive('blockType', (wp, props, { vnode }) => {
 
 	if (!blockHydration) return;
 
-	// Use `lazy()` to pause hydration until the component is
-	// downloaded.
+	// Use `lazy()` to pause hydration until the component is registered.
 	const Component = lazy(() => blockViews.get(blockType));
 
 	if (blockUsesBlockContext.length) {
