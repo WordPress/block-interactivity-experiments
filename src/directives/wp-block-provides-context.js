@@ -4,7 +4,7 @@ import { directive } from '../gutenberg-packages/directives';
 
 directive(
 	'blockProvidesBlockContext',
-	({ blockProvidesBlockContext, blockAttributes }, { children }) => {
+	({ blockProvidesBlockContext }, { children, attributes }) => {
 		// Do nothing if it doesn't provides context.
 		if (
 			!blockProvidesBlockContext ||
@@ -18,7 +18,7 @@ directive(
 		// Get provided context from attributes.
 		const context = {};
 		for (const key in blockProvidesBlockContext) {
-			const value = blockAttributes[blockProvidesBlockContext[key]];
+			const value = attributes[blockProvidesBlockContext[key]];
 			if (value) context[key] = value;
 		}
 
