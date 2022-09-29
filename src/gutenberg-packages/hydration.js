@@ -1,7 +1,7 @@
 import 'preact/debug';
 import { hydrate } from 'preact';
 import toVdom from './to-vdom';
-import '../directives/wp-block';
+import '../directives/wp-block-type';
 import '../directives/wp-block-provides-context';
 import '../directives/wp-log';
 
