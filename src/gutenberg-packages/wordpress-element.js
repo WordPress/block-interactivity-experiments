@@ -1,11 +1,10 @@
+import { createContext } from 'preact';
 import {
-	createContext,
 	useContext as usePreactContext,
 	useEffect as usePreactEffect,
 	useState as usePreactState,
-} from 'preact/compat';
-
-import { useErrorBoundary as usePreactErrorBoundary } from 'preact/hooks';
+	useErrorBoundary as usePreactErrorBoundary,
+} from 'preact/hooks';
 
 export const EnvContext = createContext('view');
 

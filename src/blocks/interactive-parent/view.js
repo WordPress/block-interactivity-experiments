@@ -5,7 +5,7 @@ import {
 	useErrorBoundary,
 } from '../../gutenberg-packages/wordpress-element';
 
-const View = ({
+const InteractiveParent = ({
 	blockProps: {
 		className,
 		style: { fontWeight, ...style },
@@ -29,7 +29,12 @@ const View = ({
 						fontWeight: bold ? 900 : fontWeight,
 					}}
 				>
-					<h2 className="title">{title}</h2>
+					<h2
+						wp-log="the header of interactive-parent was rendered"
+						className="title"
+					>
+						{title}
+					</h2>
 					<button onClick={() => setShow(!show)}>Show</button>
 					<button onClick={() => setBold(!bold)}>Bold</button>
 					<button onClick={() => setCounter(counter + 1)}>
@@ -50,4 +55,4 @@ const View = ({
 	);
 };
 
-export default View;
+export default InteractiveParent;

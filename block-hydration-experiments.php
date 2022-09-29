@@ -103,13 +103,13 @@ function bhe_block_wrapper($block_content, $block, $instance)
 
 	// Generate all required wrapper attributes.
 	$block_wrapper_attributes = sprintf(
-		'data-wp-block-type="%1$s" ' .
-			'data-wp-block-uses-block-context="%2$s" ' .
-			'data-wp-block-provides-block-context="%3$s" ' .
-			'data-wp-block-attributes="%4$s" ' .
-			'data-wp-block-sourced-attributes="%5$s" ' .
-			'data-wp-block-props="%6$s" ' .
-			'data-wp-block-hydration="%7$s"',
+		'wp-block-type="%1$s" ' .
+			'wp-block-uses-block-context="%2$s" ' .
+			'wp-block-provides-block-context="%3$s" ' .
+			'wp-block-attributes="%4$s" ' .
+			'wp-block-sourced-attributes="%5$s" ' .
+			'wp-block-props="%6$s" ' .
+			'wp-block-hydration="%7$s"',
 		esc_attr($block['blockName']),
 		esc_attr(json_encode($block_type->uses_context)),
 		esc_attr(json_encode($block_type->provides_context)),

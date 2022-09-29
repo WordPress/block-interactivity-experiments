@@ -1,8 +1,11 @@
 import CounterContext from '../../context/counter';
 import ThemeContext from '../../context/theme';
-import { useContext, useState } from '../../gutenberg-packages/wordpress-element';
+import {
+	useContext,
+	useState,
+} from '../../gutenberg-packages/wordpress-element';
 
-const View = ({ blockProps, context }) => {
+const InteractiveChild = ({ blockProps, context }) => {
 	const theme = useContext(ThemeContext);
 	const counter = useContext(CounterContext);
 
@@ -29,4 +32,4 @@ const View = ({ blockProps, context }) => {
 	);
 };
 
-export default View;
+export default InteractiveChild;

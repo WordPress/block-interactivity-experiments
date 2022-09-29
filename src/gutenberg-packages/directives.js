@@ -8,29 +8,64 @@ export const directive = (name, cb) => {
 	directives[name] = cb;
 };
 
-const WpDirective = (props) => {
-	for (const d in props.wpBlock) {
-		directives[d]?.(props);
+const WpDirective = ({ type, wp, props: originalProps, vnode }) => {
+	const element = h(type, { ...originalProps, _wrapped: true });
+	const props = { ...originalProps, children: element };
+
+	for (const d in wp) {
+		const wrapper = directives[d]?.(wp, props, { element, vnode });
+		if (wrapper !== undefined) props.children = wrapper;
 	}
-	props._wrapped = true;
-	const { wp, tag, children, ...rest } = props;
-	return h(tag, rest, children);
+
+	return props.children;
 };
 
 const old = options.vnode;
-
 options.vnode = (vnode) => {
-	const wpBlock = vnode.props.wpBlock;
-	const wrapped = vnode.props._wrapped;
+	const props = vnode.props;
+	let wp = props.wp;
+	let hasWpDirectives = false;
 
-	if (wpBlock) {
-		if (!wrapped) {
-			vnode.props.tag = vnode.type;
-			vnode.type = WpDirective;
+	// If it's not a static vnode, we need to extract the WordPress Directives.
+	if (!props._static) {
+		wp = {};
+		const keys = Object.keys(props);
+
+		for (let i = 0; i < keys.length; i++) {
+			const key = keys[i];
+			if (key.startsWith('wp-')) {
+				hasWpDirectives = true;
+				let value = props[key];
+				try {
+					value = JSON.parse(value);
+				} catch (e) {}
+				wp[rename(key)] = value;
+				delete props[key];
+			}
 		}
-	} else if (wrapped) {
-		delete vnode.props._wrapped;
+	} else {
+		if (wp) {
+			hasWpDirectives = true;
+			delete props.wp;
+		}
+		delete props._static;
+	}
+
+	if (hasWpDirectives) {
+		if (!props._wrapped) {
+			vnode.props = { type: vnode.type, wp, props, vnode };
+			vnode.type = WpDirective;
+		} else {
+			delete props._wrapped;
+		}
 	}
 
 	if (old) old(vnode);
 };
+
+// Rename WordPress Directives from `wp-some-directive` to `someDirective`.
+export const rename = (s) =>
+	s
+		.toLowerCase()
+		.replace(/^wp-/, '')
+		.replace(/-(.)/g, (_, chr) => chr.toUpperCase());
