@@ -6,6 +6,13 @@ _It's not a goal to do an in-depth analysis of the patterns, only to experiment 
 
 ## Current Experiments
 
+- 🎨 **WordPress Directives Plugin**
+
+  - Main branch: `main-wp-directives-plugin` 
+  - Tracking Issue: [Tracking issue: WordPress Directives Plugin 🎨](https://github.com/WordPress/block-hydration-experiments/issues/80)
+
+  An installable plugin that adds a set of basic directives and client-side transitions.
+
 - 🧩 **Custom Elements Hydration**
 
   - Main branch: `main-custom-elements-hydration`
@@ -15,20 +22,10 @@ _It's not a goal to do an in-depth analysis of the patterns, only to experiment 
 
 - ⚛️ **Full vDOM Hydration**
 
-  - Main branch: `main-full-vdom-hydration` ([Switch to that branch](https://github.com/WordPress/block-hydration-experiments/tree/main-full-vdom-hydration))
+  - Main branch: `main-full-vdom-hydration`
   - Tracking Issue: [Tracking issue: Full vDOM Hydration ⚛](https://github.com/WordPress/block-hydration-experiments/issues/64)
 
   This hydration method is based on the creation of a static virtual DOM from the root, where only the interactive islands are replaced by P/React components. It behaves like a single P/React application.
-
-## Project structure
-
-Blocks are structured using these folders/files:
-
-- `edit`: User code exclusive to the `Edit` component.
-- `view`: User code exclusive to the `View` component.
-- `shared`: User code shared between `Edit` and `View` components.
-- `gutenberg-packages`: Framework code that should be absorbed by Gutenberg packages.
-- `webpack`: Bundling configuration that should be absorbed by `@wordpress/scripts`.
 
 ## Block Requirements
 
@@ -36,6 +33,7 @@ If you want to use these experiments on your blocks, they will need:
 
 - To have a `block.json` file.
 - To be registered on the server.
+- A single node wrapper.
 
 ## Collaborate!
 
