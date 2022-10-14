@@ -5,14 +5,12 @@
 	"license": "GPL-2.0-or-later",
 	"main": "build/index.js",
 	"scripts": {
-		"build": "wp-scripts build",
+		"build": "webpack --mode=production",
+		"start": "webpack --mode=development --watch",
+		"dev": "npm start",
 		"test": "jest",
 		"test:watch": "jest --watch",
-		"lint:css": "wp-scripts lint-style",
-		"lint:js": "wp-scripts lint-js",
-		"packages-update": "wp-scripts packages-update",
 		"plugin-zip": "wp-scripts plugin-zip",
-		"start": "wp-scripts start",
 		"wp-env": "wp-env"
 	},
 	"prettier": {
@@ -32,10 +30,8 @@
 		"@babel/preset-env": "^7.17.10",
 		"@prettier/plugin-php": "^0.18.9",
 		"@types/jest": "^27.5.1",
-		"@wordpress/blocks": "^11.7.0",
-		"@wordpress/element": "^4.3.0",
 		"@wordpress/env": "^4.4.0",
-		"@wordpress/scripts": "^22.3.0",
+		"@wordpress/scripts": "^24.3.0",
 		"babel-jest": "^28.1.0",
 		"jest": "^28.1.0",
 		"prettier": "^2.7.1"
