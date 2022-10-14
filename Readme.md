@@ -9,7 +9,7 @@ _It's not a goal to do an in-depth analysis of the patterns, only to experiment 
 - 🧩 **Custom Elements Hydration**
 
   - Main branch: `main-custom-elements-hydration`
-  - Tracking Issue: [Tracking issue: Custom Elements Hydration 🏝](https://github.com/WordPress/block-hydration-experiments/issues/39)
+  - Tracking Issue: [Tracking issue: Custom Elements Hydration 🧩](https://github.com/WordPress/block-hydration-experiments/issues/39)
 
   This hydration method is based on custom elements (`<wp-block>`) that hydrates isolated islands. It interconnects those islands through synchronized bridges for APIs like `context`, `Suspense` or `ErrorBoundary`.
 
