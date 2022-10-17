@@ -1,8 +1,6 @@
-import { hydrate } from 'preact';
 import registerDirectives from './directives';
 import registerComponents from './components';
-import toVdom from './vdom';
-import { createRootFragment } from './utils';
+import { init } from './router';
 
 /**
  * Initialize the initial vDOM.
@@ -10,15 +8,6 @@ import { createRootFragment } from './utils';
 document.addEventListener('DOMContentLoaded', async () => {
 	registerDirectives();
 	registerComponents();
-
-	// Create the root fragment to hydrate everything.
-	const rootFragment = createRootFragment(
-		document.documentElement,
-		document.body
-	);
-
-	const vdom = toVdom(document.body);
-	hydrate(vdom, rootFragment);
-
+	await init();
 	console.log('hydrated!');
 });

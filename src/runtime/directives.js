@@ -1,7 +1,8 @@
-import { useContext, useMemo } from 'preact/hooks';
+import { useContext, useMemo, useEffect } from 'preact/hooks';
 import { useSignalEffect } from '@preact/signals';
 import { directive } from './hooks';
 import { deepSignal } from './deepsignal';
+import { prefetch, navigate } from './router';
 import { getCallback } from './utils';
 
 const raf = window.requestAnimationFrame;
@@ -79,6 +80,46 @@ export default () => {
 					const cb = getCallback(callback);
 					element.props[attribute] = cb({ context });
 				});
+		}
+	);
+
+	// The `wp-link` directive.
+	directive(
+		'link',
+		({
+			directives: {
+				link: { default: link },
+			},
+			props: { href },
+			element,
+		}) => {
+			useEffect(() => {
+				// Prefetch the page if it is in the directive options.
+				if (link?.prefetch) {
+					prefetch(href);
+				}
+			});
+
+			// Don't do anything if it's falsy.
+			if (link !== false) {
+				element.props.onclick = async (event) => {
+					event.preventDefault();
+
+					// Fetch the page (or return it from cache).
+					await navigate(href);
+
+					// Update the scroll, depending on the option. True by default.
+					if (link?.scroll === 'smooth') {
+						window.scrollTo({
+							top: 0,
+							left: 0,
+							behavior: 'smooth',
+						});
+					} else if (link?.scroll !== false) {
+						window.scrollTo(0, 0);
+					}
+				};
+			}
 		}
 	);
 };

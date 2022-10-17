@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Plugin Name:       wp-directives
  * Version:           0.1.0
@@ -36,7 +35,7 @@ function wp_directives_register_scripts()
 	wp_enqueue_script('wp-directive-runtime');
 }
 
-add_action('init', 'wp_directives_register_scripts');
+add_action('wp_enqueue_scripts', 'wp_directives_register_scripts');
 
 function add_wp_link_attribute($block_content)
 {
@@ -48,10 +47,10 @@ function add_wp_link_attribute($block_content)
 		}
 
 		$link = parse_url($w->get_attribute('href'));
-		if (is_null($link['host']) || ($link['host'] ===  $site_url['host'])) {
+		if (!isset($link['host']) || $link['host'] === $site_url['host']) {
 			$w->set_attribute('wp-link', 'true');
 		}
-	};
+	}
 	return (string) $w;
 }
 
