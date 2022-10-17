@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Plugin Name:       wp-directives
  * Version:           0.1.0
@@ -36,3 +37,13 @@ function wp_directives_register_scripts()
 }
 
 add_action('init', 'wp_directives_register_scripts');
+
+function add_wp_link_attribute($block_content)
+{
+	$w = new WP_HTML_Tag_Processor($block_content);
+	$w->next_tag('a');
+	$w->set_attribute('wp-link', 'true');
+	return $w;
+}
+
+add_filter('render_block', 'add_wp_link_attribute', 10, 2);
