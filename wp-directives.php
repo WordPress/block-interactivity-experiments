@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Plugin Name:       wp-directives
  * Version:           0.1.0
@@ -36,3 +37,22 @@ function wp_directives_register_scripts()
 }
 
 add_action('init', 'wp_directives_register_scripts');
+
+function add_wp_link_attribute($block_content)
+{
+	$site_url = parse_url(get_site_url());
+	$w = new WP_HTML_Tag_Processor($block_content);
+	while ($w->next_tag('a')) {
+		if ($w->get_attribute('target') === '_blank') {
+			break;
+		}
+
+		$link = parse_url($w->get_attribute('href'));
+		if (is_null($link['host']) || ($link['host'] ===  $site_url['host'])) {
+			$w->set_attribute('wp-link', 'true');
+		}
+	};
+	return (string) $w;
+}
+
+add_filter('render_block', 'add_wp_link_attribute', 10, 2);
