@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Plugin Name:       wp-directives
  * Version:           0.1.0
@@ -48,7 +47,7 @@ function add_wp_link_attribute($block_content)
 		}
 
 		$link = parse_url($w->get_attribute('href'));
-		if (is_null($link['host']) || $link['host'] === $site_url['host']) {
+		if (!isset($link['host']) || $link['host'] === $site_url['host']) {
 			$w->set_attribute('wp-link', 'true');
 		}
 	}
