@@ -40,9 +40,19 @@ add_action('init', 'wp_directives_register_scripts');
 
 function add_wp_link_attribute($block_content)
 {
+	$site_url = parse_url(get_site_url());
 	$w = new WP_HTML_Tag_Processor($block_content);
-	$w->next_tag('a');
-	$w->set_attribute('wp-link', 'true');
+	while ($w->next_tag('a')) {
+		$link = parse_url($w->get_attribute('href'));
+
+		if ($w->get_attribute('target') === '_blank') {
+			break;
+		}
+
+		if (is_null($link['host']) || ($link['host'] ===  $site_url['host'])) {
+			$w->set_attribute('wp-link', 'true');
+		}
+	};
 	return $w;
 }
 
