@@ -1,18 +1,13 @@
-/**
- * External dependencies
- */
 import { h } from 'preact';
 
 // Recursive function that transfoms a DOM tree into vDOM.
 export default function toVdom(node) {
 	const props = {};
-	const attributes = node.attributes;
+	const { attributes, childNodes } = node;
 	const wpDirectives = {};
 	let hasWpDirectives = false;
 
 	if (node.nodeType === 3) return node.data;
-	if (node.nodeType === 8) return null;
-	if (node.localName === 'script') return h('script');
 
 	for (let i = 0; i < attributes.length; i++) {
 		const name = attributes[i].name;
@@ -32,11 +27,16 @@ export default function toVdom(node) {
 
 	if (hasWpDirectives) props.wp = wpDirectives;
 
-	// Walk child nodes and return vDOM children.
-	const children = [].map.call(node.childNodes, toVdom).filter(exists);
+	const children = [];
+	for (let i = 0; i < childNodes.length; i++) {
+		const child = childNodes[i];
+		if (child.nodeType === 8) {
+			child.remove();
+			i--;
+		} else {
+			children.push(toVdom(child));
+		}
+	}
 
 	return h(node.localName, props, children);
 }
-
-// Filter existing items.
-const exists = (x) => x;
