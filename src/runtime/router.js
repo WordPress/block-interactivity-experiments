@@ -6,7 +6,8 @@ import { createRootFragment } from './utils';
 let rootFragment;
 
 // The cache of visited and prefetched pages.
-export const pages = new Map();
+const pages = new Map();
+const stylesheets = new Map();
 
 // Helper to remove domain and hash from the URL. We are only interesting in
 // caching the path and the query.
@@ -15,11 +16,37 @@ const cleanUrl = (url) => {
 	return u.pathname + u.search;
 };
 
+// Fetch styles of a new page.
+const fetchHead = async (head) => {
+	const sheets = await Promise.all(
+		[].map.call(head.querySelectorAll("link[rel='stylesheet']"), (link) => {
+			const href = link.getAttribute('href');
+			if (!stylesheets.has(href))
+				stylesheets.set(
+					href,
+					fetch(href).then((r) => r.text())
+				);
+			return stylesheets.get(href);
+		})
+	);
+	const stylesFromSheets = sheets.map((sheet) => {
+		const style = document.createElement('style');
+		style.textContent = sheet;
+		return style;
+	});
+	return [
+		head.querySelector('title'),
+		...head.querySelectorAll('style'),
+		...stylesFromSheets,
+	];
+};
+
 // Fetch a new page and convert it to a static virtual DOM.
 const fetchPage = async (url) => {
-	const html = await window.fetch(url).then((res) => res.text());
+	const html = await window.fetch(url).then((r) => r.text());
 	const dom = new window.DOMParser().parseFromString(html, 'text/html');
-	return toVdom(dom.body);
+	const head = await fetchHead(dom.head);
+	return { head, body: toVdom(dom.body) };
 };
 
 // Prefetch a page. We store the promise to avoid triggering a second fetch for
@@ -35,8 +62,9 @@ export const prefetch = (url) => {
 export const navigate = async (href) => {
 	const url = cleanUrl(href);
 	prefetch(url);
-	const vdom = await pages.get(url);
-	render(vdom, rootFragment);
+	const { body, head } = await pages.get(url);
+	document.head.replaceChildren(...head);
+	render(body, rootFragment);
 	window.history.pushState({ wp: { clientNavigation: true } }, '', href);
 };
 
@@ -45,8 +73,9 @@ export const navigate = async (href) => {
 window.addEventListener('popstate', async () => {
 	const url = cleanUrl(window.location); // Remove hash.
 	if (pages.has(url)) {
-		const vdom = await pages.get(url);
-		render(vdom, rootFragment);
+		const { body, head } = await pages.get(url);
+		document.head.replaceChildren(...head);
+		render(body, rootFragment);
 	} else {
 		window.location.reload();
 	}
@@ -59,7 +88,8 @@ export const init = async () => {
 	// Create the root fragment to hydrate everything.
 	rootFragment = createRootFragment(document.documentElement, document.body);
 
-	const vdom = toVdom(document.body);
-	pages.set(url, Promise.resolve(vdom));
-	hydrate(vdom, rootFragment);
+	const body = toVdom(document.body);
+	hydrate(body, rootFragment);
+	const head = await fetchHead(document.head);
+	pages.set(url, Promise.resolve({ body, head }));
 };
