@@ -34,10 +34,9 @@ function wp_directives_register_scripts()
 	// conditionally enqueue directives later.
 	wp_enqueue_script('wp-directive-runtime');
 }
-
 add_action('wp_enqueue_scripts', 'wp_directives_register_scripts');
 
-function add_wp_link_attribute($block_content)
+function wp_directives_add_wp_link_attribute($block_content)
 {
 	$site_url = parse_url(get_site_url());
 	$w = new WP_HTML_Tag_Processor($block_content);
@@ -53,5 +52,15 @@ function add_wp_link_attribute($block_content)
 	}
 	return (string) $w;
 }
+add_filter('render_block', 'wp_directives_add_wp_link_attribute', 10, 2);
 
-add_filter('render_block', 'add_wp_link_attribute', 10, 2);
+function wp_directives_client_site_transitions_meta_tag()
+{
+	if (apply_filters('client_side_transitions', false)) {
+		echo '<meta itemprop="wp-client-side-transitions" content="active">';
+	}
+}
+add_action('wp_head', 'wp_directives_client_site_transitions_meta_tag', 10, 0);
+
+/* User code */
+add_filter('client_side_transitions', '__return_true');
