@@ -1,3 +1,9 @@
 {
-	"plugins": ["."]
+	"plugins": [
+		".",
+		"https://downloads.wordpress.org/plugin/gutenberg.latest-stable.zip"
+	],
+	"config": {
+		"SCRIPT_DEBUG": true
+	}
 }
