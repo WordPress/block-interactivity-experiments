@@ -1,6 +1,7 @@
 import { hydrate, render } from 'preact';
 import toVdom from './vdom';
 import { createRootFragment } from './utils';
+import { startTransition } from './transitions';
 
 // The root to render the vdom (document.body).
 let rootFragment;
@@ -63,8 +64,10 @@ export const navigate = async (href) => {
 	const url = cleanUrl(href);
 	prefetch(url);
 	const { body, head } = await pages.get(url);
-	document.head.replaceChildren(...head);
-	render(body, rootFragment);
+	await startTransition(url, () => {
+		document.head.replaceChildren(...head);
+		render(body, rootFragment);
+	});
 	window.history.pushState({ wp: { clientNavigation: true } }, '', href);
 };
 
@@ -74,8 +77,10 @@ window.addEventListener('popstate', async () => {
 	const url = cleanUrl(window.location); // Remove hash.
 	if (pages.has(url)) {
 		const { body, head } = await pages.get(url);
-		document.head.replaceChildren(...head);
-		render(body, rootFragment);
+		await startTransition(url, () => {
+			document.head.replaceChildren(...head);
+			render(body, rootFragment);
+		});
 	} else {
 		window.location.reload();
 	}
