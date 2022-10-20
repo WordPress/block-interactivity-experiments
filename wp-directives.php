@@ -10,6 +10,33 @@
  * Text Domain:       wp-directives
  */
 
+function wp_directives_loader()
+{
+	// Load the Admin page.
+	require_once plugin_dir_path(__FILE__) . '/src/admin/admin-page.php';
+}
+add_action('plugins_loaded', 'wp_directives_loader');
+
+/**
+ * Add default settings upon activation.
+ */
+function wp_directives_activate()
+{
+	add_option('wp_directives_plugin_settings', [
+		'client_side_transitions' => false,
+	]);
+}
+register_activation_hook(__FILE__, 'wp_directives_activate');
+
+/**
+ * Delete settings on uninstall.
+ */
+function wp_directives_uninstall()
+{
+	delete_option('wp_directives_plugin_settings');
+}
+register_uninstall_hook(__FILE__, 'wp_directives_uninstall');
+
 /**
  * Register the scripts
  */
@@ -63,4 +90,12 @@ function wp_directives_client_site_transitions_meta_tag()
 add_action('wp_head', 'wp_directives_client_site_transitions_meta_tag', 10, 0);
 
 /* User code */
-add_filter('client_side_transitions', '__return_true');
+function wp_directives_client_site_transitions_option()
+{
+	$options = get_option('wp_directives_plugin_settings');
+	return $options['client_side_transitions'];
+}
+add_filter(
+	'client_side_transitions',
+	'wp_directives_client_site_transitions_option'
+);
