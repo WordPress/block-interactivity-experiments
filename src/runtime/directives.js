@@ -34,7 +34,12 @@ export default () => {
 			Object.values(effect).forEach((callback) => {
 				useSignalEffect(() => {
 					const cb = getCallback(callback);
-					cb({ context, tick, ref: element.ref.current });
+					cb({
+						context,
+						tick,
+						ref: element.ref.current,
+						state: window.wpx.state,
+					});
 				});
 			});
 		}
@@ -46,7 +51,7 @@ export default () => {
 		Object.entries(on).forEach(([name, callback]) => {
 			element.props[`on${name}`] = (event) => {
 				const cb = getCallback(callback);
-				cb({ context, event });
+				cb({ context, event, state: window.wpx.state });
 			};
 		});
 	});
@@ -64,7 +69,7 @@ export default () => {
 				.filter((n) => n !== 'default')
 				.forEach((name) => {
 					const cb = getCallback(className[name]);
-					const result = cb({ context });
+					const result = cb({ context, state: window.wpx.state });
 					if (!result) element.props.class.replace(name, '');
 					else if (!element.props.class.includes(name))
 						element.props.class += ` ${name}`;
@@ -81,7 +86,10 @@ export default () => {
 				.filter((n) => n !== 'default')
 				.forEach(([attribute, callback]) => {
 					const cb = getCallback(callback);
-					element.props[attribute] = cb({ context });
+					element.props[attribute] = cb({
+						context,
+						state: window.wpx.state,
+					});
 				});
 		}
 	);
