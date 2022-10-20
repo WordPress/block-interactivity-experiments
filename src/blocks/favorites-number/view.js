@@ -1,4 +1,5 @@
 import wpx from '../../runtime/wpx';
+import { deepMerge } from '../../runtime/utils';
 
 wpx({
 	state: {
@@ -27,6 +28,20 @@ wpx({
 				);
 				if (index === -1) state.favorites.posts.push(context.post.id);
 				else state.favorites.posts.splice(index, 1);
+			},
+			save: ({ state }) => {
+				localStorage.setItem(
+					'wpmoviesdemo.favorites',
+					JSON.stringify(state.favorites)
+				);
+			},
+			restore: ({ state }) => {
+				deepMerge(
+					state.favorites,
+					JSON.parse(
+						localStorage.getItem('wpmoviesdemo.favorites')
+					) || {}
+				);
 			},
 		},
 	},

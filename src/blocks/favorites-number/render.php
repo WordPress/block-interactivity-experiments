@@ -1,4 +1,4 @@
-<div>
+<div wp-effect:restore="actions.favorites.restore" wp-effect:save="actions.favorites.save">
     <img 
         class="emoji"
         alt=":heart:"
