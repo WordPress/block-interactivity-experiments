@@ -2,12 +2,15 @@ import { useContext, useMemo, useEffect } from 'preact/hooks';
 import { useSignalEffect } from '@preact/signals';
 import { directive } from './hooks';
 import { deepSignal } from './deepsignal';
-import { prefetch, navigate } from './router';
+import { prefetch, navigate, hasClientSideTransitions } from './router';
 import { getCallback } from './utils';
 
 const raf = window.requestAnimationFrame;
 // Until useSignalEffects is fixed: https://github.com/preactjs/signals/issues/228
 const tick = () => new Promise((r) => raf(() => raf(r)));
+
+// Check if current page has client-side transitions enabled.
+const clientSideTransitions = hasClientSideTransitions(document.head);
 
 export default () => {
 	// wp-context
@@ -95,13 +98,13 @@ export default () => {
 		}) => {
 			useEffect(() => {
 				// Prefetch the page if it is in the directive options.
-				if (link?.prefetch) {
+				if (clientSideTransitions && link?.prefetch) {
 					prefetch(href);
 				}
 			});
 
 			// Don't do anything if it's falsy.
-			if (link !== false) {
+			if (clientSideTransitions && link !== false) {
 				element.props.onclick = async (event) => {
 					event.preventDefault();
 

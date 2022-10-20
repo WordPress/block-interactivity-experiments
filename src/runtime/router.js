@@ -6,7 +6,7 @@ import { startTransition } from './transitions';
 // The root to render the vdom (document.body).
 let rootFragment;
 
-// The cache of visited and prefetched pages.
+// The cache of visited and prefetched pages and stylesheets.
 const pages = new Map();
 const stylesheets = new Map();
 
@@ -16,6 +16,12 @@ const cleanUrl = (url) => {
 	const u = new URL(url, 'http://a.bc');
 	return u.pathname + u.search;
 };
+
+// Helper to check if a page has client-side transitions activated.
+export const hasClientSideTransitions = (dom) =>
+	dom
+		.querySelector("meta[itemprop='wp-client-side-transitions']")
+		?.getAttribute('content') === 'active';
 
 // Fetch styles of a new page.
 const fetchHead = async (head) => {
@@ -46,6 +52,7 @@ const fetchHead = async (head) => {
 const fetchPage = async (url) => {
 	const html = await window.fetch(url).then((r) => r.text());
 	const dom = new window.DOMParser().parseFromString(html, 'text/html');
+	if (!hasClientSideTransitions(dom.head)) return false;
 	const head = await fetchHead(dom.head);
 	return { head, body: toVdom(dom.body) };
 };
@@ -63,23 +70,28 @@ export const prefetch = (url) => {
 export const navigate = async (href) => {
 	const url = cleanUrl(href);
 	prefetch(url);
-	const { body, head } = await pages.get(url);
-	await startTransition(url, () => {
-		document.head.replaceChildren(...head);
-		render(body, rootFragment);
-	});
 	window.history.pushState({ wp: { clientNavigation: true } }, '', href);
+	const page = await pages.get(url);
+	if (page) {
+		await startTransition(url, () => {
+			document.head.replaceChildren(...page.head);
+			render(page.body, rootFragment);
+		});
+		window.history.pushState({}, '', href);
+	} else {
+		window.location.assign(href);
+	}
 };
 
 // Listen to the back and forward buttons and restore the page if it's in the
 // cache.
 window.addEventListener('popstate', async () => {
 	const url = cleanUrl(window.location); // Remove hash.
-	if (pages.has(url)) {
-		const { body, head } = await pages.get(url);
+	const page = pages.has(url) && (await pages.get(url));
+	if (page) {
 		await startTransition(url, () => {
-			document.head.replaceChildren(...head);
-			render(body, rootFragment);
+			document.head.replaceChildren(...page.head);
+			render(page.body, rootFragment);
 		});
 	} else {
 		window.location.reload();
@@ -88,13 +100,13 @@ window.addEventListener('popstate', async () => {
 
 // Initialize the router with the initial DOM.
 export const init = async () => {
-	const url = cleanUrl(window.location); // Remove hash.
-
 	// Create the root fragment to hydrate everything.
 	rootFragment = createRootFragment(document.documentElement, document.body);
-
 	const body = toVdom(document.body);
 	hydrate(body, rootFragment);
-	const head = await fetchHead(document.head);
-	pages.set(url, Promise.resolve({ body, head }));
+
+	if (hasClientSideTransitions(document.head)) {
+		const head = await fetchHead(document.head);
+		pages.set(cleanUrl(window.location), Promise.resolve({ body, head }));
+	}
 };
