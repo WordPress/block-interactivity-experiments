@@ -47,8 +47,8 @@ function add_wp_link_attribute($block_content)
 		}
 
 		$link = parse_url($w->get_attribute('href'));
-		$classes = $w->get_attribute('class');
 		if (!isset($link['host']) || $link['host'] === $site_url['host']) {
+			$classes = $w->get_attribute('class');
 			if (str_contains($classes, 'query-pagination') || str_contains($classes, 'page-numbers')) {
 				$w->set_attribute('wp-link', '{ "prefetch": true, "scroll": false }');
 			} else {
