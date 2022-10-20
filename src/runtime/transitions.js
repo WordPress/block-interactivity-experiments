@@ -3,6 +3,18 @@ let previousHref = window.location.href;
 export const startTransition = async (href, updateDomCallback, scroll) => {
 	if (!document.createDocumentTransition) {
 		updateDomCallback();
+
+		// Update the scroll, depending on the option. True by default.
+		if (scroll === 'smooth') {
+			window.scrollTo({
+				top: 0,
+				left: 0,
+				behavior: 'smooth',
+			});
+		} else if (scroll !== false) {
+			window.scrollTo(0, 0);
+		}
+
 		return;
 	}
 
