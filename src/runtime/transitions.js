@@ -1,6 +1,6 @@
 let previousHref = window.location.href;
 
-export const startTransition = async (href, updateDomCallback) => {
+export const startTransition = async (href, updateDomCallback, scroll) => {
 	if (!document.createDocumentTransition) {
 		updateDomCallback();
 		return;
@@ -65,7 +65,16 @@ export const startTransition = async (href, updateDomCallback) => {
 
 			updateDomCallback();
 
-			window.scrollTo(0, 0);
+			// Update the scroll, depending on the option. True by default.
+			if (scroll === 'smooth') {
+				window.scrollTo({
+					top: 0,
+					left: 0,
+					behavior: 'smooth',
+				});
+			} else if (scroll !== false) {
+				window.scrollTo(0, 0);
+			}
 
 			// Small to big -> final picture is the big one.
 			if (

@@ -67,15 +67,19 @@ export const prefetch = (url) => {
 };
 
 // Navigate to a new page.
-export const navigate = async (href) => {
+export const navigate = async (href, scroll) => {
 	const url = cleanUrl(href);
 	prefetch(url);
 	const page = await pages.get(url);
 	if (page) {
-		await startTransition(href, () => {
-			document.head.replaceChildren(...page.head);
-			render(page.body, rootFragment);
-		});
+		await startTransition(
+			href,
+			() => {
+				document.head.replaceChildren(...page.head);
+				render(page.body, rootFragment);
+			},
+			scroll
+		);
 		window.history.pushState({}, '', href);
 	} else {
 		window.location.assign(href);
