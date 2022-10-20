@@ -7,6 +7,18 @@ wpx({
 			count: ({ state }) => state.favorites.posts.length,
 		},
 	},
+	selectors: {
+		favorites: {
+			isPostIncluded: ({ state, context: { post } }) =>
+				`https://s.w.org/images/core/emoji/14.0.0/svg/${
+					state.favorites.posts.includes(post.id) ? '2764' : '1f90'
+				}.svg`,
+			isFavoritePostsEmpty: ({ state }) =>
+				`https://s.w.org/images/core/emoji/14.0.0/svg/${
+					state.favorites.posts.length !== 0 ? '2764' : '1f90'
+				}.svg`,
+		},
+	},
 	actions: {
 		favorites: {
 			togglePost: ({ state, context }) => {
@@ -15,17 +27,6 @@ wpx({
 				);
 				if (index === -1) state.favorites.posts.push(context.post.id);
 				else state.favorites.posts.splice(index, 1);
-			},
-			isPostIncluded: ({ state, context }) => {
-				return state.favorites.posts.includes(context.post.id)
-					? 'https://s.w.org/images/core/emoji/14.0.0/svg/2764.svg'
-					: 'https://s.w.org/images/core/emoji/14.0.0/svg/1f90d.svg';
-			},
-			isFavoritePostsEmpty: ({ state }) => {
-				debugger;
-				return state.favorites.posts.length !== 0
-					? 'https://s.w.org/images/core/emoji/14.0.0/svg/2764.svg'
-					: 'https://s.w.org/images/core/emoji/14.0.0/svg/1f90d.svg';
 			},
 		},
 	},
