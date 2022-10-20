@@ -117,18 +117,7 @@ export default () => {
 					event.preventDefault();
 
 					// Fetch the page (or return it from cache).
-					await navigate(href);
-
-					// Update the scroll, depending on the option. True by default.
-					if (link?.scroll === 'smooth') {
-						window.scrollTo({
-							top: 0,
-							left: 0,
-							behavior: 'smooth',
-						});
-					} else if (link?.scroll !== false) {
-						window.scrollTo(0, 0);
-					}
+					await navigate(href, link?.scroll);
 				};
 			}
 		}
