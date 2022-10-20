@@ -75,8 +75,14 @@ function wp_directives_add_wp_link_attribute($block_content)
 		$link = parse_url($w->get_attribute('href'));
 		if (!isset($link['host']) || $link['host'] === $site_url['host']) {
 			$classes = $w->get_attribute('class');
-			if (str_contains($classes, 'query-pagination') || str_contains($classes, 'page-numbers')) {
-				$w->set_attribute('wp-link', '{ "prefetch": true, "scroll": false }');
+			if (
+				str_contains($classes, 'query-pagination') ||
+				str_contains($classes, 'page-numbers')
+			) {
+				$w->set_attribute(
+					'wp-link',
+					'{ "prefetch": true, "scroll": false }'
+				);
 			} else {
 				$w->set_attribute('wp-link', '{ "prefetch": true }');
 			}
@@ -85,8 +91,18 @@ function wp_directives_add_wp_link_attribute($block_content)
 	return (string) $w;
 }
 // We go only through the Query Loops and the template parts until we find a better solution.
-add_filter('render_block_core/query', 'wp_directives_add_wp_link_attribute', 10, 1);
-add_filter('render_block_core/template-part', 'wp_directives_add_wp_link_attribute', 10, 1);
+add_filter(
+	'render_block_core/query',
+	'wp_directives_add_wp_link_attribute',
+	10,
+	1
+);
+add_filter(
+	'render_block_core/template-part',
+	'wp_directives_add_wp_link_attribute',
+	10,
+	1
+);
 
 function wp_directives_client_site_transitions_meta_tag()
 {
@@ -106,3 +122,16 @@ add_filter(
 	'client_side_transitions',
 	'wp_directives_client_site_transitions_option'
 );
+
+/* WP Movies Demo */
+add_action('init', function () {
+	register_block_type(__DIR__ . '/build/blocks/test');
+});
+
+add_filter('render_block_test/test', function ($content) {
+	wp_enqueue_script(
+		'test/test',
+		plugin_dir_url(__FILE__) . 'build/blocks/test/view.js'
+	);
+	return $content;
+});
