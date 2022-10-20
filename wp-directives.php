@@ -10,6 +10,33 @@
  * Text Domain:       wp-directives
  */
 
+function wp_directives_loader()
+{
+	// Load the Admin page.
+	require_once plugin_dir_path(__FILE__) . '/src/admin/admin-page.php';
+}
+add_action('plugins_loaded', 'wp_directives_loader');
+
+/**
+ * Add default settings upon activation.
+ */
+function wp_directives_activate()
+{
+	add_option('wp_directives_plugin_settings', [
+		'client_side_transitions' => false,
+	]);
+}
+register_activation_hook(__FILE__, 'wp_directives_activate');
+
+/**
+ * Delete settings on uninstall.
+ */
+function wp_directives_uninstall()
+{
+	delete_option('wp_directives_plugin_settings');
+}
+register_uninstall_hook(__FILE__, 'wp_directives_uninstall');
+
 /**
  * Register the scripts
  */
@@ -34,10 +61,9 @@ function wp_directives_register_scripts()
 	// conditionally enqueue directives later.
 	wp_enqueue_script('wp-directive-runtime');
 }
-
 add_action('wp_enqueue_scripts', 'wp_directives_register_scripts');
 
-function add_wp_link_attribute($block_content)
+function wp_directives_add_wp_link_attribute($block_content)
 {
 	$site_url = parse_url(get_site_url());
 	$w = new WP_HTML_Tag_Processor($block_content);
@@ -58,7 +84,25 @@ function add_wp_link_attribute($block_content)
 	}
 	return (string) $w;
 }
-
 // We go only through the Query Loops and the template parts until we find a better solution.
-add_filter('render_block_core/query', 'add_wp_link_attribute', 10, 1);
-add_filter('render_block_core/template-part', 'add_wp_link_attribute', 10, 1);
+add_filter('render_block_core/query', 'wp_directives_add_wp_link_attribute', 10, 1);
+add_filter('render_block_core/template-part', 'wp_directives_add_wp_link_attribute', 10, 1);
+
+function wp_directives_client_site_transitions_meta_tag()
+{
+	if (apply_filters('client_side_transitions', false)) {
+		echo '<meta itemprop="wp-client-side-transitions" content="active">';
+	}
+}
+add_action('wp_head', 'wp_directives_client_site_transitions_meta_tag', 10, 0);
+
+/* User code */
+function wp_directives_client_site_transitions_option()
+{
+	$options = get_option('wp_directives_plugin_settings');
+	return $options['client_side_transitions'];
+}
+add_filter(
+	'client_side_transitions',
+	'wp_directives_client_site_transitions_option'
+);
