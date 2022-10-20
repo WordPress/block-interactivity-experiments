@@ -10,5 +10,6 @@
     <span
         wp-bind:children="state.favorites.count"
     >
+    0
     </span>
 </div>

@@ -11,6 +11,7 @@ $wrapper_attributes = get_block_wrapper_attributes();
         role="img"
         class="emoji"
         alt=":heart:"
+        src="https://s.w.org/images/core/emoji/14.0.0/svg/1f90d.svg"
         wp-bind:src="actions.favorites.isPostIncluded"
     />
 </wp-context>
