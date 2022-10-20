@@ -131,13 +131,14 @@ add_filter(
 
 /* WP Movies Demo */
 add_action('init', function () {
-	register_block_type(__DIR__ . '/build/blocks/test');
+	register_block_type(__DIR__ . '/build/blocks/post-favorite');
+	register_block_type(__DIR__ . '/build/blocks/favorites-number');
 });
 
-add_filter('render_block_test/test', function ($content) {
+add_filter('render_block_bhe/favorites-number', function ($content) {
 	wp_enqueue_script(
-		'test/test',
-		plugin_dir_url(__FILE__) . 'build/blocks/test/view.js'
+		'bhe/favorites-number',
+		plugin_dir_url(__FILE__) . 'build/blocks/favorites-number/view.js'
 	);
 	return $content;
 });

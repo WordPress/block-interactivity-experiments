@@ -4,9 +4,11 @@ const { resolve } = require('path');
 module.exports = [
 	defaultConfig,
 	{
+		...defaultConfig,
 		entry: {
 			runtime: './src/runtime',
-			'blocks/test/view': './src/blocks/test/view',
+			'blocks/favorites-number/view':
+				'./src/blocks/favorites-number/view',
 		},
 		output: {
 			filename: '[name].js',
