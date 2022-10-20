@@ -74,12 +74,19 @@ function wp_directives_add_wp_link_attribute($block_content)
 
 		$link = parse_url($w->get_attribute('href'));
 		if (!isset($link['host']) || $link['host'] === $site_url['host']) {
-			$w->set_attribute('wp-link', 'true');
+			$classes = $w->get_attribute('class');
+			if (str_contains($classes, 'query-pagination') || str_contains($classes, 'page-numbers')) {
+				$w->set_attribute('wp-link', '{ "prefetch": true, "scroll": false }');
+			} else {
+				$w->set_attribute('wp-link', '{ "prefetch": true }');
+			}
 		}
 	}
 	return (string) $w;
 }
-add_filter('render_block', 'wp_directives_add_wp_link_attribute', 10, 2);
+// We go only through the Query Loops and the template parts until we find a better solution.
+add_filter('render_block_core/query', 'wp_directives_add_wp_link_attribute', 10, 1);
+add_filter('render_block_core/template-part', 'wp_directives_add_wp_link_attribute', 10, 1);
 
 function wp_directives_client_site_transitions_meta_tag()
 {
