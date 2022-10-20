@@ -70,10 +70,9 @@ export const prefetch = (url) => {
 export const navigate = async (href) => {
 	const url = cleanUrl(href);
 	prefetch(url);
-	window.history.pushState({ wp: { clientNavigation: true } }, '', href);
 	const page = await pages.get(url);
 	if (page) {
-		await startTransition(url, () => {
+		await startTransition(href, () => {
 			document.head.replaceChildren(...page.head);
 			render(page.body, rootFragment);
 		});
@@ -87,11 +86,11 @@ export const navigate = async (href) => {
 // cache.
 window.addEventListener('popstate', async () => {
 	const url = cleanUrl(window.location); // Remove hash.
-	const page = pages.has(url) && (await pages.get(url));
-	if (page) {
-		await startTransition(url, () => {
-			document.head.replaceChildren(...page.head);
-			render(page.body, rootFragment);
+	if (pages.has(url)) {
+		const { body, head } = await pages.get(url);
+		await startTransition(window.location.href, () => {
+			document.head.replaceChildren(...head);
+			render(body, rootFragment);
 		});
 	} else {
 		window.location.reload();
