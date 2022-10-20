@@ -11,11 +11,11 @@ wpx({
 		favorites: {
 			isPostIncluded: ({ state, context: { post } }) =>
 				`https://s.w.org/images/core/emoji/14.0.0/svg/${
-					state.favorites.posts.includes(post.id) ? '2764' : '1f90'
+					state.favorites.posts.includes(post.id) ? '2764' : '1f90d'
 				}.svg`,
 			isFavoritePostsEmpty: ({ state }) =>
 				`https://s.w.org/images/core/emoji/14.0.0/svg/${
-					state.favorites.posts.length !== 0 ? '2764' : '1f90'
+					state.favorites.posts.length !== 0 ? '2764' : '1f90d'
 				}.svg`,
 		},
 	},
