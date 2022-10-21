@@ -38,8 +38,11 @@ options.vnode = (vnode) => {
 	const wp = vnode.props.wp;
 
 	if (typeof type === 'string' && type.startsWith('wp-')) {
-		vnode.type = components[type];
-		vnode.props.context = context;
+		vnode.props.children = h(
+			components[type],
+			{ ...vnode.props, context },
+			vnode.props.children
+		);
 	}
 
 	if (wp) {
