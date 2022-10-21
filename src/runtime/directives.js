@@ -17,11 +17,13 @@ export default () => {
 	directive(
 		'context',
 		({
-			directives: { context },
+			directives: {
+				context: { default: context },
+			},
 			props: { children },
 			context: { Provider },
 		}) => {
-			const signals = useMemo(() => deepSignal(context.default), []);
+			const signals = useMemo(() => deepSignal(context), [context]);
 			return <Provider value={signals}>{children}</Provider>;
 		}
 	);
