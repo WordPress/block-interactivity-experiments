@@ -3,7 +3,7 @@ import { join } from 'path';
 import { writeFileSync } from 'fs';
 import { inspect } from 'util';
 
-import wordpressPages from './domains.mjs';
+import { domains, top_sites } from './domains.mjs';
 
 const dirname = process.cwd();
 
@@ -12,7 +12,7 @@ const allMutations = {};
 (async () => {
 	const browser = await playwright.chromium.launch();
 
-	for (const wordpressPage of wordpressPages.slice(0, 100)) {
+	for (const wordpressPage of [...top_sites, ...domains.slice(0, 100)]) {
 		try {
 			const page = await browser.newPage();
 
