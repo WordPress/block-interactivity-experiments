@@ -87,7 +87,7 @@ const allMutations = {};
 								nodeName: mutation.target.nodeName,
 								mutationType: mutation.type,
 								addedNodes:
-									mutation.addedNodes.length > 0
+									mutation?.addedNodes?.length > 0
 										? Array.from(mutation.addedNodes).map(
 												(node) => ({
 													nodeName: node.nodeName,
@@ -96,7 +96,7 @@ const allMutations = {};
 										  )
 										: [],
 								removedNodes:
-									mutation.removedNodes.length > 0
+									mutation?.removedNodes?.length > 0
 										? Array.from(mutation.removedNodes).map(
 												(node) => ({
 													nodeName: node.nodeName,
