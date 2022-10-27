@@ -1,85 +1,51 @@
 import playwright from 'playwright';
 import { join } from 'path';
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
+import { writeFileSync } from 'fs';
 import { inspect } from 'util';
-import pixelmatch from 'pixelmatch';
-import { PNG } from 'pngjs';
+
+import wordpressPages from './domains.mjs';
 
 const dirname = process.cwd();
 
-const wordpressPages = [
-	'https://www.wordpress.com',
-	'https://www.whitehouse.gov',
-	'https://www.nytimes.com',
-	'https://www.usatoday.com',
-	'https://www.nypost.com',
-	'https://www.nytimes.com/wirecutter/',
-	'https://www.techcrunch.com',
-	'https://www.capgemini.com/',
-	'https://www.theverge.com',
-];
+const allMutations = {};
 
 (async () => {
 	const browser = await playwright.chromium.launch();
 
-	writeFileSync(
-		join(dirname, './results.md'),
-		'| HOST | TIME (ms) | DIFF (# of pixels) |\n | --- | --- | --- |\n'
-	);
-
-	const allMutations = {};
-
-	for (const wordpressPage of wordpressPages) {
+	for (const wordpressPage of wordpressPages.slice(0, 100)) {
 		try {
 			const page = await browser.newPage();
-			await page.goto(wordpressPage, {
-				waitUntil: 'domcontentloaded',
+
+			console.log(
+				`\n==================================\nNavigating to ${wordpressPage}\n`
+			);
+
+			await page.goto(`https://www.${wordpressPage}`, {
+				waitUntil: 'networkidle',
+				timeout: 30000,
 			});
 
 			await page.addScriptTag({
-				path: join(dirname, 'hydration-script.js'),
+				path: join(dirname, './build/hydrationScriptForTesting.js'),
 			});
 
 			page.on('console', (msg) => {
-				if (msg.text().startsWith('mutation')) {
+				const message = msg.text();
+				if (message.startsWith('mutation')) {
 					const mutation = JSON.parse(
-						msg.text().replace('mutation ', '')
+						message.replace('mutation ', '')
 					);
 					console.log(inspect(mutation, { colors: true, depth: 5 }));
 
 					if (!allMutations[wordpressPage]) {
 						allMutations[wordpressPage] = [];
 					}
-					allMutations[wordpressPage].push(mutation);
+					allMutations[wordpressPage].push({
+						wordpressPage,
+						...mutation,
+					});
 				}
 			});
-
-			/**
-			 * Takes a screenshot of the page
-			 *
-			 * @param {Object} obj
-			 * @param {playwright.Page} obj.page Page object
-			 * @param {string} preOrPost Whether to take a screenshot before or after hydration
-			 * @returns a promise that resolves to a buffer of the screenshot
-			 */
-			async function takeScreenshot({ page }, preOrPost) {
-				const hostname = new URL(page.url()).hostname;
-				// check if the screenshots directory exists
-				const screenshotsDir = join(
-					dirname,
-					'./screenshots/',
-					hostname
-				);
-				const screenshot = await page.screenshot({
-					type: 'png',
-					fullPage: true,
-					path: join(screenshotsDir, `${preOrPost}.png`),
-				});
-
-				return screenshot;
-			}
-
-			await page.exposeBinding('takeScreenshot', takeScreenshot);
 
 			const { time } = await page.evaluate(async () => {
 				/**
@@ -114,6 +80,9 @@ const wordpressPages = [
 					for (const mutation of mutations) {
 						console.log(
 							'mutation',
+							// The MutationRecord is not serializable with JSON.stringify()
+							// We have to stringify it manually because it contains a DOM
+							// node and we can't send that over the console.
 							JSON.stringify({
 								nodeName: mutation.target.nodeName,
 								mutationType: mutation.type,
@@ -128,7 +97,7 @@ const wordpressPages = [
 										: [],
 								removedNodes:
 									mutation.removedNodes.length > 0
-										? Array.from(mutation.addedNodes).map(
+										? Array.from(mutation.removedNodes).map(
 												(node) => ({
 													nodeName: node.nodeName,
 													node: nodeToString(node),
@@ -152,8 +121,6 @@ const wordpressPages = [
 					}
 				}
 
-				await takeScreenshot('pre');
-
 				const observer = new MutationObserver(processMutations);
 				observer.observe(document.body, {
 					attributes: true,
@@ -162,7 +129,7 @@ const wordpressPages = [
 				});
 
 				let time = performance.now();
-				window.run();
+				window.__runHydration();
 				time = performance.now() - time;
 
 				// Process pending mutations
@@ -170,64 +137,31 @@ const wordpressPages = [
 				observer.disconnect();
 				processMutations(mutations);
 
-				await takeScreenshot('post');
-
 				return { time };
 			});
-
-			const hostname = new URL(page.url()).hostname;
-			// check if the screenshots directory exists
-			const screenshotsDir = join(dirname, './screenshots/', hostname);
-			if (!existsSync(screenshotsDir)) {
-				// create a directory to store the screenshots
-				mkdirSync(screenshotsDir, { recursive: true });
-			}
-
-			const pathToPre = join(screenshotsDir, 'pre.png');
-			const pathToPost = join(screenshotsDir, 'post.png');
-			const pre_img = PNG.sync.read(readFileSync(pathToPre));
-			const post_img = PNG.sync.read(readFileSync(pathToPost));
-			const { width, height } = pre_img;
-			const diff_image = new PNG({ width, height });
-			const diff = pixelmatch(
-				pre_img.data,
-				post_img.data,
-				diff_image.data,
-				width,
-				height,
-				{
-					threshold: 0.1,
-				}
-			);
-
-			console.log(diff);
-			writeFileSync(
-				join(screenshotsDir, 'diff.png'),
-				PNG.sync.write(diff_image)
-			);
-
-			writeFileSync(
-				'./results.md',
-				`| ${hostname} | ${time} | ${diff} |\n`,
-				{
-					mode: 0o777,
-					flag: 'a',
-				}
-			);
 
 			console.log(`Time to hydrate: ${time}ms`);
 
 			await page.close();
 		} catch (e) {
 			console.error(e);
-			await browser.close();
+			continue;
 		}
 	}
 
-	writeFileSync(
-		join(dirname, './mutation-observer-results.json'),
-		JSON.stringify(allMutations, null, 2)
-	);
+	dumpAllMutations();
 
 	await browser.close();
 })();
+
+const dumpAllMutations = () => {
+	writeFileSync(
+		join(dirname, './benchmark/mutation-observer-results.json'),
+		JSON.stringify(allMutations, null, 2)
+	);
+};
+
+process.on('SIGINT', function () {
+	dumpAllMutations();
+	process.exit();
+});
