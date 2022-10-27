@@ -20,7 +20,7 @@ const allMutations = {};
 				`\n==================================\nNavigating to ${wordpressPage}\n`
 			);
 
-			await page.goto(`https://www.${wordpressPage}`, {
+			await page.goto(`http://www.${wordpressPage}`, {
 				waitUntil: 'networkidle',
 				timeout: 30000,
 			});
