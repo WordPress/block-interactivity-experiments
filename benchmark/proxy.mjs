@@ -114,7 +114,12 @@ const getPerformanceData = (report) => {
 	const ids = ['interactive', 'total-blocking-time'];
 
 	return ids.reduce((acc, id) => {
-		acc[id] = audits[id];
+		const { numericValue, numericUnit } = audits[id];
+		if (numericValue !== undefined && numericUnit !== undefined) {
+			acc[id] = `${numericValue.toFixed(2)} ${numericUnit}`;
+		} else {
+			acc[id] = 'no data';
+		}
 		return acc;
 	}, {});
 };
@@ -141,15 +146,24 @@ const getPerformanceData = (report) => {
 			console.log(`\n==================================`);
 			console.log(`Testing ${wordpressPage}\n`);
 
-			const report = await lighthouse(`http://www.${wordpressPage}`);
-
-			const reportInjection = await lighthouse(
-				`http://www.${wordpressPage}${injectionPath}`
+			const reportNormal = await lighthouse(`http://${wordpressPage}`);
+			const reportHydration = await lighthouse(
+				`http://${wordpressPage}${injectionPath}`
 			);
 
+			const perfNormal = getPerformanceData(reportNormal);
+			const perfHydration = getPerformanceData(reportHydration);
+
+			// Display some obtained data.
 			console.log(
-				getPerformanceData(report),
-				getPerformanceData(reportInjection)
+				'TTI',
+				[perfNormal, perfHydration].map((perf) => perf.interactive)
+			);
+			console.log(
+				'TBT',
+				[perfNormal, perfHydration].map(
+					(perf) => perf['total-blocking-time']
+				)
 			);
 
 			// TODO: store results in some kind of database.
