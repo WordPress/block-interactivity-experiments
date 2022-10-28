@@ -45,12 +45,12 @@ proxy.onConnect((req, socket, _head, callback) => {
 
 	// Handle connection errors.
 	conn.on('error', (err) => {
-		if (err.errno !== 'ECONNRESET') {
+		if (err.code !== 'ECONNRESET') {
 			console.log(`Unexpected error on PROXY_TO_SERVER_SOCKET`, err);
 		}
 	});
 	socket.on('error', (err) => {
-		if (err.errno !== 'ECONNRESET') {
+		if (err.code !== 'ECONNRESET') {
 			console.log(`Unexpected error on CLIENT_TO_PROXY_SOCKET`, err);
 		}
 	});
