@@ -1,26 +1,46 @@
 import playwright from 'playwright';
 import { join } from 'path';
-import { writeFileSync } from 'fs';
 import { inspect } from 'util';
+import { createModels } from './models.mjs';
+import { Sequelize } from 'sequelize';
 
 import { domains, top_sites } from './domains.mjs';
 
 const dirname = process.cwd();
 
-const allMutations = {};
-
 (async () => {
 	const browser = await playwright.chromium.launch();
 
-	for (const wordpressPage of [...top_sites, ...domains.slice(0, 100)]) {
+	// Initialize the database
+	const sequelize = new Sequelize({
+		dialect: 'sqlite',
+		storage: join(dirname, './benchmark/test_results.db'),
+	});
+
+	const { TestResult, WordPressPage } = createModels(sequelize);
+
+	await sequelize.sync();
+
+	for (const url of [...top_sites, ...domains]) {
+		let wordPressPage = await WordPressPage.findOne({
+			where: {
+				url: url,
+			},
+		});
+
+		// If we've already tested this page, skip it.
+		if (wordPressPage) continue;
+
+		wordPressPage = await WordPressPage.create({ url });
+
 		try {
 			const page = await browser.newPage();
 
 			console.log(
-				`\n==================================\nNavigating to ${wordpressPage}\n`
+				`\n==================================\nNavigating to ${url}\n`
 			);
 
-			await page.goto(`http://www.${wordpressPage}`, {
+			await page.goto(`http://${url}`, {
 				waitUntil: 'networkidle',
 				timeout: 30000,
 			});
@@ -29,7 +49,7 @@ const allMutations = {};
 				path: join(dirname, './build/hydrationScriptForTesting.js'),
 			});
 
-			page.on('console', (msg) => {
+			page.on('console', async (msg) => {
 				const message = msg.text();
 				if (message.startsWith('mutation')) {
 					const mutation = JSON.parse(
@@ -37,13 +57,31 @@ const allMutations = {};
 					);
 					console.log(inspect(mutation, { colors: true, depth: 5 }));
 
-					if (!allMutations[wordpressPage]) {
-						allMutations[wordpressPage] = [];
+					for (let node of mutation.removedNodes) {
+						const testResult = await TestResult.create({
+							wordpressPage: url,
+							nodeName: mutation.nodeName,
+							mutationType: mutation.mutationType,
+							node: mutation.node,
+							nodeOperation: 'remove',
+							removedNode: node.node,
+							removedNodeName: node.nodeName,
+						});
+						await wordPressPage.addTestResult(testResult);
 					}
-					allMutations[wordpressPage].push({
-						wordpressPage,
-						...mutation,
-					});
+
+					for (let node of mutation.addedNodes) {
+						const testResult = await TestResult.create({
+							wordpressPage: url,
+							nodeName: mutation.nodeName,
+							mutationType: mutation.mutationType,
+							node: mutation.node,
+							nodeOperation: 'add',
+							addedNode: node.node,
+							addedNodeName: node.nodeName,
+						});
+						await wordPressPage.addTestResult(testResult);
+					}
 				}
 			});
 
@@ -142,26 +180,22 @@ const allMutations = {};
 
 			console.log(`Time to hydrate: ${time}ms`);
 
+			wordPressPage.set('errorOrSuccess', 'success');
+			wordPressPage.save();
+
 			await page.close();
 		} catch (e) {
 			console.error(e);
-			continue;
+
+			wordPressPage.set('errorOrSuccess', 'error');
+			wordPressPage.save();
 		}
 	}
-
-	dumpAllMutations();
 
 	await browser.close();
 })();
 
-const dumpAllMutations = () => {
-	writeFileSync(
-		join(dirname, './benchmark/mutation-observer-results.json'),
-		JSON.stringify(allMutations, null, 2)
-	);
-};
-
 process.on('SIGINT', function () {
-	dumpAllMutations();
+	// TODO: Here we should save the results to the database
 	process.exit();
 });
