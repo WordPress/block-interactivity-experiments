@@ -24,7 +24,7 @@ proxy.onConnect((req, socket, _head, callback) => {
 	const [host, port] = req.url.split(':');
 
 	// Handle requests sent to the current host.
-	// TODO: make this work with subdomains.
+	// TODO: this could not work with subdomains.
 	if (host.includes(currentHost)) {
 		return callback();
 	}
@@ -64,7 +64,6 @@ proxy.onRequest(async (ctx, callback) => {
 	const response = ctx.proxyToClientResponse;
 
 	const { url } = request;
-
 	const scriptUrls = ['/build/runtime.js', '/build/vendors.js'];
 
 	if (scriptUrls.includes(url)) {
@@ -78,7 +77,10 @@ proxy.onRequest(async (ctx, callback) => {
 
 /*
  * Inject the hydration scripts. Includes a style that changes the background
- * color to make it noticeable that the scripts were injected.
+ * color to make it noticeable that the scripts were injected. The injection
+ * only happens when two conditions are fulfilled:
+ * - The request host is `currentHost`
+ * - The request URL coincides with `injectionPath
  */
 proxy.onRequest((ctx, callback) => {
 	const request = ctx.clientToProxyRequest;
@@ -100,6 +102,13 @@ proxy.onRequest((ctx, callback) => {
 	callback();
 });
 
+/**
+ * Return some performance data from a generated Lighthouse report. Currently it
+ * only returns data for TTI and TBT audits.
+ *
+ * @param {*} report
+ * @returns Performance results data.
+ */
 const getPerformanceData = (report) => {
 	const { audits } = report.lhr;
 	const ids = ['interactive', 'total-blocking-time'];
@@ -141,6 +150,8 @@ const getPerformanceData = (report) => {
 				getPerformanceData(report),
 				getPerformanceData(reportInjection)
 			);
+
+			// TODO: store results in some kind of database.
 		} catch (e) {
 			console.log(e);
 		}
