@@ -126,10 +126,11 @@ const getPerformanceData = (report) => {
 		console.log(`listening on ${port}`);
 	});
 
-	await playwright.chromium.launch({
+	// Launch Playwright. The debugging port is required by Lighthouse.
+	const browser = await playwright.chromium.launch({
 		args: ['--remote-debugging-port=9222'],
 		proxy: { server: `http://localhost:${port}` },
-		devtools: true,
+		devtools: true, // TODO: remove this later.
 	});
 
 	for (const wordpressPage of ['wordpress.org']) {
@@ -156,4 +157,8 @@ const getPerformanceData = (report) => {
 			console.log(e);
 		}
 	}
+
+	// Close everything.
+	await browser.close();
+	proxy.close();
 })();
