@@ -218,8 +218,3 @@ fs.createReadStream('./benchmark/sites.csv')
 
 	await browser.close();
 })();
-
-process.on('SIGINT', function () {
-	// TODO: Here we should save the results to the database
-	process.exit();
-});
