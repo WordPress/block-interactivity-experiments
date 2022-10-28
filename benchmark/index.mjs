@@ -55,32 +55,41 @@ const dirname = process.cwd();
 					const mutation = JSON.parse(
 						message.replace('mutation ', '')
 					);
-					console.log(inspect(mutation, { colors: true, depth: 5 }));
+					const isComment =
+						mutation?.addedNodes.length === 0 &&
+						mutation?.removedNodes.length === 1 &&
+						mutation?.removedNodes[0]?.nodeName === '#comment';
 
-					for (let node of mutation.removedNodes) {
-						const testResult = await TestResult.create({
-							wordpressPage: url,
-							nodeName: mutation.nodeName,
-							mutationType: mutation.mutationType,
-							node: mutation.node,
-							nodeOperation: 'remove',
-							removedNode: node.node,
-							removedNodeName: node.nodeName,
-						});
-						await wordPressPage.addTestResult(testResult);
-					}
+					if (!isComment) {
+						console.log(
+							inspect(mutation, { colors: true, depth: 5 })
+						);
 
-					for (let node of mutation.addedNodes) {
-						const testResult = await TestResult.create({
-							wordpressPage: url,
-							nodeName: mutation.nodeName,
-							mutationType: mutation.mutationType,
-							node: mutation.node,
-							nodeOperation: 'add',
-							addedNode: node.node,
-							addedNodeName: node.nodeName,
-						});
-						await wordPressPage.addTestResult(testResult);
+						for (let node of mutation.removedNodes) {
+							const testResult = await TestResult.create({
+								wordpressPage: url,
+								nodeName: mutation.nodeName,
+								mutationType: mutation.mutationType,
+								node: mutation.node,
+								nodeOperation: 'remove',
+								removedNode: node.node,
+								removedNodeName: node.nodeName,
+							});
+							await wordPressPage.addTestResult(testResult);
+						}
+
+						for (let node of mutation.addedNodes) {
+							const testResult = await TestResult.create({
+								wordpressPage: url,
+								nodeName: mutation.nodeName,
+								mutationType: mutation.mutationType,
+								node: mutation.node,
+								nodeOperation: 'add',
+								addedNode: node.node,
+								addedNodeName: node.nodeName,
+							});
+							await wordPressPage.addTestResult(testResult);
+						}
 					}
 				}
 			});
