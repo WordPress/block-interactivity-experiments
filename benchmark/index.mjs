@@ -1,13 +1,25 @@
 import * as fs from 'fs';
+import { parse } from 'csv-parse';
 import playwright from 'playwright';
 import { join } from 'path';
 import { inspect } from 'util';
 import { createModels } from './models.mjs';
 import { Sequelize } from 'sequelize';
 
-import { domains, top_sites } from './domains.mjs';
-
 const dirname = process.cwd();
+
+const domains = [];
+fs.createReadStream('./benchmark/sites.csv')
+	.pipe(parse({ delimiter: ',', from_line: 2 }))
+	.on('data', function (row) {
+		domains.push(row[0]);
+	})
+	.on('end', () => {
+		console.log('Domains Created');
+	})
+	.on('error', function (error) {
+		console.log(error.message);
+	});
 
 (async () => {
 	const browser = await playwright.chromium.launch();
@@ -22,7 +34,7 @@ const dirname = process.cwd();
 
 	await sequelize.sync();
 
-	for (const url of [...top_sites, ...domains]) {
+	for (const url of domains) {
 		let wordPressPage = await WordPressPage.findOne({
 			where: {
 				url: url,
