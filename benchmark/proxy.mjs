@@ -133,7 +133,7 @@ const getPerformanceData = (report) => {
 		devtools: true, // TODO: remove this later.
 	});
 
-	for (const wordpressPage of ['wordpress.org']) {
+	for (const wordpressPage of top_sites.slice(0, 10)) {
 		try {
 			// Change the host that the proxy will filter.
 			currentHost = wordpressPage;
