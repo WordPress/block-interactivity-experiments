@@ -138,17 +138,17 @@ const getPerformanceData = (report) => {
 		devtools: true, // TODO: remove this later.
 	});
 
-	for (const wordpressPage of top_sites.slice(0, 10)) {
+	for (const url of [...top_sites, ...domains]) {
 		try {
 			// Change the host that the proxy will filter.
-			currentHost = wordpressPage;
+			currentHost = url;
 
 			console.log(`\n==================================`);
-			console.log(`Testing ${wordpressPage}\n`);
+			console.log(`Testing ${url}\n`);
 
-			const reportNormal = await lighthouse(`http://${wordpressPage}`);
+			const reportNormal = await lighthouse(`http://${url}`);
 			const reportHydration = await lighthouse(
-				`http://${wordpressPage}${injectionPath}`
+				`http://${url}${injectionPath}`
 			);
 
 			const perfNormal = getPerformanceData(reportNormal);
