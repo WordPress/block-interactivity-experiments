@@ -1,3 +1,4 @@
+import * as fs from 'fs';
 import playwright from 'playwright';
 import { join } from 'path';
 import { inspect } from 'util';
@@ -45,9 +46,11 @@ const dirname = process.cwd();
 				timeout: 30000,
 			});
 
-			await page.addScriptTag({
-				path: join(dirname, './build/hydrationScriptForTesting.js'),
-			});
+			const preloadFile = fs.readFileSync(
+				'./build/hydrationScriptForTesting.js',
+				'utf8'
+			);
+			await page.evaluate(preloadFile);
 
 			page.on('console', async (msg) => {
 				const message = msg.text();
