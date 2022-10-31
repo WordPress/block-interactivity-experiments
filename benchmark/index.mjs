@@ -219,9 +219,7 @@ async function testUrl(url, browser) {
 
 	await sequelize.sync();
 
-	await asyncParallelQueue(20, domains.slice(0, 1000), (url) =>
-		testUrl(url, browser)
-	);
+	await asyncParallelQueue(20, domains, (url) => testUrl(url, browser));
 
 	await browser.close();
 })();
