@@ -16,6 +16,19 @@ const sequelize = new Sequelize({
 
 const { TestResult, WordPressPage } = createModels(sequelize);
 
+(async () => {
+	try {
+		const domains = await getDomains();
+		const browser = await playwright.chromium.launch();
+
+		await sequelize.sync();
+		await asyncParallelQueue(40, domains, (url) => testUrl(url, browser));
+		await browser.close();
+	} catch (e) {
+		console.log(e);
+	}
+})();
+
 async function testUrl(url, browser) {
 	let wordPressPage = await WordPressPage.findOne({
 		where: {
@@ -200,15 +213,6 @@ async function testUrl(url, browser) {
 		wordPressPage.save();
 	}
 }
-
-(async () => {
-	const domains = await getDomains();
-	const browser = await playwright.chromium.launch();
-
-	await sequelize.sync();
-	await asyncParallelQueue(40, domains, (url) => testUrl(url, browser));
-	await browser.close();
-})();
 
 async function getDomains() {
 	const domains = [];
