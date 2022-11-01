@@ -206,16 +206,14 @@ async function testUrl(url, browser) {
 	const browser = await playwright.chromium.launch();
 
 	await sequelize.sync();
-
-	await asyncParallelQueue(20, domains, (url) => testUrl(url, browser));
-
+	await asyncParallelQueue(40, domains, (url) => testUrl(url, browser));
 	await browser.close();
 })();
 
 async function getDomains() {
 	const domains = [];
 	return new Promise((resolve, reject) => {
-		fs.createReadStream('./benchmark/sites.csv')
+		fs.createReadStream('./benchmark/all-sites.csv')
 			.pipe(parse({ delimiter: ',', from_line: 2 }))
 			.on('data', (row) => {
 				domains.push(row[0]);
