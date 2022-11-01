@@ -218,7 +218,13 @@ async function getDomains() {
 	const domains = [];
 	return new Promise((resolve, reject) => {
 		fs.createReadStream('./benchmark/all-sites.csv')
-			.pipe(parse({ delimiter: ',', from_line: 2 }))
+			.pipe(
+				parse({
+					delimiter: ',',
+					from_line: 2,
+					skip_records_with_error: true,
+				})
+			)
 			.on('data', (row) => {
 				domains.push(row[0]);
 			})
