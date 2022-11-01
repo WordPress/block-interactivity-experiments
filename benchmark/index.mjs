@@ -16,19 +16,6 @@ const sequelize = new Sequelize({
 
 const { TestResult, WordPressPage } = createModels(sequelize);
 
-const domains = [];
-fs.createReadStream('./benchmark/sites.csv')
-	.pipe(parse({ delimiter: ',', from_line: 2 }))
-	.on('data', function (row) {
-		domains.push(row[0]);
-	})
-	.on('end', () => {
-		console.log('Domains Created');
-	})
-	.on('error', function (error) {
-		console.log(error.message);
-	});
-
 async function testUrl(url, browser) {
 	let wordPressPage = await WordPressPage.findOne({
 		where: {
@@ -215,6 +202,7 @@ async function testUrl(url, browser) {
 }
 
 (async () => {
+	const domains = await getDomains();
 	const browser = await playwright.chromium.launch();
 
 	await sequelize.sync();
@@ -223,6 +211,24 @@ async function testUrl(url, browser) {
 
 	await browser.close();
 })();
+
+async function getDomains() {
+	const domains = [];
+	return new Promise((resolve, reject) => {
+		fs.createReadStream('./benchmark/sites.csv')
+			.pipe(parse({ delimiter: ',', from_line: 2 }))
+			.on('data', (row) => {
+				domains.push(row[0]);
+			})
+			.on('end', () => {
+				console.log('Domains Created');
+				resolve(domains);
+			})
+			.on('error', (error) => {
+				reject(error);
+			});
+	});
+}
 
 async function asyncParallelQueue(concurrency = 3, items, func) {
 	const batch = items.slice(0, concurrency);
