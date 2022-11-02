@@ -17,7 +17,9 @@ export default function toVdom(node) {
 			try {
 				val = JSON.parse(val);
 			} catch (e) {}
-			const [, prefix, suffix] = /wp-([^:]+):?(.*)$/.exec(name);
+			const result = /wp-([^:]+):?(.*)$/.exec(name);
+			if (!result) continue;
+			const [, prefix, suffix] = result;
 			wpDirectives[prefix] = wpDirectives[prefix] || {};
 			wpDirectives[prefix][suffix || 'default'] = val;
 		} else {
