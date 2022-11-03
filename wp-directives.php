@@ -137,3 +137,32 @@ add_filter('render_block_bhe/favorites-number', function ($content) {
 	);
 	return $content;
 });
+
+function wpx_props_array_to_object($props)
+{
+	$array = [];
+	foreach ($props as list($key, $value)) {
+		$array[$key] = $value;
+	}
+	return $array;
+}
+
+function wpx_tag_open($tag, $args)
+{
+	$props = wpx_props_array_to_object($args);
+	if ($props['when'] !== 'false') {
+		echo "<$tag>";
+	} else {
+		echo "<$tag><template>";
+	}
+}
+
+function wpx_tag_close($tag, $args)
+{
+	$props = wpx_props_array_to_object($args);
+	if ($props['when'] !== 'false') {
+		echo "</$tag>";
+	} else {
+		echo "</template></$tag>";
+	}
+}

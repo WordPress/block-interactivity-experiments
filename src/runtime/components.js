@@ -8,4 +8,9 @@ export default () => {
 		return <Provider value={signals}>{children}</Provider>;
 	};
 	component('wp-context', WpContext);
+
+	const WpShow = ({ children }) => {
+		return children;
+	};
+	component('wp-show', WpShow);
 };
