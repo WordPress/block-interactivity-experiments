@@ -112,6 +112,14 @@ async function testUrl(url, browser) {
 					}
 				}
 			}
+
+			if (message.startsWith('error')) {
+				const error = JSON.parse(message.replace('error ', ''));
+				console.log(inspect(error, { colors: true, depth: 5 }));
+				await wordPressPage.update({
+					errorOrSuccess: 'hydrationError',
+				});
+			}
 		});
 
 		await page.evaluate(async () => {
@@ -192,7 +200,11 @@ async function testUrl(url, browser) {
 				subtree: true,
 			});
 
-			window.__runHydration();
+			try {
+				window.__runHydration();
+			} catch (error) {
+				console.log('error', JSON.stringify(error));
+			}
 
 			// Process pending mutations
 			let mutations = observer.takeRecords();
