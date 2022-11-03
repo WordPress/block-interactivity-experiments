@@ -271,3 +271,8 @@ async function asyncParallelQueue(concurrency = 3, items, func) {
 		}
 	}
 }
+
+process.on('SIGINT', () => {
+	console.log('Caught interrupt signal');
+	process.exit(1);
+});
