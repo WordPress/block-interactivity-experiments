@@ -8,7 +8,7 @@
 		"build": "webpack --mode=production",
 		"build:benchmark": "esbuild benchmark/hydrationScript.js --bundle --outfile=build/hydrationScriptForTesting.js",
 		"start": "webpack --mode=development --watch",
-		"benchmark": "node ./benchmark/index.mjs",
+		"benchmark": "npm run build:benchmark && node ./benchmark/index.mjs",
 		"dev": "npm start",
 		"test": "jest",
 		"test:watch": "jest --watch",

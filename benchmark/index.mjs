@@ -1,21 +1,31 @@
 import * as fs from 'fs';
 import { parse } from 'csv-parse';
 import playwright from 'playwright';
-import { join } from 'path';
 import { inspect } from 'util';
-import { createModels } from './models.mjs';
 import { Sequelize } from 'sequelize';
 
-const dirname = process.cwd();
+import { createModels } from './models.mjs';
+
+// Get the path to the CSV file
+const fileArg = process.argv[2];
+if (typeof fileArg === 'undefined') {
+	console.error(
+		'\x1b[41m',
+		'\nPlease provide a CSV file as an argument\n\nFor example: npm run benchmark 1.csv\n'
+	);
+	process.exit(1);
+}
 
 // Initialize the database
 const sequelize = new Sequelize({
 	dialect: 'sqlite',
-	storage: join(dirname, './benchmark/test_results.db'),
+	storage: new URL('./test_results.db', import.meta.url).pathname,
 });
 
+// Create the models for the database
 const { TestResult, WordPressPage } = createModels(sequelize);
 
+// Run the benchmark
 (async () => {
 	try {
 		const domains = await getDomains();
@@ -216,8 +226,9 @@ async function testUrl(url, browser) {
 
 async function getDomains() {
 	const domains = [];
+	const csvFile = new URL(`../${fileArg}`, import.meta.url).pathname;
 	return new Promise((resolve, reject) => {
-		fs.createReadStream('./benchmark/all-sites.csv')
+		fs.createReadStream(csvFile)
 			.pipe(
 				parse({
 					delimiter: ',',
