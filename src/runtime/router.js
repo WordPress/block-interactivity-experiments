@@ -1,7 +1,6 @@
 import { hydrate, render } from 'preact';
 import toVdom from './vdom';
 import { createRootFragment } from './utils';
-import { startTransition } from './transitions';
 
 // The root to render the vdom (document.body).
 let rootFragment;
@@ -67,19 +66,13 @@ export const prefetch = (url) => {
 };
 
 // Navigate to a new page.
-export const navigate = async (href, scroll) => {
+export const navigate = async (href) => {
 	const url = cleanUrl(href);
 	prefetch(url);
 	const page = await pages.get(url);
 	if (page) {
-		await startTransition(
-			href,
-			() => {
-				document.head.replaceChildren(...page.head);
-				render(page.body, rootFragment);
-			},
-			scroll
-		);
+		document.head.replaceChildren(...page.head);
+		render(page.body, rootFragment);
 		window.history.pushState({}, '', href);
 	} else {
 		window.location.assign(href);
@@ -92,10 +85,8 @@ window.addEventListener('popstate', async () => {
 	const url = cleanUrl(window.location); // Remove hash.
 	if (pages.has(url)) {
 		const { body, head } = await pages.get(url);
-		await startTransition(window.location.href, () => {
-			document.head.replaceChildren(...head);
-			render(body, rootFragment);
-		});
+		document.head.replaceChildren(...head);
+		render(body, rootFragment);
 	} else {
 		window.location.reload();
 	}

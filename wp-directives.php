@@ -60,12 +60,6 @@ function wp_directives_register_scripts()
 	// For now we can always enqueue the runtime. We'll figure out how to
 	// conditionally enqueue directives later.
 	wp_enqueue_script('wp-directive-runtime');
-
-	wp_register_style(
-		'transition-styles',
-		plugin_dir_url(__FILE__) . '/transition-styles.css'
-	);
-	wp_enqueue_style('transition-styles');
 }
 add_action('wp_enqueue_scripts', 'wp_directives_register_scripts');
 
