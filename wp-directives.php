@@ -149,8 +149,10 @@ function wpx_props_array_to_object($props)
 
 function wpx_tag_open($tag, $args)
 {
+	global $wpx;
 	$props = wpx_props_array_to_object($args);
-	if ($props['when'] !== 'false') {
+	$callback = wpx_get_callback($props['when']);
+	if ($callback) {
 		echo "<$tag>";
 	} else {
 		echo "<$tag><template>";
@@ -159,10 +161,31 @@ function wpx_tag_open($tag, $args)
 
 function wpx_tag_close($tag, $args)
 {
+	global $wpx;
 	$props = wpx_props_array_to_object($args);
-	if ($props['when'] !== 'false') {
+	$callback = wpx_get_callback($props['when']);
+	if ($callback) {
 		echo "</$tag>";
 	} else {
 		echo "</template></$tag>";
 	}
+}
+
+$GLOBALS['wpx'] = [];
+
+function wpx($block)
+{
+	global $wpx;
+	$wpx = array_merge_recursive($wpx, $block);
+}
+
+function wpx_get_callback($path)
+{
+	global $wpx;
+	$current = $wpx;
+	$array = explode('.', $path);
+	foreach ($array as $p) {
+		$current = $current[$p];
+	}
+	return $current;
 }
