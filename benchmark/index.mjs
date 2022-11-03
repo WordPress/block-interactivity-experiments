@@ -20,6 +20,7 @@ if (typeof fileArg === 'undefined') {
 const sequelize = new Sequelize({
 	dialect: 'sqlite',
 	storage: new URL('./test_results.db', import.meta.url).pathname,
+	logging: false,
 });
 
 // Create the models for the database
@@ -58,9 +59,7 @@ async function testUrl(url, browser) {
 	try {
 		const page = await browser.newPage();
 
-		console.log(
-			`\n==================================\nNavigating to ${url}\n`
-		);
+		console.log(`Navigating to ${url}\n`);
 
 		await page.goto(`http://${url}`, {
 			waitUntil: 'networkidle',
@@ -115,7 +114,7 @@ async function testUrl(url, browser) {
 			}
 		});
 
-		const { time } = await page.evaluate(async () => {
+		await page.evaluate(async () => {
 			/**
 			 * Takes a Mutation and returns the string representation of the node
 			 * @param {MutationRecord} mutation
@@ -193,19 +192,13 @@ async function testUrl(url, browser) {
 				subtree: true,
 			});
 
-			let time = performance.now();
 			window.__runHydration();
-			time = performance.now() - time;
 
 			// Process pending mutations
 			let mutations = observer.takeRecords();
 			observer.disconnect();
 			processMutations(mutations);
-
-			return { time };
 		});
-
-		console.log(`Time to hydrate: ${time}ms`);
 
 		wordPressPage.set('errorOrSuccess', 'success');
 		wordPressPage.save();
@@ -226,7 +219,7 @@ async function testUrl(url, browser) {
 
 async function getDomains() {
 	const domains = [];
-	const csvFile = new URL(`../${fileArg}`, import.meta.url).pathname;
+	const csvFile = new URL(`./data/${fileArg}`, import.meta.url).pathname;
 	return new Promise((resolve, reject) => {
 		fs.createReadStream(csvFile)
 			.pipe(
