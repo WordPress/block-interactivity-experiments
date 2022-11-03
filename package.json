@@ -3,7 +3,6 @@
 	"version": "0.1.0",
 	"author": "The WordPress Contributors",
 	"license": "GPL-2.0-or-later",
-	"main": "build/index.js",
 	"scripts": {
 		"build": "webpack --mode=production",
 		"start": "webpack --mode=development --watch",
@@ -12,7 +11,7 @@
 		"test:watch": "jest --watch",
 		"plugin-zip": "wp-scripts plugin-zip",
 		"wp-env": "wp-env",
-		"ssr": "node ssr/index.mjs"
+		"ssr": "node ssr.mjs"
 	},
 	"prettier": {
 		"useTabs": true,
