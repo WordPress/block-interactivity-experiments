@@ -19,9 +19,9 @@ const start = async () => {
 	const output = await transform(php, {
 		components: {
 			'wp-show': (props, children) =>
-				html`<?php wpx_tag_open("wp-show", ${propsToArray(props)}); ?>
+				html`<?php wpx_show_open_tag(${propsToArray(props)}); ?>
 					${children}
-					<?php wpx_tag_close("wp-show", ${propsToArray(props)}); ?>`,
+					<?php wpx_show_close_tag(${propsToArray(props)}); ?>`,
 		},
 	});
 	await writeFile('./build' + file, output);

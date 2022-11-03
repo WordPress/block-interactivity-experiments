@@ -138,48 +138,45 @@ add_filter('render_block_bhe/favorites-number', function ($content) {
 	return $content;
 });
 
-function wpx_props_array_to_object($props)
-{
-	$array = [];
-	foreach ($props as list($key, $value)) {
-		$array[$key] = $value;
-	}
-	return $array;
-}
+/**
+ * SSR in PHP
+ */
 
-function wpx_tag_open($tag, $args)
+// wp-show
+function wpx_show_open_tag($prop_entries)
 {
 	global $wpx;
-	$props = wpx_props_array_to_object($args);
-	$callback = wpx_get_callback($props['when']);
-	if ($callback) {
-		echo "<$tag>";
+	$props = wpx_prop_entries_to_array($prop_entries);
+	$attributes = wpx_prop_entries_to_attributes($prop_entries);
+	$value = wpx_get_state($props['when']);
+	if ($value) {
+		echo "<wp-show $attributes>";
 	} else {
-		echo "<$tag><template>";
+		echo "<wp-show $attributes><template>";
 	}
 }
 
-function wpx_tag_close($tag, $args)
+function wpx_show_close_tag($prop_entries)
 {
 	global $wpx;
-	$props = wpx_props_array_to_object($args);
-	$callback = wpx_get_callback($props['when']);
-	if ($callback) {
-		echo "</$tag>";
+	$props = wpx_prop_entries_to_array($prop_entries);
+	$value = wpx_get_state($props['when']);
+	if ($value) {
+		echo '</wp-show>';
 	} else {
-		echo "</template></$tag>";
+		echo '</template></wp-show>';
 	}
 }
 
+// Utils
 $GLOBALS['wpx'] = [];
-
-function wpx($block)
+function wpx($data)
 {
 	global $wpx;
-	$wpx = array_merge_recursive($wpx, $block);
+	$wpx = array_merge_recursive($wpx, $data);
 }
 
-function wpx_get_callback($path)
+function wpx_get_state($path)
 {
 	global $wpx;
 	$current = $wpx;
@@ -188,4 +185,22 @@ function wpx_get_callback($path)
 		$current = $current[$p];
 	}
 	return $current;
+}
+
+function wpx_prop_entries_to_array($prop_entries)
+{
+	$array = [];
+	foreach ($prop_entries as list($key, $value)) {
+		$array[$key] = $value;
+	}
+	return $array;
+}
+
+function wpx_prop_entries_to_attributes($prop_entries)
+{
+	$attributes = '';
+	foreach ($prop_entries as list($key, $value)) {
+		$attributes .= "$key='$value'";
+	}
+	return $attributes;
 }
