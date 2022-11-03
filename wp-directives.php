@@ -123,10 +123,11 @@ add_filter(
 	'wp_directives_client_site_transitions_option'
 );
 
-/* WP Movies Demo */
+/* Blocks */
 add_action('init', function () {
 	register_block_type(__DIR__ . '/build/blocks/post-favorite');
 	register_block_type(__DIR__ . '/build/blocks/favorites-number');
+	register_block_type(__DIR__ . '/build/blocks/tabs');
 });
 
 add_filter('render_block_bhe/favorites-number', function ($content) {
