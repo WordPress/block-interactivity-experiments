@@ -26,3 +26,13 @@ bottom order. The results are saved into the `test_results.db` sqlite database.
 The script will check the database to see if a successful test has already been 
 recorded against a particular site and if yes, will skip testing it and try the
 next site from the list.
+
+### Help, I see many timeout errors
+
+This is probably because your network is too slow to handle the traffic spike -
+the script by default tries to test 40 sites concurrently. Try lowering the
+number of pages tested concurrently:
+
+```sh
+npm run benchmark -- 1.csv --concurrency=20
+```

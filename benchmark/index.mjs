@@ -3,11 +3,14 @@ import { parse } from 'csv-parse';
 import playwright from 'playwright';
 import { inspect } from 'util';
 import { Sequelize } from 'sequelize';
+import minimist from 'minimist';
 
 import { createModels } from './models.mjs';
 
-// Get the path to the CSV file
-const fileArg = process.argv[2];
+// Get the CLI arguments for the file to use
+// and the number of pages to test concurrently.
+const { _, concurrency } = minimist(process.argv.slice(2));
+const fileArg = _[0];
 if (typeof fileArg === 'undefined') {
 	console.error(
 		'\x1b[41m',
@@ -33,7 +36,9 @@ const { TestResult, WordPressPage } = createModels(sequelize);
 		const browser = await playwright.chromium.launch();
 
 		await sequelize.sync();
-		await asyncParallelQueue(40, domains, (url) => testUrl(url, browser));
+		await asyncParallelQueue(concurrency || 40, domains, (url) =>
+			testUrl(url, browser)
+		);
 		await browser.close();
 	} catch (e) {
 		console.log(e);
@@ -254,7 +259,7 @@ async function getDomains() {
 	});
 }
 
-async function asyncParallelQueue(concurrency = 3, items, func) {
+async function asyncParallelQueue(concurrency, items, func) {
 	const batch = items.slice(0, concurrency);
 	let promisesArray = batch
 		.map(func)

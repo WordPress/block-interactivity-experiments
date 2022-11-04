@@ -38,6 +38,7 @@
 		"csv-parse": "^5.3.1",
 		"esbuild": "^0.15.12",
 		"jest": "^28.1.0",
+		"minimist": "^1.2.7",
 		"playwright": "^1.27.1",
 		"prettier": "^2.7.1",
 		"sequelize": "^6.25.3",
