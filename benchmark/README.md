@@ -1,5 +1,7 @@
 # Testing performance and fragility of vDOM hydration
 
+The list of sites is divided into 10 files in `benchmark/data/`.
+
 ## Run the tests
 
 ```sh
@@ -10,8 +12,8 @@ npm run benchmark <file_in_benchmark/data>
 For example:
 
 ```sh
+# This will run the tests against all the sites in 1.csv
 npm run benchmark 1.csv
-
 ```
 
 The test injects the `hydrationScript.js` using Playwright and checks if any
