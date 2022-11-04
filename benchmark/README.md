@@ -27,7 +27,12 @@ The script will check the database to see if a successful test has already been
 recorded against a particular site and if yes, will skip testing it and try the
 next site from the list.
 
-### Help, I see many timeout errors
+### How can I see the test results?
+
+You should use a DB viewer tool like <https://sqlitebrowser.org/>  and use it to
+open the `test_results.db` file.
+
+### Help, I see many timeout errors!
 
 This is probably because your network is too slow to handle the traffic spike -
 the script by default tries to test 40 sites concurrently. Try lowering the
