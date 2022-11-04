@@ -27,6 +27,7 @@ export const createModels = (sequelize) => {
 			errorOrSuccess: DataTypes.ENUM(
 				'success',
 				'hydrationError',
+				'timeoutError',
 				'error'
 			),
 		},
