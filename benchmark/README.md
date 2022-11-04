@@ -30,7 +30,7 @@ next site from the list.
 ### How can I see the test results?
 
 You should use a DB viewer tool like <https://sqlitebrowser.org/>  and use it to
-open the `test_results.db` file.
+open the `benchmark/test_results.db` file.
 
 ### Help, I see many timeout errors!
 
