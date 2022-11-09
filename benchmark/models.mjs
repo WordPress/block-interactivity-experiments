@@ -24,7 +24,12 @@ export const createModels = (sequelize) => {
 	WordPressPage.init(
 		{
 			url: DataTypes.STRING,
-			errorOrSuccess: DataTypes.STRING,
+			errorOrSuccess: DataTypes.ENUM(
+				'success',
+				'hydrationError',
+				'timeoutError',
+				'error'
+			),
 		},
 		{
 			sequelize,
