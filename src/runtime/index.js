@@ -6,8 +6,10 @@ import { init } from './router';
  * Initialize the initial vDOM.
  */
 document.addEventListener('DOMContentLoaded', async () => {
+	const t0 = performance.now();
 	registerDirectives();
 	registerComponents();
 	await init();
-	console.log('hydrated!');
+	const t1 = performance.now();
+	console.log(`hydrated in ${t1 - t0} ms`);
 });
