@@ -61,10 +61,26 @@ async function testUrl(url, browser) {
 		wordPressPage = await WordPressPage.create({ url });
 	}
 
+	let error403 = false;
+
 	try {
 		const page = await browser.newPage();
 
 		console.log(`Navigating to ${url}\n`);
+
+		page.on('response', async (msg) => {
+			const urlObject = new URL(msg.url());
+
+			// Check if the url returns a 403
+			if (
+				urlObject.hostname + urlObject.pathname === url &&
+				msg.status() === 403
+			) {
+				console.log('403 error');
+				error403 = true;
+				await page.close();
+			}
+		});
 
 		await page.goto(`http://${url}`, {
 			waitUntil: 'networkidle',
@@ -226,6 +242,8 @@ async function testUrl(url, browser) {
 
 		if (e instanceof playwright.errors.TimeoutError) {
 			wordPressPage.set('errorOrSuccess', 'timeoutError');
+		} else if (error403 === true) {
+			wordPressPage.set('errorOrSuccess', '403error');
 		} else {
 			wordPressPage.set('errorOrSuccess', 'error');
 		}
