@@ -72,7 +72,7 @@ async function testUrl(url, browser) {
 		});
 
 		if (response.status() === 403) {
-			throw '403 error - ' + url;
+			throw '403 error';
 		}
 
 		const preloadFile = fs.readFileSync(
