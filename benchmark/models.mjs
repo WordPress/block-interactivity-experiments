@@ -28,7 +28,8 @@ export const createModels = (sequelize) => {
 				'success',
 				'hydrationError',
 				'timeoutError',
-				'error'
+				'error',
+				'403error'
 			),
 		},
 		{
