@@ -21,19 +21,20 @@ const createDivs = (maxDepth) => {
 };
 
 let html = `
+<!DOCTYPE html>
 <html>
   <head>
     <title>Performance Test</title>
+		<script defer src="../build/vendors.js"></script>
+		<script defer src="../build/runtime.js"></script>
   </head>
   <body>`;
 
 for (let i = 0; i < 100; i++) {
-	html += createDivs(20);
+	html += createDivs(10);
 }
 
 const end = `
-	<script src="../build/vendors.js"></script>
-	<script src="../build/runtime.js"></script>
   </body>
 </html>
 `;

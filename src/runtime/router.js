@@ -1,6 +1,7 @@
 import { hydrate, render } from 'preact';
-import toVdom from './vdom';
+import { toVdomArray, toVdomTreeWalker } from './vdom';
 import { createRootFragment } from './utils';
+import { diff } from 'deep-object-diff';
 
 // The root to render the vdom (document.body).
 let rootFragment;
@@ -94,13 +95,44 @@ window.addEventListener('popstate', async () => {
 
 // Initialize the router with the initial DOM.
 export const init = async () => {
-	// Create the root fragment to hydrate everything.
+	// Number of nodes.
+	const nodeIterator = document.createNodeIterator(
+		document.body,
+		NodeFilter.SHOW_ELEMENT + NodeFilter.SHOW_TEXT
+	);
+	let node = nodeIterator.referenceNode;
+	let count = 0;
+	while (node) {
+		count++;
+		node = nodeIterator.nextNode();
+	}
+	console.log(`Number of DOM nodes: ${count}`);
+
+	// toVdom
+	const t0 = performance.now();
+	const vdom1 = toVdomArray(document.body);
+	const t1 = performance.now();
+	console.log(`vdom using array created in ${t1 - t0} ms`);
+
+	// treeWalker
+	const t2 = performance.now();
+	const vdom2 = toVdomTreeWalker(document.body);
+	const t3 = performance.now();
+	console.log(`vdom using treeWalker created in ${t3 - t2} ms`);
+
+	// console.log(`Diff:`, diff(vdom1, vdom2));
+
 	rootFragment = createRootFragment(document.documentElement, document.body);
-	const body = toVdom(document.body);
-	hydrate(body, rootFragment);
+	const t4 = performance.now();
+	hydrate(vdom2, rootFragment);
+	const t5 = performance.now();
+	console.log(`hydrated in ${t5 - t4} ms`);
 
 	if (hasClientSideTransitions(document.head)) {
 		const head = await fetchHead(document.head);
-		pages.set(cleanUrl(window.location), Promise.resolve({ body, head }));
+		pages.set(
+			cleanUrl(window.location),
+			Promise.resolve({ body: vdom1, head })
+		);
 	}
 };
