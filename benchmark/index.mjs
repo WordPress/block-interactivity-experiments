@@ -66,27 +66,13 @@ async function testUrl(url, browser) {
 
 		console.log(`Navigating to ${url}\n`);
 
-		let error403 = false;
-
-		page.on('response', async (msg) => {
-			const urlObject = new URL(msg.url());
-
-			// Check if the url returns a 403
-			if (
-				urlObject.hostname + urlObject.pathname === url &&
-				msg.status() === 403
-			) {
-				error403 = true;
-			}
-		});
-
-		await page.goto(`http://${url}`, {
+		const response = await page.goto(`http://${url}`, {
 			waitUntil: 'networkidle',
 			timeout: 60000,
 		});
 
-		if (error403) {
-			throw '403 error';
+		if (response.status() === 403) {
+			throw '403 error - ' + url;
 		}
 
 		const preloadFile = fs.readFileSync(
