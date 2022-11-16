@@ -157,6 +157,16 @@ async function testUrl(url, browser) {
 			 * @param {MutationRecord[]} mutations
 			 */
 			function processMutations(mutations) {
+				// There are some sites using (old) libraries that overwrites
+				// `Array.prototype.toJSON` with a function that serializes
+				// arrays as strings. If that's the case, we remove `toJSON`
+				// from the prototype right before serializing all the mutations
+				// that were recorded, to avoid transforming `addedNodes` and
+				// `removedNodes` into strings. The `toJSON` function is
+				// restored afterwards.
+				const arrayToJSON = Array.prototype.toJSON;
+				if (arrayToJSON) delete Array.prototype.toJSON;
+
 				for (const mutation of mutations) {
 					console.log(
 						'mutation',
@@ -196,6 +206,9 @@ async function testUrl(url, browser) {
 						})
 					);
 				}
+
+				// Restore the `toJSON` function if it was previously defined.
+				if (arrayToJSON) Array.prototype.toJSON = arrayToJSON;
 			}
 
 			const observer = new MutationObserver(processMutations);
