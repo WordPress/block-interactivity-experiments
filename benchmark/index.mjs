@@ -61,12 +61,12 @@ async function testUrl(url, browser) {
 		wordPressPage = await WordPressPage.create({ url });
 	}
 
-	let error403 = false;
-
 	try {
 		const page = await browser.newPage();
 
 		console.log(`Navigating to ${url}\n`);
+
+		let error403 = false;
 
 		page.on('response', async (msg) => {
 			const urlObject = new URL(msg.url());
@@ -76,9 +76,7 @@ async function testUrl(url, browser) {
 				urlObject.hostname + urlObject.pathname === url &&
 				msg.status() === 403
 			) {
-				console.log('403 error');
 				error403 = true;
-				await page.close();
 			}
 		});
 
@@ -86,6 +84,10 @@ async function testUrl(url, browser) {
 			waitUntil: 'networkidle',
 			timeout: 60000,
 		});
+
+		if (error403) {
+			throw '403 error';
+		}
 
 		const preloadFile = fs.readFileSync(
 			'./build/hydrationScriptForTesting.js',
@@ -242,7 +244,7 @@ async function testUrl(url, browser) {
 
 		if (e instanceof playwright.errors.TimeoutError) {
 			wordPressPage.set('errorOrSuccess', 'timeoutError');
-		} else if (error403 === true) {
+		} else if (e === '403 error') {
 			wordPressPage.set('errorOrSuccess', '403error');
 		} else {
 			wordPressPage.set('errorOrSuccess', 'error');
