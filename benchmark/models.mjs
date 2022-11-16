@@ -30,6 +30,7 @@ export const createModels = (sequelize) => {
 				'timeoutError',
 				'error'
 			),
+			cloudflare: DataTypes.ENUM('tested', 'skipped'),
 		},
 		{
 			sequelize,
