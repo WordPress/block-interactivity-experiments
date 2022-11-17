@@ -31,6 +31,7 @@ export const createModels = (sequelize) => {
 				'error',
 				'403error'
 			),
+			cloudflare: DataTypes.ENUM('true', 'false'),
 		},
 		{
 			sequelize,
