@@ -14,8 +14,9 @@ const {
 	_,
 	concurrency,
 	cloudflare: testCloudflare,
+	database,
 } = minimist(process.argv.slice(2), {
-	default: { cloudflare: false },
+	default: { cloudflare: false, database: 'test_results' },
 });
 const fileArg = _[0];
 if (typeof fileArg === 'undefined') {
@@ -29,7 +30,7 @@ if (typeof fileArg === 'undefined') {
 // Initialize the database
 const sequelize = new Sequelize({
 	dialect: 'sqlite',
-	storage: new URL('./test_results.db', import.meta.url).pathname,
+	storage: new URL(`./${database}.db`, import.meta.url).pathname,
 	logging: false,
 });
 
