@@ -66,10 +66,14 @@ async function testUrl(url, browser) {
 
 		console.log(`Navigating to ${url}\n`);
 
-		await page.goto(`http://${url}`, {
+		const response = await page.goto(`http://${url}`, {
 			waitUntil: 'networkidle',
 			timeout: 60000,
 		});
+
+		if (response.status() === 403) {
+			throw '403 error';
+		}
 
 		const preloadFile = fs.readFileSync(
 			'./build/hydrationScriptForTesting.js',
@@ -239,6 +243,8 @@ async function testUrl(url, browser) {
 
 		if (e instanceof playwright.errors.TimeoutError) {
 			wordPressPage.set('errorOrSuccess', 'timeoutError');
+		} else if (e === '403 error') {
+			wordPressPage.set('errorOrSuccess', '403error');
 		} else {
 			wordPressPage.set('errorOrSuccess', 'error');
 		}
