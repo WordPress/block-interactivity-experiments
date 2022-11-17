@@ -14,9 +14,9 @@ const {
 	_,
 	concurrency,
 	cloudflare: testCloudflare,
-	database = 'test_results',
+	database,
 } = minimist(process.argv.slice(2), {
-	default: { cloudflare: false },
+	default: { cloudflare: false, database: 'test_results' },
 });
 const fileArg = _[0];
 if (typeof fileArg === 'undefined') {
