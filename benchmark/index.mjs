@@ -7,12 +7,14 @@ import minimist from 'minimist';
 import { promises as dnsPromises } from 'dns';
 
 import { createModels } from './models.mjs';
+import * as proxy from './proxy.mjs';
 
 // Get the CLI arguments for the file to use
 // and the number of pages to test concurrently.
 const {
 	_,
 	concurrency,
+	useProxy,
 	cloudflare: testCloudflare,
 } = minimist(process.argv.slice(2), {
 	default: { cloudflare: false },
@@ -39,16 +41,25 @@ const { TestResult, WordPressPage } = createModels(sequelize);
 // Run the benchmark
 (async () => {
 	try {
+		const browserSettings = {};
+
+		if (useProxy) {
+			await proxy.init();
+			browserSettings.proxy = { server: `http://localhost:${9999}` };
+		}
+
 		const domains = await getDomains();
-		const browser = await playwright.chromium.launch();
+		const browser = await playwright.chromium.launch(browserSettings);
 
 		await sequelize.sync();
 		await asyncParallelQueue(concurrency || 40, domains, (url) =>
 			testUrl(url, browser)
 		);
-		await browser.close();
 	} catch (e) {
 		console.log(e);
+	} finally {
+		await browser.close();
+		proxy.close();
 	}
 })();
 
@@ -117,6 +128,7 @@ async function testUrl(url, browser) {
 
 async function runScript(wordPressPage, url, browser) {
 	try {
+		if (useProxy) proxy.addHost(url);
 		const page = await browser.newPage();
 
 		console.log(`Navigating to ${url}\n`);
@@ -130,11 +142,15 @@ async function runScript(wordPressPage, url, browser) {
 			throw '403 error';
 		}
 
-		const preloadFile = fs.readFileSync(
-			'./build/hydrationScriptForTesting.js',
-			'utf8'
-		);
-		await page.evaluate(preloadFile);
+		// If the proxy is active, the following code was already requested. We
+		// need to load it otherwise.
+		if (!useProxy) {
+			const preloadFile = fs.readFileSync(
+				'./build/hydrationScriptForTesting.js',
+				'utf8'
+			);
+			await page.evaluate(preloadFile);
+		}
 
 		page.on('console', async (msg) => {
 			const message = msg.text();
@@ -293,6 +309,8 @@ async function runScript(wordPressPage, url, browser) {
 		wordPressPage.save();
 
 		await page.close();
+
+		if (useProxy) proxy.removeHost(url);
 	} catch (e) {
 		console.error(e);
 
