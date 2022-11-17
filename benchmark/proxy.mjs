@@ -8,7 +8,7 @@ const proxy = new Proxy();
 const hosts = new Set();
 
 // Scripts that should be included in processed sites.
-const toInject = ['/build/runtime.js', '/build/vendors.js'];
+const toInject = ['/build/hydrationScriptForTesting.js'];
 
 proxy.use(Proxy.wildcard);
 proxy.use(Proxy.gunzip);
