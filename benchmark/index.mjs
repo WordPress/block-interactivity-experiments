@@ -4,12 +4,19 @@ import playwright from 'playwright';
 import { inspect } from 'util';
 import { Sequelize } from 'sequelize';
 import minimist from 'minimist';
+import { promises as dnsPromises } from 'dns';
 
 import { createModels } from './models.mjs';
 
 // Get the CLI arguments for the file to use
 // and the number of pages to test concurrently.
-const { _, concurrency } = minimist(process.argv.slice(2));
+const {
+	_,
+	concurrency,
+	cloudflare: testCloudflare,
+} = minimist(process.argv.slice(2), {
+	default: { cloudflare: false },
+});
 const fileArg = _[0];
 if (typeof fileArg === 'undefined') {
 	console.error(
@@ -52,24 +59,76 @@ async function testUrl(url, browser) {
 		},
 	});
 
-	if (wordPressPage?.errorOrSuccess === 'success') {
-		console.log('Already tested', url);
-		return;
-	}
-
 	if (!wordPressPage) {
 		wordPressPage = await WordPressPage.create({ url });
 	}
 
+	// Skip test if it is a Cloudflare site and `testCloudflare` is not enabled
+	if (wordPressPage?.cloudflare === 'true' && !testCloudflare) {
+		console.log('Skip: Cloudfare site', url);
+		return;
+	}
+
+	// Skip test if we have already checked if it is a Cloudflare site and is a success
+	if (
+		wordPressPage?.cloudflare !== null &&
+		wordPressPage?.errorOrSuccess === 'success'
+	) {
+		console.log('Already tested', url);
+		return;
+	}
+
+	// Check if it is a Cloudflare site and act accordingly
+	if (
+		wordPressPage?.cloudflare === null ||
+		wordPressPage?.cloudflare === undefined
+	) {
+		let cloudflareSite = false;
+		try {
+			const dns = await dnsPromises.resolveNs(url);
+			cloudflareSite = dns.some((host) => /cloudflare/.test(host));
+		} catch (e) {
+			console.log(e);
+		}
+		wordPressPage.set('cloudflare', cloudflareSite ? 'true' : 'false');
+
+		// Remove record if it is a Cloudflare site
+		if (cloudflareSite) {
+			wordPressPage.set('errorOrSuccess', null);
+		}
+		wordPressPage.save();
+
+		// Skip test if `testCloudflare` is not enabled
+		if (cloudflareSite && !testCloudflare) {
+			console.log('Skip: Cloudfare site', url);
+			return;
+		}
+
+		// Skip test if it is not a Cloudflare site and it was a success
+		if (!cloudflareSite && wordPressPage?.errorOrSuccess === 'success') {
+			console.log('Already tested', url);
+			return;
+		}
+	}
+
+	// Run script if we haven't exit before
+	await runScript(wordPressPage, url, browser);
+}
+
+async function runScript(wordPressPage, url, browser) {
 	try {
 		const page = await browser.newPage();
 
 		console.log(`Navigating to ${url}\n`);
 
-		await page.goto(`http://${url}`, {
+		const response = await page.goto(`http://${url}`, {
 			waitUntil: 'networkidle',
 			timeout: 60000,
 		});
+
+		if (response.status() === 403) {
+			throw '403 error';
+		}
 
 		const preloadFile = fs.readFileSync(
 			'./build/hydrationScriptForTesting.js',
@@ -157,6 +216,16 @@ async function testUrl(url, browser) {
 			 * @param {MutationRecord[]} mutations
 			 */
 			function processMutations(mutations) {
+				// There are some sites using (old) libraries that overwrites
+				// `Array.prototype.toJSON` with a function that serializes
+				// arrays as strings. If that's the case, we remove `toJSON`
+				// from the prototype right before serializing all the mutations
+				// that were recorded, to avoid transforming `addedNodes` and
+				// `removedNodes` into strings. The `toJSON` function is
+				// restored afterwards.
+				const arrayToJSON = Array.prototype.toJSON;
+				if (arrayToJSON) delete Array.prototype.toJSON;
+
 				for (const mutation of mutations) {
 					console.log(
 						'mutation',
@@ -196,6 +265,9 @@ async function testUrl(url, browser) {
 						})
 					);
 				}
+
+				// Restore the `toJSON` function if it was previously defined.
+				if (arrayToJSON) Array.prototype.toJSON = arrayToJSON;
 			}
 
 			const observer = new MutationObserver(processMutations);
@@ -226,6 +298,8 @@ async function testUrl(url, browser) {
 
 		if (e instanceof playwright.errors.TimeoutError) {
 			wordPressPage.set('errorOrSuccess', 'timeoutError');
+		} else if (e === '403 error') {
+			wordPressPage.set('errorOrSuccess', '403error');
 		} else {
 			wordPressPage.set('errorOrSuccess', 'error');
 		}
