@@ -43,7 +43,10 @@ proxy.onConnect((req, socket, _head, callback) => {
 
 	// Handle connection errors.
 	conn.on('error', (err) => {
-		if (err.code !== 'ECONNRESET') {
+		if (err.code === 'ENOTFOUND') {
+			conn.end();
+			socket.destroy();
+		} else if (err.code !== 'ECONNRESET') {
 			console.log(`Unexpected error on PROXY_TO_SERVER_SOCKET`, err);
 		}
 	});
@@ -64,9 +67,15 @@ proxy.onRequest(async (ctx, callback) => {
 	const { url } = request;
 
 	if (toInject.includes(url)) {
-		const body = await fs.readFile(`.${url}`);
-		response.writeHead(200, { 'Content-Type': 'text/javascript' });
-		response.end(body);
+		try {
+			const body = await fs.readFile(`.${url}`);
+			response.writeHead(200, { 'Content-Type': 'text/javascript' });
+			response.end(body);
+		} catch (e) {
+			console.error(e.toString());
+			response.writeHead(404, 'Not found');
+			response.end('');
+		}
 	} else {
 		callback();
 	}
