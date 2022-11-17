@@ -55,11 +55,11 @@ const { TestResult, WordPressPage } = createModels(sequelize);
 		await asyncParallelQueue(concurrency || 40, domains, (url) =>
 			testUrl(url, browser)
 		);
+
+		await browser.close();
+		if (useProxy) proxy.close();
 	} catch (e) {
 		console.log(e);
-	} finally {
-		await browser.close();
-		proxy.close();
 	}
 })();
 
