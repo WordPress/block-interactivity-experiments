@@ -30,7 +30,7 @@ if (typeof fileArg === 'undefined') {
 // Initialize the database
 const sequelize = new Sequelize({
 	dialect: 'sqlite',
-	storage: new URL(`./${database}.db`, import.meta.url).pathname,
+	storage: new URL(`./data/${database}.db`, import.meta.url).pathname,
 	logging: false,
 });
 
