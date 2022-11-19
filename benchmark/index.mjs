@@ -205,9 +205,6 @@ async function runScript(wordPressPage, url, browser) {
 
 			try {
 				window.__runHydration();
-				window.document
-					.querySelector('body div')
-					.appendChild(window.document.createTextNode('FLAMES!'));
 			} catch (error) {
 				return { hydrationError: error };
 			}
