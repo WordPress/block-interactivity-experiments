@@ -95,7 +95,7 @@ async function testUrl(url, browser) {
 
 		// Remove record if it is a Cloudflare site
 		if (cloudflareSite) {
-			wordPressPage.set('errorOrSuccess', null);
+			wordPressPage.set('errorOrSuccess', 'cloudflareError');
 		}
 		wordPressPage.save();
 
