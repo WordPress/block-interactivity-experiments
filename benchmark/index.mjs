@@ -222,8 +222,6 @@ async function runScript(wordPressPage, url, browser) {
 			wordPressPage.set('errorOrSuccess', 'success');
 		}
 
-		wordPressPage.save();
-
 		await page.close();
 
 		// Save mutations in DB.
@@ -266,6 +264,8 @@ async function runScript(wordPressPage, url, browser) {
 				}
 			});
 		}
+
+		wordPressPage.save();
 	} catch (e) {
 		console.error(e);
 
