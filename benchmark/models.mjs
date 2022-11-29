@@ -29,8 +29,7 @@ export const createModels = (sequelize) => {
 				'hydrationError',
 				'timeoutError',
 				'error',
-				'403error',
-				'cloudflareError'
+				'403error'
 			),
 			cloudflare: DataTypes.ENUM('true', 'false'),
 		},
