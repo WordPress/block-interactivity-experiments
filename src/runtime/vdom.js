@@ -9,19 +9,21 @@ export default function toVdom(node) {
 
 	if (node.nodeType === 3) return node.data;
 
-	for (let i = 0; i < attributes.length; i++) {
-		const name = attributes[i].name;
-		if (name.startsWith('wp-')) {
-			hasWpDirectives = true;
-			let val = attributes[i].value;
-			try {
-				val = JSON.parse(val);
-			} catch (e) {}
-			const [, prefix, suffix] = /wp-([^:]+):?(.*)$/.exec(name);
-			wpDirectives[prefix] = wpDirectives[prefix] || {};
-			wpDirectives[prefix][suffix || 'default'] = val;
-		} else {
-			props[name] = attributes[i].value;
+	if (attributes) {
+		for (let i = 0; i < attributes?.length; i++) {
+			const name = attributes[i].name;
+			if (name.startsWith('wp-')) {
+				hasWpDirectives = true;
+				let val = attributes[i].value;
+				try {
+					val = JSON.parse(val);
+				} catch (e) {}
+				const [, prefix, suffix] = /wp-([^:]+):?(.*)$/.exec(name);
+				wpDirectives[prefix] = wpDirectives[prefix] || {};
+				wpDirectives[prefix][suffix || 'default'] = val;
+			} else {
+				props[name] = attributes[i].value;
+			}
 		}
 	}
 
