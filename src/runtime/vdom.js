@@ -9,7 +9,7 @@ export default function toVdom(node) {
 
 	if (node.nodeType === 3) return node.data;
 
-	for (let i = 0; i < attributes.length; i++) {
+	for (let i = 0; i < attributes?.length; i++) {
 		const name = attributes[i].name;
 		if (name.startsWith('wp-')) {
 			hasWpDirectives = true;
