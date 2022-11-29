@@ -10,19 +10,19 @@ export default function toVdom(node) {
 	if (node.nodeType === 3) return node.data;
 
 	if (attributes) {
-		for (let i = 0; i < attributes?.length; i++) {
-			const name = attributes[i].name;
-			if (name.startsWith('wp-')) {
+		for (let i = 0; i < attributes.length; i++) {
+			const n = attributes[i].name;
+			if (n[0] === 'w' && n[1] === 'p' && n[2] === '-' && n[3]) {
 				hasWpDirectives = true;
 				let val = attributes[i].value;
 				try {
 					val = JSON.parse(val);
 				} catch (e) {}
-				const [, prefix, suffix] = /wp-([^:]+):?(.*)$/.exec(name);
+				const [, prefix, suffix] = /wp-([^:]+):?(.*)$/.exec(n);
 				wpDirectives[prefix] = wpDirectives[prefix] || {};
 				wpDirectives[prefix][suffix || 'default'] = val;
 			} else {
-				props[name] = attributes[i].value;
+				props[n] = attributes[i].value;
 			}
 		}
 	}
