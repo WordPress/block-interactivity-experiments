@@ -137,10 +137,96 @@ async function runScript(wordPressPage, url, browser) {
 		);
 		await page.evaluate(preloadFile);
 
-		page.on('console', async (msg) => {
-			const message = msg.text();
-			if (message.startsWith('mutation')) {
-				const mutation = JSON.parse(message.replace('mutation ', ''));
+		const result = await page.evaluate(async () => {
+			/**
+			 * Takes a Mutation and returns the string representation of the node
+			 * @param {MutationRecord} mutation
+			 */
+			function mutationToString(mutation) {
+				var tmpNode = document.createElement('div');
+				tmpNode.appendChild(mutation.target.cloneNode(true));
+				var str = tmpNode.innerHTML.slice(0, 70);
+				tmpNode = mutation = null; // prevent memory leaks in IE
+				return str;
+			}
+
+			/**
+			 * Takes a DOM Node and returns the string representation of the node
+			 */
+			function nodeToString(node) {
+				if (node === null) return null;
+				var tmpNode = document.createElement('div');
+				tmpNode.appendChild(node.cloneNode(true));
+				var str = tmpNode.innerHTML.slice(0, 70);
+				tmpNode = node = null; // prevent memory leaks in IE
+				return str;
+			}
+
+			/**
+			 * Takes a Mutation and console logs the string representation of the node
+			 * @param {MutationRecord[]} mutations
+			 */
+			function processMutations(mutations) {
+				return mutations.map((mutation) => ({
+					nodeName: mutation.target.nodeName,
+					mutationType: mutation.type,
+					addedNodes:
+						mutation?.addedNodes?.length > 0
+							? Array.from(mutation.addedNodes).map((node) => ({
+									nodeName: node.nodeName,
+									node: nodeToString(node),
+							  }))
+							: [],
+					removedNodes:
+						mutation?.removedNodes?.length > 0
+							? Array.from(mutation.removedNodes).map((node) => ({
+									nodeName: node.nodeName,
+									node: nodeToString(node),
+							  }))
+							: [],
+					previousSibling: {
+						node: nodeToString(mutation.previousSibling),
+						nodeName: mutation.previousSibling?.nodeName,
+					},
+					nextSibling: {
+						node: nodeToString(mutation.nextSibling),
+						nodeName: mutation.nextSibling?.nodeName,
+					},
+					node: mutationToString(mutation),
+				}));
+			}
+
+			const observer = new MutationObserver(processMutations);
+			observer.observe(document.body, {
+				attributes: true,
+				childList: true,
+				subtree: true,
+			});
+
+			try {
+				window.__runHydration();
+			} catch (error) {
+				return { hydrationError: error };
+			}
+
+			// Process pending mutations
+			const mutations = processMutations(observer.takeRecords());
+			observer.disconnect();
+
+			return { mutations };
+		});
+
+		if (result.hydrationError) {
+			wordPressPage.set('errorOrSuccess', 'hydrationError');
+		} else {
+			wordPressPage.set('errorOrSuccess', 'success');
+		}
+
+		await page.close();
+
+		// Save mutations in DB.
+		if (result.mutations) {
+			result.mutations.forEach(async (mutation) => {
 				const isComment =
 					mutation?.addedNodes.length === 0 &&
 					mutation?.removedNodes.length === 1 &&
@@ -176,124 +262,10 @@ async function runScript(wordPressPage, url, browser) {
 						await wordPressPage.addTestResult(testResult);
 					}
 				}
-			}
-
-			if (message.startsWith('error')) {
-				const error = JSON.parse(message.replace('error ', ''));
-				console.log(inspect(error, { colors: true, depth: 5 }));
-				await wordPressPage.update({
-					errorOrSuccess: 'hydrationError',
-				});
-			}
-		});
-
-		await page.evaluate(async () => {
-			/**
-			 * Takes a Mutation and returns the string representation of the node
-			 * @param {MutationRecord} mutation
-			 */
-			function mutationToString(mutation) {
-				var tmpNode = document.createElement('div');
-				tmpNode.appendChild(mutation.target.cloneNode(true));
-				var str = tmpNode.innerHTML.slice(0, 70);
-				tmpNode = mutation = null; // prevent memory leaks in IE
-				return str;
-			}
-
-			/**
-			 * Takes a DOM Node and returns the string representation of the node
-			 */
-			function nodeToString(node) {
-				if (node === null) return null;
-				var tmpNode = document.createElement('div');
-				tmpNode.appendChild(node.cloneNode(true));
-				var str = tmpNode.innerHTML.slice(0, 70);
-				tmpNode = node = null; // prevent memory leaks in IE
-				return str;
-			}
-
-			/**
-			 * Takes a Mutation and console logs the string representation of the node
-			 * @param {MutationRecord[]} mutations
-			 */
-			function processMutations(mutations) {
-				// There are some sites using (old) libraries that overwrites
-				// `Array.prototype.toJSON` with a function that serializes
-				// arrays as strings. If that's the case, we remove `toJSON`
-				// from the prototype right before serializing all the mutations
-				// that were recorded, to avoid transforming `addedNodes` and
-				// `removedNodes` into strings. The `toJSON` function is
-				// restored afterwards.
-				const arrayToJSON = Array.prototype.toJSON;
-				if (arrayToJSON) delete Array.prototype.toJSON;
-
-				for (const mutation of mutations) {
-					console.log(
-						'mutation',
-						// The MutationRecord is not serializable with JSON.stringify()
-						// We have to stringify it manually because it contains a DOM
-						// node and we can't send that over the console.
-						JSON.stringify({
-							nodeName: mutation.target.nodeName,
-							mutationType: mutation.type,
-							addedNodes:
-								mutation?.addedNodes?.length > 0
-									? Array.from(mutation.addedNodes).map(
-											(node) => ({
-												nodeName: node.nodeName,
-												node: nodeToString(node),
-											})
-									  )
-									: [],
-							removedNodes:
-								mutation?.removedNodes?.length > 0
-									? Array.from(mutation.removedNodes).map(
-											(node) => ({
-												nodeName: node.nodeName,
-												node: nodeToString(node),
-											})
-									  )
-									: [],
-							previousSibling: {
-								node: nodeToString(mutation.previousSibling),
-								nodeName: mutation.previousSibling?.nodeName,
-							},
-							nextSibling: {
-								node: nodeToString(mutation.nextSibling),
-								nodeName: mutation.nextSibling?.nodeName,
-							},
-							node: mutationToString(mutation),
-						})
-					);
-				}
-
-				// Restore the `toJSON` function if it was previously defined.
-				if (arrayToJSON) Array.prototype.toJSON = arrayToJSON;
-			}
-
-			const observer = new MutationObserver(processMutations);
-			observer.observe(document.body, {
-				attributes: true,
-				childList: true,
-				subtree: true,
 			});
+		}
 
-			try {
-				window.__runHydration();
-			} catch (error) {
-				console.log('error', JSON.stringify(error));
-			}
-
-			// Process pending mutations
-			let mutations = observer.takeRecords();
-			observer.disconnect();
-			processMutations(mutations);
-		});
-
-		wordPressPage.set('errorOrSuccess', 'success');
 		wordPressPage.save();
-
-		await page.close();
 	} catch (e) {
 		console.error(e);
 
