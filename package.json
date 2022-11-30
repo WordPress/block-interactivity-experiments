@@ -6,7 +6,7 @@
 	"main": "build/index.js",
 	"scripts": {
 		"build": "webpack --mode=production",
-		"build:benchmark": "esbuild benchmark/hydrationScript.js --bundle --outfile=build/hydrationScriptForTesting.js",
+		"build:benchmark": "webpack --mode=development",
 		"start": "webpack --mode=development --watch",
 		"benchmark": "npm run build:benchmark && node ./benchmark/index.mjs",
 		"dev": "npm start",
@@ -36,7 +36,6 @@
 		"@wordpress/scripts": "^24.3.0",
 		"babel-jest": "^28.1.0",
 		"csv-parse": "^5.3.1",
-		"esbuild": "^0.15.12",
 		"jest": "^28.1.0",
 		"minimist": "^1.2.7",
 		"playwright": "^1.27.1",
