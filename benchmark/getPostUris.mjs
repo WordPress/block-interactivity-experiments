@@ -39,7 +39,7 @@ if (typeof fileArg === 'undefined') {
 
 async function testUrlWithRSS(url) {
 	try {
-		const feed = await parser.parseURL(`https://${url}/feed/`);
+		const feed = await parser.parseURL(`http://${url}/feed/`);
 		try {
 			await fs.appendFileSync(
 				'./benchmark/data/posts_rss.csv',
@@ -56,7 +56,7 @@ async function testUrlWithRSS(url) {
 async function testUrl(url) {
 	try {
 		const context = await request.newContext({
-			baseURL: `https://${url}`,
+			baseURL: `http://${url}`,
 		});
 
 		try {
