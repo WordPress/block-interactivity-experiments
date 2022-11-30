@@ -644,18 +644,18 @@
 		let hasWpDirectives = false;
 		if (node.nodeType === 3) return node.data;
 		for (let i2 = 0; i2 < attributes.length; i2++) {
-			const name = attributes[i2].name;
-			if (name.startsWith('wp-')) {
+			const n = attributes[i2].name;
+			if (n[0] === 'w' && n[1] === 'p' && n[2] === '-' && n[3]) {
 				hasWpDirectives = true;
 				let val = attributes[i2].value;
 				try {
 					val = JSON.parse(val);
 				} catch (e2) {}
-				const [, prefix, suffix] = /wp-([^:]+):?(.*)$/.exec(name);
+				const [, prefix, suffix] = /wp-([^:]+):?(.*)$/.exec(n);
 				wpDirectives[prefix] = wpDirectives[prefix] || {};
 				wpDirectives[prefix][suffix || 'default'] = val;
 			} else {
-				props[name] = attributes[i2].value;
+				props[n] = attributes[i2].value;
 			}
 		}
 		if (hasWpDirectives) props.wp = wpDirectives;
