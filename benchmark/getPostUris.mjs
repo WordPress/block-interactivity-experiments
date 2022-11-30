@@ -2,12 +2,14 @@ import * as fs from 'fs';
 import { parse } from 'csv-parse';
 import minimist from 'minimist';
 import { request } from '@playwright/test';
+import Parser from 'rss-parser';
 
 // Get the CLI arguments for the file to use
 // and the number of pages to test concurrently.
-const { _, concurrency } = minimist(process.argv.slice(2), {
-	default: { concurrency: 10 },
+const { _, concurrency, rss } = minimist(process.argv.slice(2), {
+	default: { concurrency: 10, rss: false },
 });
+const parser = new Parser();
 const fileArg = _[0];
 if (typeof fileArg === 'undefined') {
 	console.error(
@@ -22,15 +24,34 @@ if (typeof fileArg === 'undefined') {
 	try {
 		const domains = await getDomains();
 		// (B) WRITE TO FILE
-		await fs.writeFileSync('./benchmark/data/posts.csv', '');
-
+		if (rss) {
+			await fs.writeFileSync('./benchmark/data/posts_rss.csv', '');
+		} else {
+			await fs.writeFileSync('./benchmark/data/posts.csv', '');
+		}
 		await asyncParallelQueue(concurrency || 40, domains, async (url) => {
-			return await testUrl(url);
+			return (await rss) ? testUrlWithRSS(url) : testUrl(url);
 		});
 	} catch (e) {
 		console.log(e);
 	}
 })();
+
+async function testUrlWithRSS(url) {
+	try {
+		const feed = await parser.parseURL(`https://${url}/feed/`);
+		try {
+			await fs.appendFileSync(
+				'./benchmark/data/posts_rss.csv',
+				`\n${feed?.items[0].link}`
+			);
+		} catch (error) {
+			console.log(error);
+		}
+	} catch (error) {
+		console.log(error);
+	}
+}
 
 async function testUrl(url) {
 	try {
@@ -40,7 +61,7 @@ async function testUrl(url) {
 
 		try {
 			const response = await context.get(
-				'/wp-json/wp/v2/posts?post_per_page=1'
+				'?rest_route=/wp/v2/posts&post_per_page=1'
 			);
 			const href = await response.json();
 			await fs.appendFileSync(
