@@ -1,6 +1,7 @@
 import * as fs from 'fs';
 import { parse } from 'csv-parse';
-import playwright from 'playwright';
+import playwright from 'playwright-extra';
+import StealthPlugin from 'puppeteer-extra-plugin-stealth';
 import { inspect } from 'util';
 import { Sequelize } from 'sequelize';
 import minimist from 'minimist';
@@ -12,7 +13,6 @@ import { createModels } from './models.mjs';
 // and the number of pages to test concurrently.
 const {
 	_,
-	concurrency,
 	cloudflare: testCloudflare,
 	database,
 } = minimist(process.argv.slice(2), {
@@ -41,12 +41,13 @@ const { TestResult, WordPressPage } = createModels(sequelize);
 (async () => {
 	try {
 		const domains = await getDomains();
+		await playwright.chromium.use(StealthPlugin());
 		const browser = await playwright.chromium.launch();
 
 		await sequelize.sync();
-		await asyncParallelQueue(concurrency || 40, domains, (url) =>
-			testUrl(url, browser)
-		);
+		for (const url of domains) {
+			await testUrl(url, browser);
+		}
 		await browser.close();
 	} catch (e) {
 		console.log(e);
@@ -304,29 +305,6 @@ async function getDomains() {
 				reject(error);
 			});
 	});
-}
-
-async function asyncParallelQueue(concurrency, items, func) {
-	const batch = items.slice(0, concurrency);
-	let promisesArray = batch
-		.map(func)
-		.map((p, i) => [i, p.then(() => i).catch(() => i)]);
-
-	// Create a "pool" of Promises.
-	const pool = new Map(promisesArray);
-
-	for (let index = 0; index < items.length; index++) {
-		const key = await Promise.race(pool.values());
-		pool.delete(key);
-		if (concurrency + index < items.length) {
-			pool.set(
-				concurrency + index,
-				func(items[concurrency + index])
-					.then(() => concurrency + index)
-					.catch(() => concurrency + index)
-			);
-		}
-	}
 }
 
 process.on('SIGINT', () => {
