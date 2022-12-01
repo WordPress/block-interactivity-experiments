@@ -1,17 +1,21 @@
 import * as fs from 'fs';
 import { parse } from 'csv-parse';
 import minimist from 'minimist';
-import { request } from '@playwright/test';
 import Parser from 'rss-parser';
 import { Sequelize } from 'sequelize';
 import { promises as dnsPromises } from 'dns';
 
-import { createModels } from './models.mjs';
+import { createPostModel } from './models.mjs';
 
 // Get the CLI arguments for the file to use
 // and the number of pages to test concurrently.
-const { _, concurrency, rss, database } = minimist(process.argv.slice(2), {
-	default: { concurrency: 10, rss: false, database: 'posts_db' },
+const {
+	_,
+	concurrency,
+	database,
+	cloudfare: testCloudflare,
+} = minimist(process.argv.slice(2), {
+	default: { concurrency: 10, database: 'posts_db', cloudfare: false },
 });
 const parser = new Parser();
 const fileArg = _[0];
@@ -30,7 +34,7 @@ const sequelize = new Sequelize({
 	logging: false,
 });
 
-const { WordPressPage } = createModels(sequelize);
+const { Post } = createPostModel(sequelize);
 
 // Run the benchmark
 (async () => {
@@ -38,117 +42,80 @@ const { WordPressPage } = createModels(sequelize);
 		const domains = await getDomains();
 		await sequelize.sync();
 		await asyncParallelQueue(concurrency || 40, domains, async (url) => {
-			return (await rss) ? testUrlWithRSS(url) : testUrl(url);
+			return await addToDB(url);
 		});
 	} catch (e) {
 		console.log(e);
 	}
 })();
 
-async function addToDB(urlLink) {
+async function addToDB(url) {
 	try {
-		let wordPressPage = await WordPressPage.findOne({
+		let post = await Post.findOne({
 			where: {
-				url: urlLink,
+				url: url,
 			},
 		});
-
-		if (!wordPressPage) {
-			wordPressPage = await WordPressPage.create({
-				url: urlLink,
+		if (!post) {
+			post = await Post.create({
+				url: url,
 			});
 		}
-
 		// Skip test if it is a Cloudflare site and `testCloudflare` is not enabled
-		if (wordPressPage?.cloudflare === 'true' && !testCloudflare) {
-			console.log('Skip: Cloudfare site', urlLink);
+		if (post?.cloudflare === 'true' && !testCloudflare) {
+			console.log('Skip: Cloudfare site', url);
 			return;
 		}
 
 		// Skip test if we have already checked if it is a Cloudflare site and is a success
-		if (
-			wordPressPage?.cloudflare !== null &&
-			wordPressPage?.errorOrSuccess === 'success'
-		) {
-			console.log('Already tested', urlLink);
+		if (post?.cloudflare !== null && post?.errorOrSuccess === 'success') {
+			console.log('Already tested', url);
 			return;
 		}
 
 		// Check if it is a Cloudflare site and act accordingly
-		if (
-			wordPressPage?.cloudflare === null ||
-			wordPressPage?.cloudflare === undefined
-		) {
+		if (post?.cloudflare === null || post?.cloudflare === undefined) {
 			let cloudflareSite = false;
 			try {
-				const dns = await dnsPromises.resolveNs(urlLink);
+				const dns = await dnsPromises.resolveNs(url);
 				cloudflareSite = dns.some((host) => /cloudflare/.test(host));
 			} catch (e) {
 				console.log(e);
 			}
-			wordPressPage.set('cloudflare', cloudflareSite ? 'true' : 'false');
+			post.set('cloudflare', cloudflareSite ? 'true' : 'false');
 
 			// Remove record if it is a Cloudflare site
 			if (cloudflareSite) {
-				wordPressPage.set('errorOrSuccess', null);
+				post.set('errorOrSuccess', null);
 			}
-			wordPressPage.save();
+			post.save();
 
 			// Skip test if `testCloudflare` is not enabled
 			if (cloudflareSite && !testCloudflare) {
-				console.log('Skip: Cloudfare site', urlLink);
+				console.log('Skip: Cloudfare site', url);
 				return;
 			}
 
 			// Skip test if it is not a Cloudflare site and it was a success
-			if (
-				!cloudflareSite &&
-				wordPressPage?.errorOrSuccess === 'success'
-			) {
-				console.log('Already tested', urlLink);
+			if (!cloudflareSite && post?.errorOrSuccess === 'success') {
+				console.log('Already tested', url);
 				return;
 			}
 		}
-	} catch (error) {
-		console.log(error);
-	}
-}
-
-async function testUrlWithRSS(url) {
-	try {
+		console.log(`Getting the feed from: http://${url}/feed/`);
 		const feed = await parser.parseURL(`http://${url}/feed/`);
-		const urlLink = feed.items[0].link;
-		await addToDB(urlLink);
-		throw new Error('stop here');
-		await fs.appendFileSync(
-			'./benchmark/data/posts_rss.csv',
-			`\n${urlLink}`
-		);
-	} catch (error) {
-		console.log(error);
-	}
-}
+		const postUrl = feed.items[0].link;
+		console.log('Post URL saved', postUrl);
 
-async function testUrl(url) {
-	try {
-		const context = await request.newContext({
-			baseURL: `http://${url}`,
-		});
-
-		try {
-			await addToDB(url);
-			throw new Error('stop here');
-			const response = await context.get(
-				'?rest_route=/wp/v2/posts&post_per_page=1'
-			);
-			const href = await response.json();
-			await fs.appendFileSync(
-				'./benchmark/data/posts.csv',
-				`\n${href[0].link}`
-			);
-		} catch (error) {
-			console.log(error);
+		if (postUrl) {
+			post.set('errorOrSuccess', 'success');
+			post.set('postUrl', postUrl);
+			post.save();
+		} else {
+			post.set('errorOrSuccess', 'error');
+			post.save();
 		}
+		return;
 	} catch (error) {
 		console.log(error);
 	}

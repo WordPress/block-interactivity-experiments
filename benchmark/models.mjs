@@ -1,5 +1,31 @@
 import { DataTypes, Model } from 'sequelize';
 
+export const createPostModel = (sequelize) => {
+	class Post extends Model {}
+	Post.init(
+		{
+			url: {
+				type: DataTypes.STRING,
+				allowNull: false,
+			},
+			postUrl: {
+				type: DataTypes.STRING,
+				allowNull: true,
+			},
+			cloudflare: {
+				type: DataTypes.STRING,
+				allowNull: true,
+			},
+		},
+		{
+			sequelize,
+			modelName: 'Posts',
+		}
+	);
+
+	return { Post };
+};
+
 export const createModels = (sequelize) => {
 	class TestResult extends Model {}
 	TestResult.init(
