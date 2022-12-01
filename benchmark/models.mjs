@@ -16,6 +16,9 @@ export const createPostModel = (sequelize) => {
 				type: DataTypes.STRING,
 				allowNull: true,
 			},
+			errorOrSuccess: {
+				type: DataTypes.ENUM('success', 'error'),
+			},
 		},
 		{
 			sequelize,

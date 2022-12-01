@@ -50,17 +50,22 @@ const { Post } = createPostModel(sequelize);
 })();
 
 async function addToDB(url) {
-	try {
-		let post = await Post.findOne({
-			where: {
-				url: url,
-			},
+	let post = await Post.findOne({
+		where: {
+			url: url,
+		},
+	});
+	if (post && post.postUrl) {
+		post.set('errorOrSuccess', 'success');
+		post.save();
+		return;
+	}
+	if (!post) {
+		post = await Post.create({
+			url: url,
 		});
-		if (!post) {
-			post = await Post.create({
-				url: url,
-			});
-		}
+	}
+	try {
 		// Skip test if it is a Cloudflare site and `testCloudflare` is not enabled
 		if (post?.cloudflare === 'true' && !testCloudflare) {
 			console.log('Skip: Cloudfare site', url);
@@ -118,6 +123,9 @@ async function addToDB(url) {
 		return;
 	} catch (error) {
 		console.log(error);
+		post.set('errorOrSuccess', 'error');
+		post.save();
+		return;
 	}
 }
 
