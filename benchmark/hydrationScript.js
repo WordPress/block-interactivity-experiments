@@ -7,7 +7,10 @@ import { createRootFragment } from '../src/runtime/utils';
 
 function runHydration() {
 	// Create the root fragment to hydrate everything.
-	rootFragment = createRootFragment(document.documentElement, document.body);
+	const rootFragment = createRootFragment(
+		document.documentElement,
+		document.body
+	);
 	const body = toVdom(document.body);
 	hydrate(body, rootFragment);
 }
