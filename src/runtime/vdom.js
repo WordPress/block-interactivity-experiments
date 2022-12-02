@@ -8,6 +8,10 @@ export default function toVdom(node) {
 	let hasWpDirectives = false;
 
 	if (node.nodeType === 3) return node.data;
+	if (node.nodeType === 4) {
+		node.replaceWith(new Text(node.nodeValue));
+		return node.nodeValue;
+	}
 
 	for (let i = 0; i < attributes.length; i++) {
 		const n = attributes[i].name;
