@@ -13,16 +13,16 @@ const {
 	_,
 	concurrency,
 	database,
-	cloudfare: testCloudflare,
+	cloudflare: testCloudflare,
 } = minimist(process.argv.slice(2), {
-	default: { concurrency: 10, database: 'posts_db', cloudfare: false },
+	default: { concurrency: 10, database: 'posts_db', cloudflare: false },
 });
 const parser = new Parser();
 const fileArg = _[0];
 if (typeof fileArg === 'undefined') {
 	console.error(
 		'\x1b[41m',
-		'\nPlease provide a CSV file as an argument\n\nFor example: npm run benchmark 1.csv\n'
+		'\nPlease provide a CSV file as an argument\n\nFor example: npm run getposts 1.csv\n'
 	);
 	process.exit(1);
 }
@@ -68,7 +68,7 @@ async function addToDB(url) {
 	try {
 		// Skip test if it is a Cloudflare site and `testCloudflare` is not enabled
 		if (post?.cloudflare === 'true' && !testCloudflare) {
-			console.log('Skip: Cloudfare site', url);
+			console.log('Skip: Cloudflare site', url);
 			return;
 		}
 
@@ -97,7 +97,7 @@ async function addToDB(url) {
 
 			// Skip test if `testCloudflare` is not enabled
 			if (cloudflareSite && !testCloudflare) {
-				console.log('Skip: Cloudfare site', url);
+				console.log('Skip: Cloudflare site', url);
 				return;
 			}
 
