@@ -643,6 +643,10 @@
 		const wpDirectives = {};
 		let hasWpDirectives = false;
 		if (node.nodeType === 3) return node.data;
+		if (node.nodeType === 4) {
+			node.replaceWith(new Text(node.nodeValue));
+			return node.nodeValue;
+		}
 		for (let i2 = 0; i2 < attributes.length; i2++) {
 			const n = attributes[i2].name;
 			if (n[0] === 'w' && n[1] === 'p' && n[2] === '-' && n[3]) {
