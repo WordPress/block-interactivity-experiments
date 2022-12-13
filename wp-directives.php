@@ -159,31 +159,6 @@ add_filter(
 	3
 );
 
-function process_wp_context( $directive_content, &$context ) {
-	$new_context = json_decode( $directive_content, true );
-	// TODO: Error handling.
-	$context = array_replace_recursive( $context, $new_context );
-	// TODO: Allow replacing the directive? Return?
-}
-
-// TODO: Unify function signatures of directive and components processors.
-// (or add some kind of adapter).
-function process_wp_show( $attributes, &$context ) {
-	if ( null !== $attributes['when'] ) {
-		// TODO: Properly parse $when.
-		$path = explode( '.', $attributes['when'] );
-		if ( count( $path ) > 0 && 'context' === $path[0] ) {
-			array_shift( $path );
-			$show = $context;
-			foreach( $path as $key ) {
-				$show = $show[$key];
-			}
-		}
-
-		// TODO: Conditionally wrap contents in <template>, based on the value of $show.
-	}
-}
-
 function wp_process_directives( $block_content, $block, $instance ) {
 	// TODO: Add some directive/components registration mechanism.
 	$directives = array(
@@ -221,4 +196,29 @@ function wp_process_directives( $block_content, $block, $instance ) {
 	// 	return '<!-- Context: ' . print_r( $context, true ) . ' -->' . $block_content;
 	// }
 	return $block_content;
+}
+
+function process_wp_context( $directive_content, &$context ) {
+	$new_context = json_decode( $directive_content, true );
+	// TODO: Error handling.
+	$context = array_replace_recursive( $context, $new_context );
+	// TODO: Allow replacing the directive? Return?
+}
+
+// TODO: Unify function signatures of directive and components processors.
+// (or add some kind of adapter).
+function process_wp_show( $attributes, &$context ) {
+	if ( null !== $attributes['when'] ) {
+		// TODO: Properly parse $when.
+		$path = explode( '.', $attributes['when'] );
+		if ( count( $path ) > 0 && 'context' === $path[0] ) {
+			array_shift( $path );
+			$show = $context;
+			foreach( $path as $key ) {
+				$show = $show[$key];
+			}
+		}
+
+		// TODO: Conditionally wrap contents in <template>, based on the value of $show.
+	}
 }
