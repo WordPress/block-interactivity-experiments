@@ -204,15 +204,16 @@ function wp_process_directives( $block_content, $block, $instance ) {
 				$attributes['when'] = $tags->get_attribute( 'when' );
 			}
 			call_user_func_array( $directives[$tag_name], array( $attributes, &$context ) );
-		}
+		} else {
+			// Components can't have directives (unless we change our mind about this).
+			foreach ( $directives as $directive => $callback ) {
+				$attribute_content = $tags->get_attribute( $directive );
+				if ( null === $attribute_content ) {
+					continue;
+				}
 
-		foreach ( $directives as $directive => $callback ) {
-			$attribute_content = $tags->get_attribute( $directive );
-			if ( null === $attribute_content ) {
-				continue;
+				call_user_func_array( $callback, array( $attribute_content, &$context ) );
 			}
-
-			call_user_func_array( $callback, array( $attribute_content, &$context ) );
 		}
 	}
 
