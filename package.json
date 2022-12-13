@@ -10,8 +10,7 @@
 		"test": "jest",
 		"test:watch": "jest --watch",
 		"plugin-zip": "wp-scripts plugin-zip",
-		"wp-env": "wp-env",
-		"ssr": "node ssr.mjs"
+		"wp-env": "wp-env"
 	},
 	"prettier": {
 		"useTabs": true,
@@ -39,7 +38,6 @@
 	"dependencies": {
 		"@preact/signals": "^1.1.2",
 		"hpq": "^1.3.0",
-		"preact": "^10.10.6",
-		"ultrahtml": "^0.4.0"
+		"preact": "^10.10.6"
 	}
 }
