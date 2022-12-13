@@ -217,8 +217,8 @@ function wp_process_directives( $block_content, $block, $instance ) {
 		}
 	}
 
-	if ( ! empty( $context ) ) {
-		return '<!-- Context: ' . print_r( $context, true ) . ' -->' . $block_content;
-	}
+	// if ( ! empty( $context ) ) {
+	// 	return '<!-- Context: ' . print_r( $context, true ) . ' -->' . $block_content;
+	// }
 	return $block_content;
 }
