@@ -142,65 +142,10 @@ add_filter('render_block_bhe/favorites-number', function ($content) {
  * SSR in PHP
  */
 
-// wp-show
-function wpx_show_open_tag($prop_entries)
-{
-	global $wpx;
-	$props = wpx_prop_entries_to_array($prop_entries);
-	$attributes = wpx_prop_entries_to_attributes($prop_entries);
-	$value = wpx_get_state($props['when']);
-	if ($value) {
-		echo "<wp-show $attributes>";
-	} else {
-		echo "<wp-show $attributes><template>";
-	}
-}
-
-function wpx_show_close_tag($prop_entries)
-{
-	global $wpx;
-	$props = wpx_prop_entries_to_array($prop_entries);
-	$value = wpx_get_state($props['when']);
-	if ($value) {
-		echo '</wp-show>';
-	} else {
-		echo '</template></wp-show>';
-	}
-}
-
 // Utils
 $GLOBALS['wpx'] = [];
 function wpx($data)
 {
 	global $wpx;
 	$wpx = array_merge_recursive($wpx, $data);
-}
-
-function wpx_get_state($path)
-{
-	global $wpx;
-	$current = $wpx;
-	$array = explode('.', $path);
-	foreach ($array as $p) {
-		$current = $current[$p];
-	}
-	return $current;
-}
-
-function wpx_prop_entries_to_array($prop_entries)
-{
-	$array = [];
-	foreach ($prop_entries as list($key, $value)) {
-		$array[$key] = $value;
-	}
-	return $array;
-}
-
-function wpx_prop_entries_to_attributes($prop_entries)
-{
-	$attributes = '';
-	foreach ($prop_entries as list($key, $value)) {
-		$attributes .= "$key='$value'";
-	}
-	return $attributes;
 }
