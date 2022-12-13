@@ -7,5 +7,14 @@ wpx([
 ]); ?>
 
 <h3>The tabs!</h3>
-<wp-show when="state.show"><div>I should be shown</div></wp-show>
-<wp-show when="state.dontShow"><div>I should not be shown</div></wp-show>
+<div wp-context='{ "myblock": { "open": false } }'>
+	<div wp-context='{ "myblock": { "open": true } }'>
+		<wp-show when="context.myblock.open">
+			<div>I should be shown!</div>
+		</wp-show>
+	</div>
+
+	<wp-show when="context.myblock.open">
+		<div>I should not be shown!</div>
+	</wp-show>
+</div>
