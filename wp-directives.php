@@ -10,6 +10,8 @@
  * Text Domain:       wp-directives
  */
 
+require_once __DIR__ . '/src/html/index.php';
+
 function wp_directives_loader()
 {
 	// Load the Admin page.
@@ -148,4 +150,61 @@ function wpx($data)
 {
 	global $wpx;
 	$wpx = array_merge_recursive($wpx, $data);
+}
+
+add_filter(
+	'render_block',
+	'wp_process_directives',
+	10,
+	3
+);
+
+function wp_process_directives( $block_content, $block, $instance ) {
+	$directives = array(
+		'wp-context' => 'process_wp_context',
+		'wp-show' => 'process_wp_show',
+	);
+
+	$tags = new WP_HTML_Tag_Processor( $block_content );
+
+	$context = array();
+	while ( $tags->next_tag() ) {
+		$tag_name = strtolower( $tags->get_tag() );
+		if ( array_key_exists( $tag_name, $directives ) ) {
+			if ( 'wp-show' === $tag_name ) {
+				$when = $tags->get_attribute( 'when' );
+				if ( null !== $when ) {
+					// TODO: Properly parse $when.
+					$path = explode( '.', $when );
+					if ( count( $path ) > 0 && 'context' === $path[0] ) {
+						array_shift( $path );
+						$show = $context;
+						foreach( $path as $key ) {
+							$show = $show[$key];
+						}
+					}
+
+					// TODO: Conditionally wrap contents in <template>, based on the value of $show.
+				}
+			}
+		}
+
+		foreach ( $directives as $directive => $processor ) {
+			$attribute_content = $tags->get_attribute( $directive );
+			if ( null === $attribute_content ) {
+				continue;
+			}
+
+			if ( 'wp-context' === $directive ) {
+				$new_context = json_decode( $attribute_content, true );
+				// TODO: Error handling.
+				$context = array_replace_recursive( $context, $new_context );
+			}
+		}
+	}
+
+	// if ( ! empty( $context ) ) {
+	// 	return '<!-- Context: ' . print_r( $context, true ) . ' -->' . $block_content;
+	// }
+	return $block_content;
 }
