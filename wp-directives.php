@@ -159,7 +159,33 @@ add_filter(
 	3
 );
 
+function process_wp_context( $directive_content, &$context ) {
+	$new_context = json_decode( $directive_content, true );
+	// TODO: Error handling.
+	$context = array_replace_recursive( $context, $new_context );
+	// TODO: Allow replacing the directive? Return?
+}
+
+// TODO: Unify function signatures of directive and components processors.
+// (or add some kind of adapter).
+function process_wp_show( $attributes, &$context ) {
+	if ( null !== $attributes['when'] ) {
+		// TODO: Properly parse $when.
+		$path = explode( '.', $attributes['when'] );
+		if ( count( $path ) > 0 && 'context' === $path[0] ) {
+			array_shift( $path );
+			$show = $context;
+			foreach( $path as $key ) {
+				$show = $show[$key];
+			}
+		}
+
+		// TODO: Conditionally wrap contents in <template>, based on the value of $show.
+	}
+}
+
 function wp_process_directives( $block_content, $block, $instance ) {
+	// TODO: Add some directive/components registration mechanism.
 	$directives = array(
 		'wp-context' => 'process_wp_context',
 		'wp-show' => 'process_wp_show',
@@ -171,40 +197,27 @@ function wp_process_directives( $block_content, $block, $instance ) {
 	while ( $tags->next_tag() ) {
 		$tag_name = strtolower( $tags->get_tag() );
 		if ( array_key_exists( $tag_name, $directives ) ) {
+			$attributes = array();
+			// TODO: We need some sort of allowlist of attributes per component.
+			// Maybe in a directive.json?
 			if ( 'wp-show' === $tag_name ) {
-				$when = $tags->get_attribute( 'when' );
-				if ( null !== $when ) {
-					// TODO: Properly parse $when.
-					$path = explode( '.', $when );
-					if ( count( $path ) > 0 && 'context' === $path[0] ) {
-						array_shift( $path );
-						$show = $context;
-						foreach( $path as $key ) {
-							$show = $show[$key];
-						}
-					}
-
-					// TODO: Conditionally wrap contents in <template>, based on the value of $show.
-				}
+				$attributes['when'] = $tags->get_attribute( 'when' );
 			}
+			call_user_func_array( $directives[$tag_name], array( $attributes, &$context ) );
 		}
 
-		foreach ( $directives as $directive => $processor ) {
+		foreach ( $directives as $directive => $callback ) {
 			$attribute_content = $tags->get_attribute( $directive );
 			if ( null === $attribute_content ) {
 				continue;
 			}
 
-			if ( 'wp-context' === $directive ) {
-				$new_context = json_decode( $attribute_content, true );
-				// TODO: Error handling.
-				$context = array_replace_recursive( $context, $new_context );
-			}
+			call_user_func_array( $callback, array( $attribute_content, &$context ) );
 		}
 	}
 
-	// if ( ! empty( $context ) ) {
-	// 	return '<!-- Context: ' . print_r( $context, true ) . ' -->' . $block_content;
-	// }
+	if ( ! empty( $context ) ) {
+		return '<!-- Context: ' . print_r( $context, true ) . ' -->' . $block_content;
+	}
 	return $block_content;
 }
