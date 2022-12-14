@@ -181,6 +181,8 @@ function wp_process_directives( $block_content, $block, $instance ) {
 			// Maybe in a directive.json?
 			if ( 'wp-show' === $tag_name ) {
 				$attributes['when'] = $tags->get_attribute( 'when' );
+			} else if ( 'wp-context' === $tag_name ) {
+				$attributes = $tags->get_attribute( 'data' );
 			}
 			call_user_func_array( $directives[$tag_name]['processor'], array( $attributes, &$context ) );
 		} else {
