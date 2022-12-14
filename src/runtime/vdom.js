@@ -34,7 +34,7 @@ export default function toVdom(node) {
 	const children = [];
 	for (let i = 0; i < childNodes.length; i++) {
 		const child = childNodes[i];
-		if (child.nodeType === 8) {
+		if (child.nodeType === 8 || child.nodeType === 7) {
 			child.remove();
 			i--;
 		} else {
