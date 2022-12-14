@@ -162,8 +162,12 @@ add_filter(
 function wp_process_directives( $block_content, $block, $instance ) {
 	// TODO: Add some directive/components registration mechanism.
 	$directives = array(
-		'wp-context' => 'process_wp_context',
-		'wp-show' => 'process_wp_show',
+		'wp-context' => array(
+			'processor' => 'process_wp_context',
+		),
+		'wp-show' => array(
+			'processor' => 'process_wp_show',
+		)
 	);
 
 	$tags = new WP_HTML_Tag_Processor( $block_content );
@@ -178,16 +182,16 @@ function wp_process_directives( $block_content, $block, $instance ) {
 			if ( 'wp-show' === $tag_name ) {
 				$attributes['when'] = $tags->get_attribute( 'when' );
 			}
-			call_user_func_array( $directives[$tag_name], array( $attributes, &$context ) );
+			call_user_func_array( $directives[$tag_name]['processor'], array( $attributes, &$context ) );
 		} else {
 			// Components can't have directives (unless we change our mind about this).
-			foreach ( $directives as $directive => $callback ) {
+			foreach ( $directives as $directive => $directive_data ) {
 				$attribute_content = $tags->get_attribute( $directive );
 				if ( null === $attribute_content ) {
 					continue;
 				}
 
-				call_user_func_array( $callback, array( $attribute_content, &$context ) );
+				call_user_func_array( $directive_data['processor'], array( $attribute_content, &$context ) );
 			}
 		}
 	}
