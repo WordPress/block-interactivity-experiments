@@ -163,10 +163,12 @@ function wp_process_directives( $block_content, $block, $instance ) {
 	// TODO: Add some directive/components registration mechanism.
 	$directives = array(
 		'wp-context' => array(
-			'processor' => 'process_wp_context',
+			'default_attribute' => 'data',
+			'processor'         => 'process_wp_context',
 		),
 		'wp-show' => array(
-			'processor' => 'process_wp_show',
+			'default_attribute' => 'when',
+			'processor'         => 'process_wp_show',
 		)
 	);
 
@@ -176,15 +178,8 @@ function wp_process_directives( $block_content, $block, $instance ) {
 	while ( $tags->next_tag() ) {
 		$tag_name = strtolower( $tags->get_tag() );
 		if ( array_key_exists( $tag_name, $directives ) ) {
-			$attributes = array();
-			// TODO: We need some sort of allowlist of attributes per component.
-			// Maybe in a directive.json?
-			if ( 'wp-show' === $tag_name ) {
-				$attributes['when'] = $tags->get_attribute( 'when' );
-			} else if ( 'wp-context' === $tag_name ) {
-				$attributes = $tags->get_attribute( 'data' );
-			}
-			call_user_func_array( $directives[$tag_name]['processor'], array( $attributes, &$context ) );
+			$directive_content = $tags->get_attribute( $directives[$tag_name]['default_attribute'] );
+			call_user_func_array( $directives[$tag_name]['processor'], array( $directive_content, &$context ) );
 		} else {
 			// Components can't have directives (unless we change our mind about this).
 			foreach ( $directives as $directive => $directive_data ) {
@@ -211,12 +206,14 @@ function process_wp_context( $directive_content, &$context ) {
 	// TODO: Allow replacing the directive? Return?
 }
 
+// TODO: I think we need to clear context once we encounter the closing tag.
+
 // TODO: Unify function signatures of directive and components processors.
 // (or add some kind of adapter).
-function process_wp_show( $attributes, &$context ) {
-	if ( null !== $attributes['when'] ) {
+function process_wp_show( $directive_content, &$context ) {
+	if ( null !== $directive_content ) {
 		// TODO: Properly parse $when.
-		$path = explode( '.', $attributes['when'] );
+		$path = explode( '.', $directive_content );
 		if ( count( $path ) > 0 && 'context' === $path[0] ) {
 			array_shift( $path );
 			$show = $context;
