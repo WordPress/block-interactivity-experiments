@@ -172,14 +172,23 @@ function wp_process_directives( $block_content, $block, $instance ) {
 		)
 	);
 
-	$tags = new WP_HTML_Tag_Processor( $block_content );
+	$tags = new WP_HTML_Processor( $block_content );
 
 	$context = array();
 	while ( $tags->next_tag() ) {
 		$tag_name = strtolower( $tags->get_tag() );
 		if ( array_key_exists( $tag_name, $directives ) ) {
 			$directive_content = $tags->get_attribute( $directives[$tag_name]['default_attribute'] );
-			call_user_func_array( $directives[$tag_name]['processor'], array( $directive_content, &$context ) );
+
+			$bookmark = "{$tag_name}_start";
+			$tags->set_bookmark( $bookmark );
+			$content = $tags->get_content_inside_balanced_tags();
+			$tags->seek( $bookmark );
+			$tags->release_bookmark( $bookmark );
+
+			$new_content = call_user_func_array( $directives[$tag_name]['processor'], array( $content, $directive_content, &$context ) );
+			// TODO:
+			// $tags->set_content_inside_balanced_tags( $new_content );
 		} else {
 			// Components can't have directives (unless we change our mind about this).
 			foreach ( $directives as $directive => $directive_data ) {
@@ -188,7 +197,15 @@ function wp_process_directives( $block_content, $block, $instance ) {
 					continue;
 				}
 
-				call_user_func_array( $directive_data['processor'], array( $attribute_content, &$context ) );
+				$bookmark = "{$tag_name}_start";
+				$tags->set_bookmark( $bookmark );
+				$content = $tags->get_content_inside_balanced_tags();
+				$tags->seek( $bookmark );
+				$tags->release_bookmark( $bookmark );
+
+				$new_content = call_user_func_array( $directive_data['processor'], array( $content, $attribute_content, &$context ) );
+				// TODO:
+				// $tags->set_content_inside_balanced_tags( $new_content );
 			}
 		}
 	}
@@ -199,20 +216,20 @@ function wp_process_directives( $block_content, $block, $instance ) {
 	return $block_content;
 }
 
-function process_wp_context( $directive_content, &$context ) {
+function process_wp_context( $content, $directive_content, &$context ) {
 	$new_context = json_decode( $directive_content, true );
 	// TODO: Error handling.
 	$context = array_replace_recursive( $context, $new_context );
-	// TODO: Allow replacing the directive? Return?
+	return $content;
 }
 
 // TODO: I think we need to clear context once we encounter the closing tag.
 
 // TODO: Unify function signatures of directive and components processors.
 // (or add some kind of adapter).
-function process_wp_show( $directive_content, &$context ) {
+function process_wp_show( $content, $directive_content, &$context ) {
 	if ( null !== $directive_content ) {
-		// TODO: Properly parse $when.
+		// TODO: Properly parse $directive_content.
 		$path = explode( '.', $directive_content );
 		if ( count( $path ) > 0 && 'context' === $path[0] ) {
 			array_shift( $path );
@@ -222,6 +239,9 @@ function process_wp_show( $directive_content, &$context ) {
 			}
 		}
 
-		// TODO: Conditionally wrap contents in <template>, based on the value of $show.
+		if( ! $show ) {
+			return '<template>' . $content . '</template>';
+		}
+		return $content;
 	}
 }
