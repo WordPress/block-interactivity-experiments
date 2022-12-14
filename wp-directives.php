@@ -149,7 +149,7 @@ $GLOBALS['wpx'] = [];
 function wpx($data)
 {
 	global $wpx;
-	$wpx = array_merge_recursive($wpx, $data);
+	$wpx = array_replace_recursive($wpx, $data);
 }
 
 add_filter(
