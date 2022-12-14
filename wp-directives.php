@@ -10,8 +10,20 @@
  * Text Domain:       wp-directives
  */
 
+ // Check if Gutenberg plugin is active
+if (!function_exists('is_plugin_active')) {
+    include_once(ABSPATH . 'wp-admin/includes/plugin.php');
+}
+if ( ! is_plugin_active( 'gutenberg/gutenberg.php' ) ) {
+    // Show an error message
+    add_action( 'admin_notices', function() {
+		echo sprintf( '<div class="error"><p>%s</p></div>', __( 'This plugin requires the Gutenberg plugin to be installed and activated.', 'wp-directives' ) );
+    });
 
-
+    // Deactivate the plugin
+    deactivate_plugins( plugin_basename( __FILE__ ) );
+    return;
+}
 
 function wp_directives_loader()
 {
@@ -109,18 +121,3 @@ add_filter(
 	'client_side_transitions',
 	'wp_directives_client_site_transitions_option'
 );
-
-// Check if Gutenberg plugin is active
-if (!function_exists('is_plugin_active')) {
-    include_once(ABSPATH . 'wp-admin/includes/plugin.php');
-}
-if ( ! is_plugin_active( 'gutenberg/gutenberg.php' ) ) {
-    // Show an error message
-    add_action( 'admin_notices', function() {
-		echo sprintf( '<div class="error"><p>%s</p></div>', __( 'This plugin requires the Gutenberg plugin to be installed and activated.', 'wp-directives' ) );
-    });
-
-    // Deactivate the plugin
-    deactivate_plugins( plugin_basename( __FILE__ ) );
-    return;
-}
