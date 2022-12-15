@@ -179,13 +179,7 @@ function wp_process_directives( $block_content, $block, $instance ) {
 		$tag_name = strtolower( $tags->get_tag() );
 		if ( array_key_exists( $tag_name, $directives ) ) {
 			$directive_content = $tags->get_attribute( $directives[$tag_name]['default_attribute'] );
-
-			$bookmark = "{$tag_name}_start";
-			$tags->set_bookmark( $bookmark );
 			$content = $tags->get_content_inside_balanced_tags();
-			$tags->seek( $bookmark );
-			$tags->release_bookmark( $bookmark );
-
 			$new_content = call_user_func_array( $directives[$tag_name]['processor'], array( $content, $directive_content, &$context ) );
 			// TODO:
 			// $tags->set_content_inside_balanced_tags( $new_content );
@@ -197,12 +191,7 @@ function wp_process_directives( $block_content, $block, $instance ) {
 					continue;
 				}
 
-				$bookmark = "{$tag_name}_start";
-				$tags->set_bookmark( $bookmark );
 				$content = $tags->get_content_inside_balanced_tags();
-				$tags->seek( $bookmark );
-				$tags->release_bookmark( $bookmark );
-
 				$new_content = call_user_func_array( $directive_data['processor'], array( $content, $attribute_content, &$context ) );
 				// TODO:
 				// $tags->set_content_inside_balanced_tags( $new_content );
