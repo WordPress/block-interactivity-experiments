@@ -24,6 +24,8 @@ export default function toVdom(node) {
 			const [, prefix, suffix] = /wp-([^:]+):?(.*)$/.exec(n);
 			wpDirectives[prefix] = wpDirectives[prefix] || {};
 			wpDirectives[prefix][suffix || 'default'] = val;
+		} else if (n === 'ref') {
+			continue;
 		} else {
 			props[n] = attributes[i].value;
 		}
