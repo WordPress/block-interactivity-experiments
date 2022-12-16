@@ -8,6 +8,8 @@
 		"build": "webpack --mode=production",
 		"start": "webpack --mode=development --watch",
 		"dev": "npm start",
+		"format:php": "wp-env run composer run-script format",
+		"lint:php": "wp-env run composer run-script lint",
 		"test": "jest",
 		"test:watch": "jest --watch",
 		"plugin-zip": "wp-scripts plugin-zip",
