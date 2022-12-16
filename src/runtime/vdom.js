@@ -24,6 +24,8 @@ export default function toVdom(node) {
 			const [, prefix, suffix] = /wp-([^:]+):?(.*)$/.exec(n);
 			wpDirectives[prefix] = wpDirectives[prefix] || {};
 			wpDirectives[prefix][suffix || 'default'] = val;
+		} else if (n === 'ref') {
+			continue;
 		} else {
 			props[n] = attributes[i].value;
 		}
@@ -34,7 +36,7 @@ export default function toVdom(node) {
 	const children = [];
 	for (let i = 0; i < childNodes.length; i++) {
 		const child = childNodes[i];
-		if (child.nodeType === 8) {
+		if (child.nodeType === 8 || child.nodeType === 7) {
 			child.remove();
 			i--;
 		} else {
