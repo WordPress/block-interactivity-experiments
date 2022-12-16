@@ -227,13 +227,14 @@ async function runScript(wordPressPage, url, browser) {
 		// Save mutations in DB.
 		if (result.mutations) {
 			result.mutations.forEach(async (mutation) => {
-				const isComment =
+				const excludeMutation =
 					mutation?.addedNodes.length === 0 &&
 					mutation?.removedNodes.length === 1 &&
-					mutation?.removedNodes[0]?.nodeName === '#comment';
+					(mutation?.removedNodes[0]?.nodeName === '#comment' ||
+						mutation?.removedNodes[0]?.nodeName === 'xpacket');
 
-				// Ignore comment mutations
-				if (!isComment) {
+				// Ignore comment and nodeType 7 mutations
+				if (!excludeMutation) {
 					console.log(inspect(mutation, { colors: true, depth: 5 }));
 
 					for (let node of mutation.removedNodes) {
