@@ -658,6 +658,8 @@
 				const [, prefix, suffix] = /wp-([^:]+):?(.*)$/.exec(n);
 				wpDirectives[prefix] = wpDirectives[prefix] || {};
 				wpDirectives[prefix][suffix || 'default'] = val;
+			} else if (n === 'ref') {
+				continue;
 			} else {
 				props[n] = attributes[i2].value;
 			}
@@ -666,7 +668,7 @@
 		const children = [];
 		for (let i2 = 0; i2 < childNodes.length; i2++) {
 			const child = childNodes[i2];
-			if (child.nodeType === 8) {
+			if (child.nodeType === 8 || child.nodeType === 7) {
 				child.remove();
 				i2--;
 			} else {
