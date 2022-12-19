@@ -11,7 +11,7 @@ require_once __DIR__ . '/../../src/directives/wp-context.php';
  * @group directives
  */
 class Tests_Directives_WpContext extends WP_UnitTestCase {
-	public function test_directive() {
+	public function test_directive_updates_context() {
 		$attributes    = array();
 		$content = <<<EOF
 			<wp-show when="context.myblock.open">
@@ -19,7 +19,7 @@ class Tests_Directives_WpContext extends WP_UnitTestCase {
 			</wp-show>
 EOF;
 		$directive_content = '{ "myblock": { "open": true } }';
-		$context = array();
+		$context = array( 'myblock' => array( 'open' => false ) );
 		$actual = process_wp_context( $content, $directive_content, $context );
 
 		$this->assertSame( $content, $actual, 'wp-context directive changed markup' );
