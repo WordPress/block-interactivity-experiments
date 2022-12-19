@@ -13,10 +13,8 @@ function process_wp_show( $content, $directive_content, &$context ) {
 		}
 
 		if( ! $show ) {
-			$context['show'] = '<template>' . $content . '</template>';
 			return '<template>' . $content . '</template>';
 		}
-		$context['show'] = $content;
 		return $content;
 	}
 }
