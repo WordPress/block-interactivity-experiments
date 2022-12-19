@@ -5,5 +5,12 @@
 	],
 	"config": {
 		"SCRIPT_DEBUG": true
+	},
+	"env": {
+		"tests": {
+			"mappings": {
+				"wp-content/plugins/block-hydration-experiments": "."
+			}
+		}
 	}
 }
