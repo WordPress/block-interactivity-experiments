@@ -12,6 +12,9 @@
 
 require_once __DIR__ . '/src/html/index.php';
 
+require_once __DIR__ . '/src/directives/wp-context.php';
+require_once __DIR__ . '/src/directives/wp-show.php';
+
 function wp_directives_loader()
 {
 	// Load the Admin page.
@@ -203,36 +206,4 @@ function wp_process_directives( $block_content, $block, $instance ) {
 		return '<!-- Context: ' . print_r( $context, true ) . ' -->' . $block_content;
 	}
 	return $block_content;
-}
-
-function process_wp_context( $content, $directive_content, &$context ) {
-	$new_context = json_decode( $directive_content, true );
-	// TODO: Error handling.
-	$context = array_replace_recursive( $context, $new_context );
-	return $content;
-}
-
-// TODO: I think we need to clear context once we encounter the closing tag.
-
-// TODO: Unify function signatures of directive and components processors.
-// (or add some kind of adapter).
-function process_wp_show( $content, $directive_content, &$context ) {
-	if ( null !== $directive_content ) {
-		// TODO: Properly parse $directive_content.
-		$path = explode( '.', $directive_content );
-		if ( count( $path ) > 0 && 'context' === $path[0] ) {
-			array_shift( $path );
-			$show = $context;
-			foreach( $path as $key ) {
-				$show = $show[$key];
-			}
-		}
-
-		if( ! $show ) {
-			$context['show'] = '<template>' . $content . '</template>';
-			return '<template>' . $content . '</template>';
-		}
-		$context['show'] = $content;
-		return $content;
-	}
 }
