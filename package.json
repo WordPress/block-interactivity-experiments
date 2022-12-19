@@ -8,6 +8,8 @@
 		"start": "webpack --mode=development --watch",
 		"dev": "npm start",
 		"test": "jest",
+		"pretest:unit:php": "wp-env start",
+		"test:unit:php": "wp-env run tests-wordpress /var/www/html/wp-content/plugins/block-hydration-experiments/vendor/bin/phpunit -c /var/www/html/wp-content/plugins/block-hydration-experiments/phpunit.xml.dist --verbose",
 		"test:watch": "jest --watch",
 		"plugin-zip": "wp-scripts plugin-zip",
 		"wp-env": "wp-env"

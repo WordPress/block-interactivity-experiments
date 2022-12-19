@@ -199,9 +199,9 @@ function wp_process_directives( $block_content, $block, $instance ) {
 		}
 	}
 
-	// if ( ! empty( $context ) ) {
-	// 	return '<!-- Context: ' . print_r( $context, true ) . ' -->' . $block_content;
-	// }
+	if ( ! empty( $context ) ) {
+		return '<!-- Context: ' . print_r( $context, true ) . ' -->' . $block_content;
+	}
 	return $block_content;
 }
 
@@ -229,8 +229,10 @@ function process_wp_show( $content, $directive_content, &$context ) {
 		}
 
 		if( ! $show ) {
+			$context['show'] = '<template>' . $content . '</template>';
 			return '<template>' . $content . '</template>';
 		}
+		$context['show'] = $content;
 		return $content;
 	}
 }
