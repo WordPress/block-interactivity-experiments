@@ -12,7 +12,7 @@
 	</php>
 	<testsuites>
 		<testsuite name="default">
-			<directory suffix="-test.php">./phpunit/</directory>
+			<directory suffix=".php">./phpunit/directives/</directory>
 		</testsuite>
 	</testsuites>
 	<groups>
