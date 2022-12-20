@@ -94,13 +94,19 @@ window.addEventListener('popstate', async () => {
 
 // Initialize the router with the initial DOM.
 export const init = async () => {
-	// Create the root fragment to hydrate everything.
-	rootFragment = createRootFragment(document.documentElement, document.body);
-	const body = toVdom(document.body);
-	hydrate(body, rootFragment);
-
 	if (hasClientSideTransitions(document.head)) {
+		// Create the root fragment to hydrate everything.
+		rootFragment = createRootFragment(
+			document.documentElement,
+			document.body
+		);
+
+		const body = toVdom(document.body);
+		hydrate(body, rootFragment);
+
 		const head = await fetchHead(document.head);
 		pages.set(cleanUrl(window.location), Promise.resolve({ body, head }));
+	} else {
+		// ...
 	}
 };
