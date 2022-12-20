@@ -181,7 +181,7 @@ function wp_process_directives( $block_content, $block, $instance ) {
 	while ( $tags->next_tag() ) {
 		$tag_name = strtolower( $tags->get_tag() );
 		if ( array_key_exists( $tag_name, $directives ) ) {
-			$$value = $tags->get_attribute( $directives[$tag_name]['default_attribute'] );
+			$value = $tags->get_attribute( $directives[$tag_name]['default_attribute'] );
 			$content = $tags->get_content_inside_balanced_tags();
 			$new_content = call_user_func_array( $directives[$tag_name]['processor'], array( $content, $value, $tag_name, &$context ) );
 			// TODO:
