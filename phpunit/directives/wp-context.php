@@ -20,7 +20,7 @@ class Tests_Directives_WpContext extends WP_UnitTestCase {
 EOF;
 		$value = '{ "myblock": { "open": true } }';
 		$context = array( 'myblock' => array( 'open' => false ) );
-		$actual = process_wp_context( $content, $value, 'wp-context', $context );
+		$actual = process_wp_context( $content, $context, $value, 'wp-context' );
 
 		$this->assertSame( $content, $actual, 'wp-context directive changed markup' );
 		$this->assertSame( array( 'myblock' => array( 'open' => true ) ), $context );

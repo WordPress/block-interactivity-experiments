@@ -17,7 +17,7 @@ class Tests_Directives_WpShow extends WP_UnitTestCase {
 		$value = 'context.myblock.open';
 		$context_before = array( 'myblock' => array( 'open' => true ) );
 		$context = $context_before;
-		$actual = process_wp_show( $content, $value, 'wp-show', $context );
+		$actual = process_wp_show( $content, $context, $value, 'wp-show' );
 
 		$this->assertSame( $content, $actual );
 		$this->assertSame( $context_before, $context, 'wp-show directive changed context' );
@@ -28,7 +28,7 @@ class Tests_Directives_WpShow extends WP_UnitTestCase {
 		$value = 'context.myblock.open';
 		$context_before = array( 'myblock' => array( 'open' => false ) );
 		$context = $context_before;
-		$actual = process_wp_show( $content, $value, 'wp-show', $context );
+		$actual = process_wp_show( $content, $context, $value, 'wp-show' );
 
 		$this->assertSame( '<template>' . $content . '</template>', $actual );
 		$this->assertSame( $context_before, $context, 'wp-show directive changed context' );

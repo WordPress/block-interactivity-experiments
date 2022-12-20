@@ -1,6 +1,6 @@
 <?php
 
-function process_wp_show( $content, $value, $name, &$context ) {
+function process_wp_show( $content, &$context, $value, $name ) {
 	if ( null !== $value ) {
 		// TODO: Properly parse $value.
 		$path = explode( '.', $value );
