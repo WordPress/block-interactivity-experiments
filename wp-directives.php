@@ -165,7 +165,7 @@ add_filter(
 		if (isset($instance->parsed_block['markAsInnerBlock'])) {
 			$w = new WP_HTML_Tag_Processor($block_content);
 			$w->next_tag();
-			$w->set_attribute('wp-inner-block', '');
+			$w->set_attribute('wpx-non-interactive', '');
 			$block_content = (string) $w;
 		}
 
@@ -177,7 +177,7 @@ add_filter(
 		// Add the `wp-interactive-block` attribute if it's interactive.
 		$w = new WP_HTML_Tag_Processor($block_content);
 		$w->next_tag();
-		$w->set_attribute('wp-interactive-block', '');
+		$w->set_attribute('wpx-interactive', '');
 
 		return (string) $w;
 	},
