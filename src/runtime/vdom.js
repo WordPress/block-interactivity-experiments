@@ -16,6 +16,10 @@ export default function toVdom(node) {
 	for (let i = 0; i < attributes.length; i++) {
 		const n = attributes[i].name;
 		if (n[0] === 'w' && n[1] === 'p' && n[2] === '-' && n[3]) {
+			if (n === 'wp-inner-block')
+				return h(node.localName, {
+					dangerouslySetInnerHTML: { __html: node.innerHTML },
+				});
 			hasWpDirectives = true;
 			let val = attributes[i].value;
 			try {
