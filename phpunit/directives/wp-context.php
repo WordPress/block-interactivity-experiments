@@ -5,6 +5,8 @@
 
 require_once __DIR__ . '/../../src/directives/wp-context.php';
 
+require_once __DIR__ . '/../../src/html/index.php';
+
 /**
  * Tests for the wp-context directive.
  *
@@ -13,16 +15,20 @@ require_once __DIR__ . '/../../src/directives/wp-context.php';
  */
 class Tests_Directives_WpContext extends WP_UnitTestCase {
 	public function test_directive_updates_context() {
-		$content = <<<EOF
-			<wp-show when="context.myblock.open">
-				<div>I should be shown!</div>
-			</wp-show>
+		$markup = <<<EOF
+			<div wp-context='{ "myblock": { "open": true } }'>
+				<wp-show when="context.myblock.open">
+					<div>I should be shown!</div>
+				</wp-show>
+			</div>
 EOF;
-		$value = '{ "myblock": { "open": true } }';
-		$context = array( 'myblock' => array( 'open' => false ) );
-		$actual = process_wp_context( $content, $context, $value, 'wp-context' );
+		$tags = new WP_HTML_Tag_Processor( $markup );
+		$tags->next_tag();
 
-		$this->assertSame( $content, $actual, 'wp-context directive changed markup' );
+		$context = array( 'myblock' => array( 'open' => false ) );
+		process_wp_context( $tags, $context );
+
 		$this->assertSame( array( 'myblock' => array( 'open' => true ) ), $context );
+		// TODO: Verify that markup is unchanged?
 	}
 }

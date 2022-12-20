@@ -159,20 +159,14 @@ add_filter(
 	'render_block',
 	'wp_process_directives',
 	10,
-	3
+	2
 );
 
 function wp_process_directives( $block_content, $block, $instance ) {
 	// TODO: Add some directive/components registration mechanism.
 	$directives = array(
-		'wp-context' => array(
-			'default_attribute' => 'data',
-			'processor'         => 'process_wp_context',
-		),
-		'wp-show' => array(
-			'default_attribute' => 'when',
-			'processor'         => 'process_wp_show',
-		)
+		'wp-context' => 'process_wp_context',
+		'wp-show' => 'process_wp_show',
 	);
 
 	$tags = new WP_HTML_Processor( $block_content );
@@ -181,25 +175,16 @@ function wp_process_directives( $block_content, $block, $instance ) {
 	while ( $tags->next_tag() ) {
 		$tag_name = strtolower( $tags->get_tag() );
 		if ( array_key_exists( $tag_name, $directives ) ) {
-			$value = $tags->get_attribute( $directives[$tag_name]['default_attribute'] );
-			$content = $tags->get_content_inside_balanced_tags();
-			$new_content = call_user_func_array( $directives[$tag_name]['processor'], array( $content, $value, $tag_name, &$context ) );
-			// TODO:
-			// $tags->set_content_inside_balanced_tags( $new_content );
+			call_user_func_array( $directives[$tag_name], array( &$tags, &$context ) );
 		} else {
 			// Components can't have directives (unless we change our mind about this).
-			foreach ( $directives as $directive => $directive_data ) {
+			foreach ( $directives as $directive => $directive_processor ) {
 				$attributes = $tags->get_attributes_by_prefix( $directive );
 				if ( empty( $attributes ) ) {
 					continue;
 				}
 
-				$content = $tags->get_content_inside_balanced_tags();
-				foreach( $attributes as $name => $value ) {
-					$content = call_user_func_array( $directive_data['processor'], array( $content, $value, $name, &$context ) );
-				}
-				// TODO:
-				// $tags->set_content_inside_balanced_tags( $new_content );
+				call_user_func_array( $directive_processor, array( &$tags, &$context ) );
 			}
 		}
 	}

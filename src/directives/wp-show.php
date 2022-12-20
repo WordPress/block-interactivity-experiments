@@ -1,6 +1,12 @@
 <?php
 
-function process_wp_show( $content, &$context, $value, $name ) {
+function process_wp_show( &$tags, &$context ) {
+	if ( 'WP-SHOW' === $tags->get_tag() ) {
+		$value = $tags->get_attribute( 'when' );
+	} else {
+		$value = $tags->get_attribute( 'wp-data' );
+	}
+
 	if ( null !== $value ) {
 		// TODO: Properly parse $value.
 		$path = explode( '.', $value );
@@ -13,8 +19,8 @@ function process_wp_show( $content, &$context, $value, $name ) {
 		}
 
 		if( ! $show ) {
-			return '<template>' . $content . '</template>';
+			// $content = $tags->get_content_inside_balanced_tags()
+			// $tags->set_content_inside_balanced_tags( '<template>' . $content . '</template>' );
 		}
-		return $content;
 	}
 }
