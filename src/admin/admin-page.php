@@ -1,81 +1,91 @@
 <?php
 
-function wp_directives_register_menu() {
-	add_options_page(
-		'WP Directives',
-		'WP Directives',
-		'manage_options',
-		'wp-directives-plugin',
-		'wp_directives_render_admin_page'
+function wp_directives_register_settings()
+{
+	// Register a new setting for the plugin
+	register_setting(
+		'wp_directives',
+		'wp_directives_plugin_settings',
+		'wp_directives_options_validate'
+	);
+
+	// Add a new section to the plugin's settings page
+	add_settings_section(
+		'wp_directives_section_client',
+		__('Client-side transitions', 'wp-directives'),
+		'wp_directives_section_client_cb',
+		'wp_directives'
+	);
+
+	// Add a field to the new section to toggle client-side transitions
+	add_settings_field(
+		'wp_directives_field_client_transitions',
+		__('Client-side transitions', 'wp-directives'),
+		'wp_directives_field_client_transitions_cb',
+		'wp_directives',
+		'wp_directives_section_client'
 	);
 }
-add_action( 'admin_menu', 'wp_directives_register_menu' );
+add_action('admin_init', 'wp_directives_register_settings');
 
-function wp_directives_render_admin_page() {?>
+function wp_directives_section_client_cb()
+{
+	echo '<p>' .
+		__(
+			'Configure the client-side transitions for the plugin.',
+			'wp-directives'
+		) .
+		'</p>';
+}
+
+function wp_directives_field_client_transitions_cb()
+{
+	$options = get_option('wp_directives_plugin_settings');
+	$value = isset($options['client_side_transitions'])
+		? $options['client_side_transitions']
+		: 0;
+	echo '<label for="wp_directives_field_client_transitions">';
+	echo '<input type="checkbox" id="wp_directives_field_client_transitions" name="wp_directives_plugin_settings[client_side_transitions]" value="1" ' .
+		checked(1, $value, false) .
+		'>';
+	echo ' ' . __('Activate client-side transitions', 'wp-directives');
+	echo '</label>';
+}
+
+function wp_directives_options_page()
+{
+	// Check that the user has the necessary permissions
+	if (!current_user_can('manage_options')) {
+		wp_die(
+			__(
+				'You do not have sufficient permissions to access this page.',
+				'wp-directives'
+			)
+		);
+	}// Output the HTML for the settings page
+	?>
 	<div class="wrap">
-		<h2>WP Directives</h2>
-		<form method="POST" action="options.php">
-			<?php
-				settings_fields( 'wp_directives_plugin_settings' );
-				do_settings_sections( 'wp_directives_plugin_page' );
-			?>
-			<?php submit_button(); ?>
-		</form>
+			<h1><?php _e('WP Directives Options', 'wp-directives'); ?></h1>
+			<form action="options.php" method="post">
+					<?php
+     // Output the hidden fields and settings sections
+     settings_fields('wp_directives');
+     do_settings_sections('wp_directives');
+     // Output the submit button
+     submit_button();?>
+			</form>
 	</div>
 	<?php
 }
 
-function wp_directives_register_settings() {
-	register_setting(
-		'wp_directives_plugin_settings',
-		'wp_directives_plugin_settings',
-		array(
-			'type'              => 'object',
-			'default'           => array(
-				'client_side_transitions' => false,
-			),
-			'sanitize_callback' => 'wp_directives_validate_settings',
-		)
-	);
-
-	add_settings_section(
-		'wp_directives_plugin_section',
-		'',
-		null,
-		'wp_directives_plugin_page'
-	);
-
-	add_settings_field(
-		'client_side_transitions',
-		'Client Side Transitions',
-		'wp_directives_client_side_transitions_input',
-		'wp_directives_plugin_page',
-		'wp_directives_plugin_section'
+function wp_directives_add_options_page()
+{
+	add_options_page(
+		__('WP Directives Options', 'wp-directives'),
+		__('WP Directives', 'wp-directives'),
+		'manage_options',
+		'wp_directives',
+		'wp_directives_options_page'
 	);
 }
-add_action( 'admin_init', 'wp_directives_register_settings' );
-
-function wp_directives_validate_settings( $input ) {
-	$output                            = get_option( 'wp_directives_plugin_settings' );
-	$output['client_side_transitions'] =
-		isset( $input ) && $input['client_side_transitions'] ? true : false;
-	return $output;
-}
-
-function wp_directives_client_side_transitions_input() {
-	$options = get_option( 'wp_directives_plugin_settings' );
-	?>
-
-	<input type="checkbox" 
-		name="
-		<?php
-		echo esc_attr(
-			'wp_directives_plugin_settings[client_side_transitions]'
-		)
-		?>
-		" 
-		<?php echo $options['client_side_transitions'] ? 'checked' : ''; ?>
-	>
-
-	<?php
-}
+add_action('admin_menu', 'wp_directives_add_options_page');
