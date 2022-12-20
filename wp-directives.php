@@ -160,12 +160,21 @@ add_filter('render_block_bhe/tabs', function ($content) {
 add_filter(
 	'render_block',
 	function ($block_content, $block, $instance) {
-		$block_type = $instance->block_type;
+		// Append the `wp-inner-block` attribute for inner blocks of interactive
+		// blocks.
+		if (isset($instance->parsed_block['markAsInnerBlock'])) {
+			$w = new WP_HTML_Tag_Processor($block_content);
+			$w->next_tag();
+			$w->set_attribute('wp-inner-block', '');
+			$block_content = (string) $w;
+		}
 
-		if (!block_has_support($block_type, ['interactivity'])) {
+		// Return if it's not interactive;
+		if (!block_has_support($instance->block_type, ['interactivity'])) {
 			return $block_content;
 		}
 
+		// Add the `wp-interactive-block` attribute if it's interactive.
 		$w = new WP_HTML_Tag_Processor($block_content);
 		$w->next_tag();
 		$w->set_attribute('wp-interactive-block', '');
@@ -175,3 +184,18 @@ add_filter(
 	10,
 	3
 );
+
+/**
+ * Add a flag to mark inner blocks of interactive blocks.
+ */
+function bhe_inner_blocks($parsed_block, $source_block, $parent_block)
+{
+	if (
+		isset($parent_block) &&
+		block_has_support($parent_block->block_type, ['interactivity'])
+	) {
+		$parsed_block['markAsInnerBlock'] = true;
+	}
+	return $parsed_block;
+}
+add_filter('render_block_data', 'bhe_inner_blocks', 10, 3);
