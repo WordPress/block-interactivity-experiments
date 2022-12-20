@@ -107,6 +107,10 @@ export const init = async () => {
 		const head = await fetchHead(document.head);
 		pages.set(cleanUrl(window.location), Promise.resolve({ body, head }));
 	} else {
-		// ...
+		document.querySelectorAll('[wp-interactive-block]').forEach((node) => {
+			const fragment = createRootFragment(node.parentNode, node);
+			const vdom = toVdom(node);
+			hydrate(vdom, fragment);
+		});
 	}
 };
