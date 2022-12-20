@@ -14,6 +14,7 @@
 if (!function_exists('is_plugin_active')) {
 	include_once ABSPATH . 'wp-admin/includes/plugin.php';
 }
+
 if (!is_plugin_active('gutenberg/gutenberg.php')) {
 	// Show an error message
 	add_action('admin_notices', function () {
@@ -133,7 +134,6 @@ function wp_directives_client_site_transitions_meta_tag()
 }
 add_action('wp_head', 'wp_directives_client_site_transitions_meta_tag', 10, 0);
 
-/* User code */
 function wp_directives_client_site_transitions_option()
 {
 	$options = get_option('wp_directives_plugin_settings');
@@ -141,10 +141,10 @@ function wp_directives_client_site_transitions_option()
 }
 add_filter(
 	'client_side_transitions',
-	'wp_directives_client_site_transitions_option'
+	'wp_directives_client_site_transitions_option',
+	9
 );
 
-/* Blocks */
 add_action('init', function () {
 	register_block_type(__DIR__ . '/build/blocks/tabs');
 });
@@ -156,3 +156,22 @@ add_filter('render_block_bhe/tabs', function ($content) {
 	);
 	return $content;
 });
+
+add_filter(
+	'render_block',
+	function ($block_content, $block, $instance) {
+		$block_type = $instance->block_type;
+
+		if (!block_has_support($block_type, ['interactivity'])) {
+			return $block_content;
+		}
+
+		$w = new WP_HTML_Tag_Processor($block_content);
+		$w->next_tag();
+		$w->set_attribute('wp-interactive-block', '');
+
+		return (string) $w;
+	},
+	10,
+	3
+);
