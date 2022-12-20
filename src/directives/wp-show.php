@@ -1,9 +1,9 @@
 <?php
 
-function process_wp_show( $content, $directive_content, &$context ) {
-	if ( null !== $directive_content ) {
-		// TODO: Properly parse $directive_content.
-		$path = explode( '.', $directive_content );
+function process_wp_show( $content, $value, $name, &$context ) {
+	if ( null !== $value ) {
+		// TODO: Properly parse $value.
+		$path = explode( '.', $value );
 		if ( count( $path ) > 0 && 'context' === $path[0] ) {
 			array_shift( $path );
 			$show = $context;

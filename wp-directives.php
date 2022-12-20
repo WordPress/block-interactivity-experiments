@@ -181,21 +181,23 @@ function wp_process_directives( $block_content, $block, $instance ) {
 	while ( $tags->next_tag() ) {
 		$tag_name = strtolower( $tags->get_tag() );
 		if ( array_key_exists( $tag_name, $directives ) ) {
-			$directive_content = $tags->get_attribute( $directives[$tag_name]['default_attribute'] );
+			$$value = $tags->get_attribute( $directives[$tag_name]['default_attribute'] );
 			$content = $tags->get_content_inside_balanced_tags();
-			$new_content = call_user_func_array( $directives[$tag_name]['processor'], array( $content, $directive_content, &$context ) );
+			$new_content = call_user_func_array( $directives[$tag_name]['processor'], array( $content, $value, $tag_name, &$context ) );
 			// TODO:
 			// $tags->set_content_inside_balanced_tags( $new_content );
 		} else {
 			// Components can't have directives (unless we change our mind about this).
 			foreach ( $directives as $directive => $directive_data ) {
-				$attribute_content = $tags->get_attribute( $directive );
-				if ( null === $attribute_content ) {
+				$attributes = $tags->get_attributes_by_prefix( $directive );
+				if ( empty( $attributes ) ) {
 					continue;
 				}
 
 				$content = $tags->get_content_inside_balanced_tags();
-				$new_content = call_user_func_array( $directive_data['processor'], array( $content, $attribute_content, &$context ) );
+				foreach( $attributes as $name => $value ) {
+					$content = call_user_func_array( $directive_data['processor'], array( $content, $value, $name, &$context ) );
+				}
 				// TODO:
 				// $tags->set_content_inside_balanced_tags( $new_content );
 			}
