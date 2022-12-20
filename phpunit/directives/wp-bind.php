@@ -27,7 +27,7 @@ class Tests_Directives_WpBind extends WP_UnitTestCase {
 			'<img src="./wordpress.png" wp-bind:src="context.myblock.imageSource" />',
 			$tags->get_updated_html()
 		);
-		// $this->assertSame( './wordpress.png', $tags->get_attribute( 'src' ) ); // FIXME: Doesn't currently work.
+		// $this->assertSame( './wordpress.png', $tags->get_attribute( 'src' ) ); // FIXME: Broken; will be fixed by https://github.com/WordPress/gutenberg/pull/46598.
 		$this->assertSame( $context_before, $context, 'wp-bind directive changed context' );
 	}
 }
