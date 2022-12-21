@@ -181,7 +181,7 @@ add_filter(
 		if ( isset( $instance->parsed_block['isolated'] ) ) {
 			$w = new WP_HTML_Tag_Processor( $block_content );
 			$w->next_tag();
-			$w->set_attribute( 'wpx-ignore', '' );
+			$w->set_attribute( 'wp-ignore', '' );
 			$block_content = (string) $w;
 		}
 
@@ -193,7 +193,7 @@ add_filter(
 		// Add the `wp-interactive-block` attribute if it's interactive.
 		$w = new WP_HTML_Tag_Processor( $block_content );
 		$w->next_tag();
-		$w->set_attribute( 'wpx-island', '' );
+		$w->set_attribute( 'wp-island', '' );
 
 		return (string) $w;
 	},

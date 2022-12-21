@@ -107,7 +107,7 @@ export const init = async () => {
 		const head = await fetchHead(document.head);
 		pages.set(cleanUrl(window.location), Promise.resolve({ body, head }));
 	} else {
-		document.querySelectorAll('[wpx-island]').forEach((node) => {
+		document.querySelectorAll('[wp-island]').forEach((node) => {
 			const fragment = createRootFragment(node.parentNode, node);
 			const vdom = toVdom(node);
 			hydrate(vdom, fragment);
