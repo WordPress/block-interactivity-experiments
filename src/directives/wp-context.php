@@ -28,6 +28,7 @@ function process_wp_context( &$tags, &$context ) {
 		}
 		$value = $tags->get_attribute( 'data' );
 	} else {
+		// TODO: Implement rewinding context upon matching closing tag.
 		$value = $tags->get_attribute( 'wp-context' );
 	}
 
