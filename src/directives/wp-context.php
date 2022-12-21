@@ -8,6 +8,11 @@ function process_wp_context( &$tags, &$context ) {
 		$value = $tags->get_attribute( 'wp-context' );
 	}
 
+	if ( null === $value ) {
+		// No wp-context directive.
+		return;
+	}
+
 	$new_context = json_decode( $value, true );
 	// TODO: Error handling.
 	$context = array_replace_recursive( $context, $new_context );
