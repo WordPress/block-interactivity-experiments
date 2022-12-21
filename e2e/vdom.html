@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Virtual DOM testing page</title>
+	</head>
+	<body>
+		<div>
+			<wp-show when="state.dontShow">
+				<span data-testid="not inside an island">
+					This should be shown because it is inside an island.
+				</span>
+			</wp-show>
+
+			<div wp-island>
+				<wp-show when="state.dontShow">
+					<span data-testid="inside an island">
+						This should not be shown because it is inside an island.
+					</span>
+				</wp-show>
+			</div>
+
+			<div wp-island>
+				<div wp-ignore>
+					<wp-show when="state.dontShow">
+						<span
+							data-testid="inside an inner block of an isolated island"
+						>
+							This should be shown because it is inside an inner
+							block of an isolated island.
+						</span>
+					</wp-show>
+				</div>
+			</div>
+		</div>
+
+		<script src="../build/blocks/isolated/view.js"></script>
+		<script src="../build/runtime.js"></script>
+		<script src="../build/vendors.js"></script>
+	</body>
+</html>
