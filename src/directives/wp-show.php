@@ -14,7 +14,7 @@ function process_wp_show( &$tags, &$context ) {
 	}
 
 	// TODO: Properly parse $value.
-	$show = get_from_context( $value, $context );
+	$show = get_from_context( $value, $context->get_context() );
 
 	if( ! $show ) {
 		// $content = $tags->get_content_inside_balanced_tags()

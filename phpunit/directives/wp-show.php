@@ -4,6 +4,7 @@
  */
 
 require_once __DIR__ . '/../../src/directives/wp-show.php';
+require_once __DIR__ . '/../../src/directives/wp-context.php';
 
 /**
  * Tests for the wp-show directive.
@@ -21,14 +22,14 @@ EOF;
 		$tags = new WP_HTML_Processor( $markup );
 		$tags->next_tag();
 
-		$context_before = array( 'myblock' => array( 'open' => true ) );
+		$context_before = new WP_Directive_Context( array( 'myblock' => array( 'open' => true ) ) );
 		$context = $context_before;
 		process_wp_show( $tags, $context );
 
 		// TODO:
 		// $content = trim ( $tags->get_content_inside_balanced_tags() );
 		// $this->assertSame( '<div>I should be shown!</div>', $content );
-		$this->assertSame( $context_before, $context, 'wp-show directive changed context' );
+		$this->assertSame( $context_before->get_context(), $context->get_context(), 'wp-show directive changed context' );
 	}
 
 	public function test_directive_wraps_content_in_template_if_when_is_false() {
@@ -40,13 +41,13 @@ EOF;
 		$tags = new WP_HTML_Processor( $markup );
 		$tags->next_tag();
 
-		$context_before = array( 'myblock' => array( 'open' => false ) );
+		$context_before = new WP_Directive_Context( array( 'myblock' => array( 'open' => false ) ) );
 		$context = $context_before;
 		process_wp_show( $tags, $context );
 
 		// TODO:
 		// $content = trim( $tags->get_content_inside_balanced_tags() );
 		// $this->assertSame( '<template><div>I should be shown!</div></template>', $content );
-		$this->assertSame( $context_before, $context, 'wp-show directive changed context' );
+		$this->assertSame( $context_before->get_context(), $context->get_context(), 'wp-show directive changed context' );
 	}
 }

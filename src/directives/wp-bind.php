@@ -13,7 +13,7 @@ function process_wp_bind( &$tags, &$context ) {
 		$bound_attr = $attr_parts[1];
 
 		// TODO: Properly parse $value.
-		$value = get_from_context( $expr, $context );
+		$value = get_from_context( $expr, $context->get_context() );
 		$tags->set_attribute( $bound_attr, $value );
 	}
 }
