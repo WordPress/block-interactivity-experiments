@@ -52,5 +52,13 @@ EOF;
 		process_wp_context( $tags, $context );
 
 		$this->assertSame( array( 'myblock' => array( 'open' => true ) ), $context->get_context() );
+
+		$tags->next_tag( array( 'tag_closers' => 'visit' ) ); //  </div>
+		process_wp_context( $tags, $context );
+
+		$tags->next_tag( array( 'tag_closers' => 'visit' ) ); //  </wp-context>
+		process_wp_context( $tags, $context );
+
+		$this->assertSame( array( 'myblock' => array( 'open' => false ) ), $context->get_context() );
 	}
 }
