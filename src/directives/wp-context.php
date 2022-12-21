@@ -21,12 +21,11 @@ class WP_Directive_Context {
 }
 
 function process_wp_context( &$tags, &$context ) {
-	if( $tags->is_tag_closer() && 'WP-CONTEXT' === $tags->get_tag() ) {
-		$context->rewind_context();
-		return;
-	}
-
 	if ( 'WP-CONTEXT' === $tags->get_tag() ) {
+		if ( $tags->is_tag_closer() ) {
+			$context->rewind_context();
+			return;
+		}
 		$value = $tags->get_attribute( 'data' );
 	} else {
 		$value = $tags->get_attribute( 'wp-context' );
