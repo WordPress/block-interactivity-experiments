@@ -3,7 +3,7 @@
 class WP_Directive_Context {
 	protected $stack = array( array() );
 
-    function __construct( $context ) {
+    function __construct( $context = array() ) {
 		$this->set_context( $context );
     }
 

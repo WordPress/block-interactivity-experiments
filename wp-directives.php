@@ -171,7 +171,7 @@ function wp_process_directives( $block_content, $block, $instance ) {
 
 	$tags = new WP_HTML_Processor( $block_content );
 
-	$context = array();
+	$context = new WP_Directive_Context;
 	while ( $tags->next_tag() ) {
 		$tag_name = strtolower( $tags->get_tag() );
 		if ( array_key_exists( $tag_name, $directives ) ) {
@@ -189,8 +189,8 @@ function wp_process_directives( $block_content, $block, $instance ) {
 		}
 	}
 
-	if ( ! empty( $context ) ) {
-		return '<!-- Context: ' . print_r( $context, true ) . ' -->' . $block_content;
+	if ( ! empty( $context->get_context() ) ) {
+		return '<!-- Context: ' . print_r( $context->get_context(), true ) . ' -->' . $block_content;
 	}
 	return $block_content;
 }
