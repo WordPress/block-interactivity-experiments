@@ -29,11 +29,20 @@ test.describe('vdom', () => {
 		await expect(el).toBeVisible();
 	});
 
-	test('islands that are inside islands should not be hydrated again', async ({
+	test('directives inside islands should not be hydrated twice', async ({
 		page,
 	}) => {
 		const el = page.getByTestId('island inside another island');
 		const templates = el.locator('template');
 		expect(await templates.count()).toEqual(1);
+	});
+
+	test('islands inside inner blocks of isolated islands should be hydrated', async ({
+		page,
+	}) => {
+		const el = page.getByTestId(
+			'island inside inner block of isolated island'
+		);
+		await expect(el).toBeHidden();
 	});
 });
