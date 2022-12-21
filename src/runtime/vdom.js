@@ -15,7 +15,7 @@ export default function toVdom(node) {
 
 	for (let i = 0; i < attributes.length; i++) {
 		const n = attributes[i].name;
-		if (n === 'wpx-non-interactive') {
+		if (n === 'wpx-ignore') {
 			return h(node.localName, {
 				dangerouslySetInnerHTML: { __html: node.innerHTML },
 			});
