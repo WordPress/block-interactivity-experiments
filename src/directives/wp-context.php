@@ -23,6 +23,7 @@ class WP_Directive_Context {
 function process_wp_context( &$tags, &$context ) {
 	if( $tags->is_tag_closer() && 'WP-CONTEXT' === $tags->get_tag() ) {
 		$context->rewind_context();
+		return;
 	}
 
 	if ( 'WP-CONTEXT' === $tags->get_tag() ) {
