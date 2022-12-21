@@ -178,7 +178,7 @@ add_filter(
 	function ( $block_content, $block, $instance ) {
 		// Append the `wp-inner-block` attribute for inner blocks of interactive
 		// blocks.
-		if ( isset( $instance->parsed_block['markAsInnerBlock'] ) ) {
+		if ( isset( $instance->parsed_block['isNonInteractive'] ) ) {
 			$w = new WP_HTML_Tag_Processor( $block_content );
 			$w->next_tag();
 			$w->set_attribute( 'wpx-non-interactive', '' );
@@ -202,14 +202,17 @@ add_filter(
 );
 
 /**
- * Add a flag to mark inner blocks of interactive blocks.
+ * Add a flag to mark inner blocks of isolated interactive blocks.
  */
 function bhe_inner_blocks( $parsed_block, $source_block, $parent_block ) {
 	if (
 		isset( $parent_block ) &&
-		block_has_support( $parent_block->block_type, array( 'interactivity' ) )
+		block_has_support(
+			$parent_block->block_type,
+			array( 'interactivity', 'isolated' )
+		)
 	) {
-		$parsed_block['markAsInnerBlock'] = true;
+		$parsed_block['isNonInteractive'] = true;
 	}
 	return $parsed_block;
 }
