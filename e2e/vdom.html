@@ -31,6 +31,20 @@
 					</wp-show>
 				</div>
 			</div>
+
+			<div wp-island>
+				<div wp-island>
+					<wp-show
+						when="state.dontShow"
+						data-testid="island inside another island"
+					>
+						<span>
+							This should not have two templates because that
+							means we hydrated twice.
+						</span>
+					</wp-show>
+				</div>
+			</div>
 		</div>
 
 		<script src="../build/blocks/isolated/view.js"></script>

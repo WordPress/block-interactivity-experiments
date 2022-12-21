@@ -1,5 +1,5 @@
 import { hydrate, render } from 'preact';
-import toVdom from './vdom';
+import { toVdom, hydratedIslands } from './vdom';
 import { createRootFragment } from './utils';
 
 // The root to render the vdom (document.body).
@@ -108,9 +108,11 @@ export const init = async () => {
 		pages.set(cleanUrl(window.location), Promise.resolve({ body, head }));
 	} else {
 		document.querySelectorAll('[wp-island]').forEach((node) => {
-			const fragment = createRootFragment(node.parentNode, node);
-			const vdom = toVdom(node);
-			hydrate(vdom, fragment);
+			if (!hydratedIslands.has(node)) {
+				const fragment = createRootFragment(node.parentNode, node);
+				const vdom = toVdom(node);
+				hydrate(vdom, fragment);
+			}
 		});
 	}
 };
