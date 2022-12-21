@@ -7,7 +7,8 @@ module.exports = [
 		...defaultConfig,
 		entry: {
 			runtime: './src/runtime',
-			'blocks/tabs/view': './src/blocks/tabs/view',
+			'blocks/isolated/view': './src/blocks/isolated/view',
+			'blocks/regular/view': './src/blocks/regular/view',
 		},
 		output: {
 			filename: '[name].js',

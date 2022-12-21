@@ -5,7 +5,7 @@ import './style.scss';
 const Edit = () => {
 	return (
 		<div {...useBlockProps()}>
-			<h3>The tabs!</h3>
+			<h3>Isolated block</h3>
 			<wp-show when="state.show">
 				<InnerBlocks />
 			</wp-show>
@@ -16,7 +16,7 @@ const Edit = () => {
 	);
 };
 
-registerBlockType('bhe/tabs', {
+registerBlockType('bhe/isolated', {
 	edit: Edit,
 	save: () => <InnerBlocks.Content />,
 });

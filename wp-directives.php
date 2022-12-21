@@ -10,13 +10,13 @@
  * Text Domain:       wp-directives
  */
 
-// Check if Gutenberg plugin is active
+// Check if Gutenberg plugin is active.
 if ( ! function_exists( 'is_plugin_active' ) ) {
 	include_once ABSPATH . 'wp-admin/includes/plugin.php';
 }
 
 if ( ! is_plugin_active( 'gutenberg/gutenberg.php' ) ) {
-	// Show an error message
+	// Show an error message.
 	add_action(
 		'admin_notices',
 		function () {
@@ -30,7 +30,7 @@ if ( ! is_plugin_active( 'gutenberg/gutenberg.php' ) ) {
 		}
 	);
 
-	// Deactivate the plugin
+	// Deactivate the plugin.
 	deactivate_plugins( plugin_basename( __FILE__ ) );
 	return;
 }
@@ -147,16 +147,27 @@ add_filter(
 add_action(
 	'init',
 	function () {
-		register_block_type( __DIR__ . '/build/blocks/tabs' );
+		register_block_type( __DIR__ . '/build/blocks/isolated' );
+		register_block_type( __DIR__ . '/build/blocks/regular' );
 	}
 );
 
 add_filter(
-	'render_block_bhe/tabs',
+	'render_block_bhe/isolated',
 	function ( $content ) {
 		wp_enqueue_script(
-			'bhe/tabs',
-			plugin_dir_url( __FILE__ ) . 'build/blocks/tabs/view.js'
+			'bhe/isolated',
+			plugin_dir_url( __FILE__ ) . 'build/blocks/isolated/view.js'
+		);
+		return $content;
+	}
+);
+add_filter(
+	'render_block_bhe/regular',
+	function ( $content ) {
+		wp_enqueue_script(
+			'bhe/regular',
+			plugin_dir_url( __FILE__ ) . 'build/blocks/regular/view.js'
 		);
 		return $content;
 	}
@@ -174,7 +185,7 @@ add_filter(
 			$block_content = (string) $w;
 		}
 
-		// Return if it's not interactive;
+		// Return if it's not interactive.
 		if ( ! block_has_support( $instance->block_type, array( 'interactivity' ) ) ) {
 			return $block_content;
 		}
