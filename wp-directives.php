@@ -159,7 +159,7 @@ add_filter(
 	'render_block',
 	'wp_process_directives',
 	10,
-	2
+	3
 );
 
 function wp_process_directives( $block_content, $block, $instance ) {
