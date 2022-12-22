@@ -56,7 +56,7 @@ export function toVdom(node) {
 			child.remove();
 			i--;
 		} else {
-			children.push(toVdom(child, full));
+			children.push(toVdom(child));
 		}
 	}
 

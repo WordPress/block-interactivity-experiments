@@ -6,8 +6,8 @@ test.describe('toVdom - full', () => {
 		await page.goto('file://' + join(__dirname, 'tovdom-full.html'));
 	});
 
-	test('it should not stop when it founds wp-ignore', async ({ page }) => {
+	test('it should stop when it founds wp-ignore', async ({ page }) => {
 		const el = page.getByTestId('inside wp-ignore');
-		await expect(el).toBeHidden();
+		await expect(el).toBeVisible();
 	});
 });
