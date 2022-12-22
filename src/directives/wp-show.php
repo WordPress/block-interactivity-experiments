@@ -3,6 +3,10 @@
 require_once __DIR__ . '/utils.php';
 
 function process_wp_show( &$tags, &$context ) {
+	if ( $tags->is_tag_closer() ) {
+		return;
+	}
+
 	if ( 'WP-SHOW' === $tags->get_tag() ) {
 		$value = $tags->get_attribute( 'when' );
 	} else {

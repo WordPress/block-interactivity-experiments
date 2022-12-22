@@ -172,7 +172,7 @@ function wp_process_directives( $block_content, $block, $instance ) {
 	$tags = new WP_HTML_Processor( $block_content );
 
 	$context = new WP_Directive_Context;
-	while ( $tags->next_tag() ) {
+	while ( $tags->next_tag( array( 'tag_closers' => 'visit' ) ) ) {
 		$tag_name = strtolower( $tags->get_tag() );
 		if ( array_key_exists( $tag_name, $directives ) ) {
 			call_user_func_array( $directives[$tag_name], array( &$tags, &$context ) );

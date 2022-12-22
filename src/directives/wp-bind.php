@@ -3,6 +3,10 @@
 require_once __DIR__ . '/utils.php';
 
 function process_wp_bind( &$tags, &$context ) {
+	if ( $tags->is_tag_closer() ) {
+		return;
+	}
+
 	$prefixed_attributes = $tags->get_attributes_by_prefix( 'wp-bind:' );
 
 	foreach( $prefixed_attributes as $name => $expr ) {
