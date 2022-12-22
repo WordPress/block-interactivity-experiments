@@ -127,12 +127,23 @@ add_filter(
 	1
 );
 
-function wp_directives_client_site_transitions_meta_tag() {
-	if ( apply_filters( 'client_side_transitions', false ) ) {
-		echo '<meta itemprop="wp-client-side-transitions" content="active">';
+
+function wp_directives_get_client_side_transitions() {
+	static $client_side_transitions = null;
+	if ( is_null( $client_side_transitions ) ) {
+		$client_side_transitions = apply_filters( 'client_side_transitions', false );
 	}
+	return $client_side_transitions;
 }
-add_action( 'wp_head', 'wp_directives_client_site_transitions_meta_tag', 10, 0 );
+
+add_action(
+	'wp_head',
+	function () {
+		if ( wp_directives_get_client_side_transitions() ) {
+			echo '<meta itemprop="wp-client-side-transitions" content="active">';
+		}
+	}
+);
 
 function wp_directives_client_site_transitions_option() {
 	$options = get_option( 'wp_directives_plugin_settings' );
@@ -176,6 +187,9 @@ add_filter(
 add_filter(
 	'render_block',
 	function ( $block_content, $block, $instance ) {
+		if ( wp_directives_get_client_side_transitions() ) {
+			return $block_content;
+		}
 		// Append the `wp-ignore` attribute for inner blocks of interactive blocks.
 		if ( isset( $instance->parsed_block['isolated'] ) ) {
 			$w = new WP_HTML_Tag_Processor( $block_content );
