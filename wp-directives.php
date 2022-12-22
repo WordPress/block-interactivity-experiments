@@ -176,8 +176,7 @@ add_filter(
 add_filter(
 	'render_block',
 	function ( $block_content, $block, $instance ) {
-		// Append the `wp-inner-block` attribute for inner blocks of interactive
-		// blocks.
+		// Append the `wp-ignore` attribute for inner blocks of interactive blocks.
 		if ( isset( $instance->parsed_block['isolated'] ) ) {
 			$w = new WP_HTML_Tag_Processor( $block_content );
 			$w->next_tag();
@@ -190,7 +189,7 @@ add_filter(
 			return $block_content;
 		}
 
-		// Add the `wp-interactive-block` attribute if it's interactive.
+		// Add the `wp-island` attribute if it's interactive.
 		$w = new WP_HTML_Tag_Processor( $block_content );
 		$w->next_tag();
 		$w->set_attribute( 'wp-island', '' );
