@@ -17,7 +17,7 @@ require_once __DIR__ . '/../../src/html/index.php';
 class Tests_Directives_WpBind extends WP_UnitTestCase {
 	public function test_directive() {
 		$markup = '<img wp-bind:src="context.myblock.imageSource" />';
-		$tags = new WP_HTML_Processor( $markup );
+		$tags = new WP_HTML_Tag_Processor( $markup );
 		$tags->next_tag();
 
 		$context_before = new WP_Directive_Context( array( 'myblock' => array( 'imageSource' => './wordpress.png' ) ) );

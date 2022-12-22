@@ -19,7 +19,7 @@ class Tests_Directives_WpShow extends WP_UnitTestCase {
 				<div>I should be shown!</div>
 			</wp-show>
 EOF;
-		$tags = new WP_HTML_Processor( $markup );
+		$tags = new WP_HTML_Tag_Processor( $markup );
 		$tags->next_tag();
 
 		$context_before = new WP_Directive_Context( array( 'myblock' => array( 'open' => true ) ) );
@@ -38,7 +38,7 @@ EOF;
 				<div>I should be shown!</div>
 			</wp-show>
 EOF;
-		$tags = new WP_HTML_Processor( $markup );
+		$tags = new WP_HTML_Tag_Processor( $markup );
 		$tags->next_tag();
 
 		$context_before = new WP_Directive_Context( array( 'myblock' => array( 'open' => false ) ) );
