@@ -5,14 +5,14 @@
 	</head>
 	<body>
 		<div>
-			<wp-show when="state.dontShow">
+			<wp-show when="state.falseValue">
 				<span data-testid="not inside an island">
 					This should be shown because it is inside an island.
 				</span>
 			</wp-show>
 
 			<div wp-island>
-				<wp-show when="state.dontShow">
+				<wp-show when="state.falseValue">
 					<span data-testid="inside an island">
 						This should not be shown because it is inside an island.
 					</span>
@@ -21,7 +21,7 @@
 
 			<div wp-island>
 				<div wp-ignore>
-					<wp-show when="state.dontShow">
+					<wp-show when="state.falseValue">
 						<span
 							data-testid="inside an inner block of an isolated island"
 						>
@@ -35,7 +35,7 @@
 			<div wp-island>
 				<div wp-island>
 					<wp-show
-						when="state.dontShow"
+						when="state.falseValue"
 						data-testid="island inside another island"
 					>
 						<span>
@@ -49,7 +49,7 @@
 			<div wp-island>
 				<div>
 					<div wp-island wp-ignore>
-						<wp-show when="state.dontShow">
+						<wp-show when="state.falseValue">
 							<span
 								data-testid="island inside inner block of isolated island"
 							>
@@ -63,7 +63,7 @@
 			</div>
 		</div>
 
-		<script src="../build/blocks/isolated/view.js"></script>
+		<script src="../build/e2e/tovdom.js"></script>
 		<script src="../build/runtime.js"></script>
 		<script src="../build/vendors.js"></script>
 	</body>

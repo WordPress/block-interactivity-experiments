@@ -6,14 +6,14 @@
 	</head>
 	<body>
 		<div wp-ignore>
-			<wp-show when="state.dontShow">
+			<wp-show when="state.falseValue">
 				<span data-testid="inside wp-ignore">
 					This should not be shown because we are in full mode.
 				</span>
 			</wp-show>
 		</div>
 
-		<script src="../build/blocks/isolated/view.js"></script>
+		<script src="../build/e2e/tovdom.js"></script>
 		<script src="../build/runtime.js"></script>
 		<script src="../build/vendors.js"></script>
 	</body>
