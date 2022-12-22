@@ -3,7 +3,7 @@ import { h } from 'preact';
 export const hydratedIslands = new WeakSet();
 
 // Recursive function that transfoms a DOM tree into vDOM.
-export function toVdom(node) {
+export function toVdom(node, full = true) {
 	const props = {};
 	const { attributes, childNodes } = node;
 	const wpDirectives = {};
@@ -20,9 +20,9 @@ export function toVdom(node) {
 	for (let i = 0; i < attributes.length; i++) {
 		const n = attributes[i].name;
 		if (n[0] === 'w' && n[1] === 'p' && n[2] === '-' && n[3]) {
-			if (n === 'wp-ignore') {
+			if (!full && n === 'wp-ignore') {
 				ignore = true;
-			} else if (n === 'wp-island') {
+			} else if (!full && n === 'wp-island') {
 				island = true;
 			} else {
 				hasWpDirectives = true;
@@ -41,12 +41,13 @@ export function toVdom(node) {
 		}
 	}
 
-	if (ignore && !island)
-		return h(node.localName, {
-			dangerouslySetInnerHTML: { __html: node.innerHTML },
-		});
-
-	if (island) hydratedIslands.add(node);
+	if (!full) {
+		if (ignore && !island)
+			return h(node.localName, {
+				dangerouslySetInnerHTML: { __html: node.innerHTML },
+			});
+		if (island) hydratedIslands.add(node);
+	}
 
 	if (hasWpDirectives) props.wp = wpDirectives;
 
@@ -57,7 +58,7 @@ export function toVdom(node) {
 			child.remove();
 			i--;
 		} else {
-			children.push(toVdom(child));
+			children.push(toVdom(child, full));
 		}
 	}
 

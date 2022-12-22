@@ -110,7 +110,7 @@ export const init = async () => {
 		document.querySelectorAll('[wp-island]').forEach((node) => {
 			if (!hydratedIslands.has(node)) {
 				const fragment = createRootFragment(node.parentNode, node);
-				const vdom = toVdom(node);
+				const vdom = toVdom(node, false);
 				hydrate(vdom, fragment);
 			}
 		});
