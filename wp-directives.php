@@ -155,41 +155,13 @@ add_filter(
 	9
 );
 
-add_action(
-	'init',
-	function () {
-		register_block_type( __DIR__ . '/build/blocks/isolated' );
-		register_block_type( __DIR__ . '/build/blocks/regular' );
-	}
-);
-
-add_filter(
-	'render_block_bhe/isolated',
-	function ( $content ) {
-		wp_enqueue_script(
-			'bhe/isolated',
-			plugin_dir_url( __FILE__ ) . 'build/blocks/isolated/view.js'
-		);
-		return $content;
-	}
-);
-add_filter(
-	'render_block_bhe/regular',
-	function ( $content ) {
-		wp_enqueue_script(
-			'bhe/regular',
-			plugin_dir_url( __FILE__ ) . 'build/blocks/regular/view.js'
-		);
-		return $content;
-	}
-);
-
 add_filter(
 	'render_block',
 	function ( $block_content, $block, $instance ) {
 		if ( wp_directives_get_client_side_transitions() ) {
 			return $block_content;
 		}
+
 		// Append the `wp-ignore` attribute for inner blocks of interactive blocks.
 		if ( isset( $instance->parsed_block['isolated'] ) ) {
 			$w = new WP_HTML_Tag_Processor( $block_content );

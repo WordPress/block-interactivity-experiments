@@ -7,8 +7,6 @@ module.exports = [
 		...defaultConfig,
 		entry: {
 			runtime: './src/runtime',
-			'blocks/isolated/view': './src/blocks/isolated/view',
-			'blocks/regular/view': './src/blocks/regular/view',
 			'e2e/tovdom': './e2e/tovdom',
 		},
 		output: {
