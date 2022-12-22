@@ -1,7 +1,7 @@
 import { join } from 'path';
 import { test, expect } from '@playwright/test';
 
-test.describe('toVdom', () => {
+test.describe('toVdom - isands', () => {
 	test.beforeEach(async ({ page }) => {
 		await page.goto('file://' + join(__dirname, 'tovdom-islands.html'));
 	});
