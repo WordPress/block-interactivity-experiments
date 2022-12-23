@@ -136,14 +136,12 @@ function wp_directives_get_client_side_transitions() {
 	return $client_side_transitions;
 }
 
-add_action(
-	'wp_head',
-	function () {
-		if ( wp_directives_get_client_side_transitions() ) {
-			echo '<meta itemprop="wp-client-side-transitions" content="active">';
-		}
+function wp_directives_add_client_side_transitions_meta_tag() {
+	if ( wp_directives_get_client_side_transitions() ) {
+		echo '<meta itemprop="wp-client-side-transitions" content="active">';
 	}
-);
+}
+add_action( 'wp_head', 'wp_directives_add_client_side_transitions_meta_tag' );
 
 function wp_directives_client_site_transitions_option() {
 	$options = get_option( 'wp_directives_plugin_settings' );
@@ -155,25 +153,23 @@ add_filter(
 	9
 );
 
-add_filter(
-	'render_block',
-	function ( $block_content, $block, $instance ) {
-		if ( wp_directives_get_client_side_transitions() ) {
-			return $block_content;
-		}
+function wp_directives_mark_interactive_blocks( $block_content, $block, $instance ) {
+	if ( wp_directives_get_client_side_transitions() ) {
+		return $block_content;
+	}
 
 		// Append the `wp-ignore` attribute for inner blocks of interactive blocks.
-		if ( isset( $instance->parsed_block['isolated'] ) ) {
-			$w = new WP_HTML_Tag_Processor( $block_content );
-			$w->next_tag();
-			$w->set_attribute( 'wp-ignore', '' );
-			$block_content = (string) $w;
-		}
+	if ( isset( $instance->parsed_block['isolated'] ) ) {
+		$w = new WP_HTML_Tag_Processor( $block_content );
+		$w->next_tag();
+		$w->set_attribute( 'wp-ignore', '' );
+		$block_content = (string) $w;
+	}
 
 		// Return if it's not interactive.
-		if ( ! block_has_support( $instance->block_type, array( 'interactivity' ) ) ) {
-			return $block_content;
-		}
+	if ( ! block_has_support( $instance->block_type, array( 'interactivity' ) ) ) {
+		return $block_content;
+	}
 
 		// Add the `wp-island` attribute if it's interactive.
 		$w = new WP_HTML_Tag_Processor( $block_content );
@@ -181,10 +177,8 @@ add_filter(
 		$w->set_attribute( 'wp-island', '' );
 
 		return (string) $w;
-	},
-	10,
-	3
-);
+}
+add_filter( 'render_block', 'wp_directives_mark_interactive_blocks', 10, 3 );
 
 /**
  * Add a flag to mark inner blocks of isolated interactive blocks.
