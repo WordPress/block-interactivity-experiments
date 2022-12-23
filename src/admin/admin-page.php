@@ -11,16 +11,16 @@ function wp_directives_register_menu() {
 }
 add_action( 'admin_menu', 'wp_directives_register_menu' );
 
-function wp_directives_render_admin_page() {?>
+function wp_directives_render_admin_page() {    ?>
 	<div class="wrap">
-		<h2>WP Directives</h2>
-		<form method="POST" action="options.php">
-			<?php
-				settings_fields( 'wp_directives_plugin_settings' );
-				do_settings_sections( 'wp_directives_plugin_page' );
+	  <h2>WP Directives</h2>
+	  <form method="POST" action="options.php">
+		  <?php
+			settings_fields( 'wp_directives_plugin_settings' );
+			do_settings_sections( 'wp_directives_plugin_page' );
 			?>
-			<?php submit_button(); ?>
-		</form>
+		  <?php submit_button(); ?>
+	  </form>
 	</div>
 	<?php
 }
@@ -67,13 +67,7 @@ function wp_directives_client_side_transitions_input() {
 	?>
 
 	<input type="checkbox" 
-		name="
-		<?php
-		echo esc_attr(
-			'wp_directives_plugin_settings[client_side_transitions]'
-		)
-		?>
-		" 
+		name="<?php echo esc_attr( 'wp_directives_plugin_settings[client_side_transitions]' ); ?>" 
 		<?php echo $options['client_side_transitions'] ? 'checked' : ''; ?>
 	>
 
