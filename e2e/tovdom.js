@@ -2,6 +2,7 @@ import wpx from '../src/runtime/wpx';
 
 wpx({
 	state: {
-		falseValue: false,
+		trueValue: () => true,
+		falseValue: () => false,
 	},
 });
