@@ -3,10 +3,10 @@ import { useSignalEffect } from '@preact/signals';
 import { directive } from './hooks';
 import { deepSignal } from './deepsignal';
 import { prefetch, navigate, hasClientSideTransitions } from './router';
-import { getCallback } from './utils';
 
+// Until useSignalEffects is fixed:
+// https://github.com/preactjs/signals/issues/228
 const raf = window.requestAnimationFrame;
-// Until useSignalEffects is fixed: https://github.com/preactjs/signals/issues/228
 const tick = () => new Promise((r) => raf(() => raf(r)));
 
 // Check if current page has client-side transitions enabled.
@@ -28,27 +28,25 @@ export default () => {
 		}
 	);
 
-	// wp-effect
+	// wp-effect:[name]
 	directive(
 		'effect',
-		({ directives: { effect }, element, context: mainContext }) => {
-			const context = useContext(mainContext);
-			Object.values(effect).forEach((callback) => {
+		({ directives: { effect }, element: { ref }, context, evaluate }) => {
+			const contextValue = useContext(context);
+			Object.values(effect).forEach((path) => {
 				useSignalEffect(() => {
-					const cb = getCallback(callback);
-					cb({ context, tick, ref: element.ref.current });
+					evaluate(path, { context: contextValue, ref: ref.current });
 				});
 			});
 		}
 	);
 
 	// wp-on:[event]
-	directive('on', ({ directives: { on }, element, context: mainContext }) => {
-		const context = useContext(mainContext);
-		Object.entries(on).forEach(([name, callback]) => {
+	directive('on', ({ directives: { on }, element, evaluate, context }) => {
+		const contextValue = useContext(context);
+		Object.entries(on).forEach(([name, path]) => {
 			element.props[`on${name}`] = (event) => {
-				const cb = getCallback(callback);
-				cb({ context, event });
+				evaluate(path, { event, context: contextValue });
 			};
 		});
 	});
@@ -56,17 +54,15 @@ export default () => {
 	// wp-class:[classname]
 	directive(
 		'class',
-		({
-			directives: { class: className },
-			element,
-			context: mainContext,
-		}) => {
-			const context = useContext(mainContext);
+		({ directives: { class: className }, element, evaluate, context }) => {
+			const contextValue = useContext(context);
 			Object.keys(className)
 				.filter((n) => n !== 'default')
 				.forEach((name) => {
-					const cb = getCallback(className[name]);
-					const result = cb({ context });
+					const result = evaluate(className[name], {
+						className: name,
+						context: contextValue,
+					});
 					if (!result)
 						element.props.class = element.props.class.replace(
 							new RegExp(`(^|\\s)${name}(\\s|$)`, 'g'),
@@ -80,9 +76,9 @@ export default () => {
 						element.props.class += ` ${name}`;
 
 					useEffect(() => {
-						// This seems necessary because Preact doesn't seem to change the
-						// classes on the hydration, so we have to do it manually. It only
-						// needs to be done the first time, so it doesn't need deps.
+						// This seems necessary because Preact doesn't change the class names
+						// on the hydration, so we have to do it manually. It doesn't need
+						// deps because it only needs to do it the first time.
 						if (!result) {
 							element.ref.current.classList.remove(name);
 						} else {
@@ -96,18 +92,19 @@ export default () => {
 	// wp-bind:[attribute]
 	directive(
 		'bind',
-		({ directives: { bind }, element, context: mainContext }) => {
-			const context = useContext(mainContext);
+		({ directives: { bind }, element, context, evaluate }) => {
+			const contextValue = useContext(context);
 			Object.entries(bind)
 				.filter((n) => n !== 'default')
-				.forEach(([attribute, callback]) => {
-					const cb = getCallback(callback);
-					element.props[attribute] = cb({ context });
+				.forEach(([attribute, path]) => {
+					element.props[attribute] = evaluate(path, {
+						context: contextValue,
+					});
 				});
 		}
 	);
 
-	// The `wp-link` directive.
+	// wp-link
 	directive(
 		'link',
 		({

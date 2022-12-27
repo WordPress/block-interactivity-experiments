@@ -65,10 +65,3 @@ export const deepMerge = (target, source) => {
 		}
 	}
 };
-
-// Get callback.
-export const getCallback = (path) => {
-	let current = window.wpx;
-	path.split('.').forEach((p) => (current = current[p]));
-	return current;
-};

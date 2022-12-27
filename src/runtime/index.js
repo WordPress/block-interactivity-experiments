@@ -1,6 +1,7 @@
 import registerDirectives from './directives';
 import registerComponents from './components';
 import { init } from './router';
+export { wpx } from './hooks';
 
 /**
  * Initialize the initial vDOM.

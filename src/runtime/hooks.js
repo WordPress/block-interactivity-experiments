@@ -1,7 +1,18 @@
 import { h, options, createContext } from 'preact';
-import { useRef } from 'preact/hooks';
+import { useRef, useContext, useCallback } from 'preact/hooks';
+import { deepSignal } from './deepsignal';
+import { deepMerge } from './utils';
 
-// Main context
+// wpx.
+const rawState = {};
+const store = { state: deepSignal(rawState) };
+if (typeof window !== 'undefined') window.wpx = store;
+export const wpx = ({ state, ...block }) => {
+	deepMerge(store, block);
+	deepMerge(rawState, state);
+};
+
+// Main context.
 const context = createContext({});
 
 // WordPress Directives.
@@ -16,12 +27,27 @@ export const component = (name, Comp) => {
 	components[name] = Comp;
 };
 
+// Resolve the path to some property of the wpx object.
+const resolve = (path) => {
+	let current = store;
+	path.split('.').forEach((p) => (current = current[p]));
+	return current;
+};
+
+// Evaluate the resolved path.
+const evaluate = (path, extraArgs = {}) => {
+	const value = resolve(path);
+	return typeof value === 'function'
+		? value({ state: store.state, ...extraArgs })
+		: value;
+};
+
 // Directive wrapper.
 const WpDirective = ({ type, wp, props: originalProps }) => {
 	const ref = useRef(null);
 	const element = h(type, { ...originalProps, ref, _wrapped: true });
 	const props = { ...originalProps, children: element };
-	const directiveArgs = { directives: wp, props, element, context };
+	const directiveArgs = { directives: wp, props, element, context, evaluate };
 
 	for (const d in wp) {
 		const wrapper = directives[d]?.(directiveArgs);
@@ -40,7 +66,7 @@ options.vnode = (vnode) => {
 	if (typeof type === 'string' && type.startsWith('wp-')) {
 		vnode.props.children = h(
 			components[type],
-			{ ...vnode.props, context },
+			{ ...vnode.props, context, evaluate },
 			vnode.props.children
 		);
 	} else if (wp) {

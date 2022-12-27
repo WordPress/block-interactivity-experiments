@@ -1,8 +1,8 @@
-import wpx from '../src/runtime/wpx';
+import { wpx } from '../src/runtime';
 
 wpx({
 	state: {
-		trueValue: () => true,
-		falseValue: () => false,
+		trueValue: true,
+		falseValue: false,
 	},
 });
