@@ -28,15 +28,15 @@ export const component = (name, Comp) => {
 };
 
 // Resolve the path to some property of the wpx object.
-const resolve = (path) => {
-	let current = store;
+const resolve = (path, context) => {
+	let current = { ...store, context };
 	path.split('.').forEach((p) => (current = current[p]));
 	return current;
 };
 
 // Evaluate the resolved path.
 const evaluate = (path, extraArgs = {}) => {
-	const value = resolve(path);
+	const value = resolve(path, extraArgs.context);
 	return typeof value === 'function'
 		? value({ state: store.state, ...extraArgs })
 		: value;
