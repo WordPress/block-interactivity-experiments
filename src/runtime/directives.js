@@ -67,9 +67,28 @@ export default () => {
 				.forEach((name) => {
 					const cb = getCallback(className[name]);
 					const result = cb({ context });
-					if (!result) element.props.class.replace(name, '');
-					else if (!element.props.class.includes(name))
+					if (!result)
+						element.props.class = element.props.class.replace(
+							new RegExp(`(^|\\s)${name}(\\s|$)`, 'g'),
+							''
+						);
+					else if (
+						!new RegExp(
+							`(^|\\s)${element.props.class}(\\s|$)`
+						).test(name)
+					)
 						element.props.class += ` ${name}`;
+
+					useEffect(() => {
+						// This seems necessary because Preact doesn't seem to change the
+						// classes on the hydration, so we have to do it manually. It only
+						// needs to be done the first time, so it doesn't need deps.
+						if (!result) {
+							element.ref.current.classList.remove(name);
+						} else {
+							element.ref.current.classList.add(name);
+						}
+					}, []);
 				});
 		}
 	);
