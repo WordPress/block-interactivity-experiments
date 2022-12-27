@@ -15,7 +15,7 @@ test.describe('Directives', () => {
 			const el = page.getByTestId(
 				'removes class if callback returns falsy value'
 			);
-			await expect(el).not.toHaveClass('foo');
+			await expect(el).toHaveClass('bar');
 		});
 
 		test('add class if callback returns truthy value', async ({ page }) => {
@@ -23,6 +23,18 @@ test.describe('Directives', () => {
 				'add class if callback returns truthy value'
 			);
 			await expect(el).toHaveClass('foo bar');
+		});
+
+		test('handles multiple classes and callbacks', async ({ page }) => {
+			const el = page.getByTestId(
+				'handles multiple classes and callbacks'
+			);
+			await expect(el).toHaveClass('bar baz');
+		});
+
+		test('passes context to callback', async ({ page }) => {
+			const el = page.getByTestId('passes context to callback');
+			await expect(el).toHaveClass('');
 		});
 	});
 });

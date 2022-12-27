@@ -17,6 +17,22 @@
 			data-testid="add class if callback returns truthy value"
 		></div>
 
+		<div
+			class="foo bar"
+			wp-class:foo="state.falseValue"
+			wp-class:bar="state.trueValue"
+			wp-class:baz="state.trueValue"
+			data-testid="handles multiple classes and callbacks"
+		></div>
+
+		<wp-context data='{ "falseValue": false }'>
+			<div
+				class="foo"
+				wp-class:foo="context.falseValue"
+				data-testid="passes context to callback"
+			></div>
+		</wp-context>
+
 		<script src="../build/e2e/tovdom.js"></script>
 		<script src="../build/runtime.js"></script>
 		<script src="../build/vendors.js"></script>
