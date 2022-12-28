@@ -1,4 +1,4 @@
-import { wpx } from '../src/runtime';
+import { wpx } from '../src/runtime/wpx';
 
 wpx({
 	state: {

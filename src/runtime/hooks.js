@@ -1,16 +1,6 @@
 import { h, options, createContext } from 'preact';
 import { useRef } from 'preact/hooks';
-import { deepSignal } from './deepsignal';
-import { deepMerge } from './utils';
-
-// wpx.
-const rawState = {};
-const store = { state: deepSignal(rawState) };
-if (typeof window !== 'undefined') window.wpx = store;
-export const wpx = ({ state, ...block }) => {
-	deepMerge(store, block);
-	deepMerge(rawState, state);
-};
+import { store } from './wpx';
 
 // Main context.
 const context = createContext({});
