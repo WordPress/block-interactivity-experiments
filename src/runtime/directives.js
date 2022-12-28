@@ -64,14 +64,16 @@ export default () => {
 						context: contextValue,
 					});
 					if (!result)
-						element.props.class = element.props.class.replace(
-							new RegExp(`(^|\\s)${name}(\\s|$)`, 'g'),
-							''
-						);
+						element.props.class = element.props.class
+							.replace(
+								new RegExp(`(^|\\s)${name}(\\s|$)`, 'g'),
+								' '
+							)
+							.trim();
 					else if (
-						!new RegExp(
-							`(^|\\s)${element.props.class}(\\s|$)`
-						).test(name)
+						!new RegExp(`(^|\\s)${name}(\\s|$)`).test(
+							element.props.class
+						)
 					)
 						element.props.class += ` ${name}`;
 
