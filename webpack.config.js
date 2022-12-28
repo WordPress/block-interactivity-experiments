@@ -7,7 +7,7 @@ module.exports = [
 		...defaultConfig,
 		entry: {
 			runtime: './src/runtime',
-			'e2e/tovdom': './e2e/tovdom',
+			'e2e/wpx': './e2e/wpx',
 		},
 		output: {
 			filename: '[name].js',

@@ -29,11 +29,31 @@
 			<div
 				class="foo"
 				wp-class:foo="context.falseValue"
-				data-testid="passes context to callback"
+				data-testid="use context values"
 			></div>
 		</wp-context>
 
-		<script src="../build/e2e/tovdom.js"></script>
+		<div
+			class="foo bar baz"
+			wp-class:bar="state.trueValue"
+			data-testid="toggled class in the middle"
+		></div>
+
+		<button
+			wp-on:click="actions.toggleTrueValue"
+			data-testid="toggle trueValue"
+		>
+			Toggle trueValue
+		</button>
+
+		<button
+			wp-on:click="actions.toggleFalseValue"
+			data-testid="toggle falseValue"
+		>
+			Toggle falseValue
+		</button>
+
+		<script src="../build/e2e/wpx.js"></script>
 		<script src="../build/runtime.js"></script>
 		<script src="../build/vendors.js"></script>
 	</body>

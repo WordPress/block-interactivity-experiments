@@ -32,9 +32,18 @@ test.describe('Directives', () => {
 			await expect(el).toHaveClass('bar baz');
 		});
 
-		test('passes context to callback', async ({ page }) => {
-			const el = page.getByTestId('passes context to callback');
+		test('use context values', async ({ page }) => {
+			const el = page.getByTestId('use context values');
 			await expect(el).toHaveClass('');
+		});
+
+		test('toggled class in the middle', async ({ page }) => {
+			const el = page.getByTestId('toggled class in the middle');
+			await expect(el).toHaveClass('foo bar baz');
+			page.getByTestId('toggle trueValue').click();
+			await expect(el).toHaveClass('foo baz');
+			page.getByTestId('toggle trueValue').click();
+			await expect(el).toHaveClass('foo bar baz');
 		});
 	});
 });
