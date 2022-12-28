@@ -12,5 +12,8 @@ wpx({
 		toggleFalseValue: ({ state }) => {
 			state.falseValue = !state.falseValue;
 		},
+		toggleContextFalseValue: ({ context }) => {
+			context.falseValue = !context.falseValue;
+		},
 	},
 });

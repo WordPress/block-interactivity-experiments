@@ -5,10 +5,24 @@
 		<meta itemprop="wp-client-side-transitions" content="active" />
 	</head>
 	<body>
+		<button
+			wp-on:click="actions.toggleTrueValue"
+			data-testid="toggle trueValue"
+		>
+			Toggle trueValue
+		</button>
+
+		<button
+			wp-on:click="actions.toggleFalseValue"
+			data-testid="toggle falseValue"
+		>
+			Toggle falseValue
+		</button>
+
 		<div
 			class="foo bar"
 			wp-class:foo="state.falseValue"
-			data-testid="removes class if callback returns falsy value"
+			data-testid="remove class if callback returns falsy value"
 		></div>
 
 		<div
@@ -25,33 +39,25 @@
 			data-testid="handles multiple classes and callbacks"
 		></div>
 
+		<div
+			class="foo bar baz"
+			wp-class:bar="state.trueValue"
+			data-testid="can toggle class in the middle"
+		></div>
+
 		<wp-context data='{ "falseValue": false }'>
 			<div
 				class="foo"
 				wp-class:foo="context.falseValue"
-				data-testid="use context values"
+				data-testid="can use context values"
 			></div>
+			<button
+				wp-on:click="actions.toggleContextFalseValue"
+				data-testid="toggle context false value"
+			>
+				Toggle context falseValue
+			</button>
 		</wp-context>
-
-		<div
-			class="foo bar baz"
-			wp-class:bar="state.trueValue"
-			data-testid="toggled class in the middle"
-		></div>
-
-		<button
-			wp-on:click="actions.toggleTrueValue"
-			data-testid="toggle trueValue"
-		>
-			Toggle trueValue
-		</button>
-
-		<button
-			wp-on:click="actions.toggleFalseValue"
-			data-testid="toggle falseValue"
-		>
-			Toggle falseValue
-		</button>
 
 		<script src="../build/e2e/wpx.js"></script>
 		<script src="../build/runtime.js"></script>
