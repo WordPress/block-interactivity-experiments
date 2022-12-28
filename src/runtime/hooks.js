@@ -1,5 +1,5 @@
 import { h, options, createContext } from 'preact';
-import { useRef, useContext, useCallback } from 'preact/hooks';
+import { useRef } from 'preact/hooks';
 import { deepSignal } from './deepsignal';
 import { deepMerge } from './utils';
 
@@ -34,19 +34,26 @@ const resolve = (path, context) => {
 	return current;
 };
 
-// Evaluate the resolved path.
-const evaluate = (path, extraArgs = {}) => {
-	const value = resolve(path, extraArgs.context);
-	return typeof value === 'function'
-		? value({ state: store.state, ...extraArgs })
-		: value;
-};
+// Generate the evaluate function.
+const getEvaluate =
+	({ ref } = {}) =>
+	(path, extraArgs = {}) => {
+		const value = resolve(path, extraArgs.context);
+		return typeof value === 'function'
+			? value({
+					state: store.state,
+					...(ref !== undefined ? { ref } : {}),
+					...extraArgs,
+			  })
+			: value;
+	};
 
 // Directive wrapper.
 const WpDirective = ({ type, wp, props: originalProps }) => {
 	const ref = useRef(null);
 	const element = h(type, { ...originalProps, ref, _wrapped: true });
 	const props = { ...originalProps, children: element };
+	const evaluate = getEvaluate({ ref: ref.current });
 	const directiveArgs = { directives: wp, props, element, context, evaluate };
 
 	for (const d in wp) {
@@ -66,7 +73,7 @@ options.vnode = (vnode) => {
 	if (typeof type === 'string' && type.startsWith('wp-')) {
 		vnode.props.children = h(
 			components[type],
-			{ ...vnode.props, context, evaluate },
+			{ ...vnode.props, context, evaluate: getEvaluate() },
 			vnode.props.children
 		);
 	} else if (wp) {

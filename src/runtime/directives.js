@@ -29,17 +29,14 @@ export default () => {
 	);
 
 	// wp-effect:[name]
-	directive(
-		'effect',
-		({ directives: { effect }, element: { ref }, context, evaluate }) => {
-			const contextValue = useContext(context);
-			Object.values(effect).forEach((path) => {
-				useSignalEffect(() => {
-					evaluate(path, { context: contextValue, ref: ref.current });
-				});
+	directive('effect', ({ directives: { effect }, context, evaluate }) => {
+		const contextValue = useContext(context);
+		Object.values(effect).forEach((path) => {
+			useSignalEffect(() => {
+				evaluate(path, { context: contextValue });
 			});
-		}
-	);
+		});
+	});
 
 	// wp-on:[event]
 	directive('on', ({ directives: { on }, element, evaluate, context }) => {
