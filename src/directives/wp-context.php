@@ -3,9 +3,9 @@
 class WP_Directive_Context {
 	protected $stack = array( array() );
 
-    function __construct( $context = array() ) {
+	function __construct( $context = array() ) {
 		$this->set_context( $context );
-    }
+	}
 
 	public function get_context() {
 		return end( $this->stack );
