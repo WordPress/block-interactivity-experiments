@@ -33,6 +33,23 @@ class Tests_Directives_WpClass extends WP_UnitTestCase {
 	}
 
 	public function test_directive_removes_class() {
+		$markup = '<div wp-class:blue="context.myblock.isBlue" class="red blue">Test</div>';
+		$tags = new WP_HTML_Tag_Processor( $markup );
+		$tags->next_tag();
+
+		$context_before = new WP_Directive_Context( array( 'myblock' => array( 'isBlue' => false ) ) );
+		$context = $context_before;
+		process_wp_class( $tags, $context );
+
+		$this->assertSame(
+			'<div wp-class:blue="context.myblock.isBlue" class="red">Test</div>',
+			$tags->get_updated_html()
+		);
+		// $this->assertSame( './wordpress.png', $tags->get_attribute( 'src' ) ); // FIXME: Broken; will be fixed by https://github.com/WordPress/gutenberg/pull/46598.
+		$this->assertSame( $context_before->get_context(), $context->get_context(), 'wp-class directive changed context' );
+	}
+
+	public function test_directive_removes_empty_class_attribute() {
 		$markup = '<div wp-class:blue="context.myblock.isBlue" class="blue">Test</div>';
 		$tags = new WP_HTML_Tag_Processor( $markup );
 		$tags->next_tag();
