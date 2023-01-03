@@ -10,10 +10,6 @@
  * Text Domain:       wp-directives
  */
 
-require_once __DIR__ . '/src/html/index.php';
-
-require_once __DIR__ . '/src/directives/wp-context.php';
-
 // Check if Gutenberg plugin is active.
 if ( ! function_exists( 'is_plugin_active' ) ) {
 	include_once ABSPATH . 'wp-admin/includes/plugin.php';
@@ -38,6 +34,10 @@ if ( ! is_plugin_active( 'gutenberg/gutenberg.php' ) ) {
 	deactivate_plugins( plugin_basename( __FILE__ ) );
 	return;
 }
+
+require_once __DIR__ . '/../gutenberg/lib/experimental/html/index.php';
+
+require_once __DIR__ . '/src/directives/wp-context.php';
 
 function wp_directives_loader() {
 	// Load the Admin page.

@@ -5,7 +5,7 @@
 
 require_once __DIR__ . '/../../src/directives/wp-context.php';
 
-require_once __DIR__ . '/../../src/html/index.php';
+require_once __DIR__ . '/../../../gutenberg/lib/experimental/html/index.php';
 
 /**
  * Tests for the wp-context directive.
