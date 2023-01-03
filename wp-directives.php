@@ -218,7 +218,7 @@ function wp_process_directives( $block_content, $block, $instance ) {
 		} else {
 			// Components can't have directives (unless we change our mind about this).
 			foreach ( $directives as $directive => $directive_processor ) {
-				$attributes = $tags->get_attributes_by_prefix( $directive );
+				$attributes = $tags->get_attribute_names_with_prefix( $directive );
 				if ( empty( $attributes ) ) {
 					continue;
 				}
