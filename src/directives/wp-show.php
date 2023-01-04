@@ -2,7 +2,7 @@
 
 require_once __DIR__ . '/utils.php';
 
-function process_wp_show( &$tags, &$context ) {
+function process_wp_show( $tags, $context ) {
 	if ( $tags->is_tag_closer() ) {
 		return;
 	}
