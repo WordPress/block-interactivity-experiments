@@ -214,7 +214,7 @@ function wp_process_directives( $block_content, $block, $instance ) {
 	while ( $tags->next_tag( array( 'tag_closers' => 'visit' ) ) ) {
 		$tag_name = strtolower( $tags->get_tag() );
 		if ( array_key_exists( $tag_name, $directives ) ) {
-			call_user_func_array( $directives[ $tag_name ], array( &$tags, &$context ) );
+			call_user_func_array( $directives[ $tag_name ], array( $tags, $context ) );
 		} else {
 			// Components can't have directives (unless we change our mind about this).
 			foreach ( $directives as $directive => $directive_processor ) {
@@ -223,7 +223,7 @@ function wp_process_directives( $block_content, $block, $instance ) {
 					continue;
 				}
 
-				call_user_func_array( $directive_processor, array( &$tags, &$context ) );
+				call_user_func_array( $directive_processor, array( $tags, $context ) );
 			}
 		}
 	}
