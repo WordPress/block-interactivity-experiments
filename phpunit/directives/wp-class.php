@@ -28,7 +28,7 @@ class Tests_Directives_WpClass extends WP_UnitTestCase {
 			'<div wp-class:red="context.myblock.isRed" class="blue red">Test</div>',
 			$tags->get_updated_html()
 		);
-		// $this->assertContains( 'red', $tags->get_attribute( 'class' ) ); // FIXME: Broken; will be fixed by https://github.com/WordPress/gutenberg/pull/46598.
+		$this->assertStringContainsString( 'red', $tags->get_attribute( 'class' ) );
 		$this->assertSame( $context_before->get_context(), $context->get_context(), 'wp-class directive changed context' );
 	}
 
@@ -45,7 +45,7 @@ class Tests_Directives_WpClass extends WP_UnitTestCase {
 			'<div wp-class:blue="context.myblock.isBlue" class="red">Test</div>',
 			$tags->get_updated_html()
 		);
-		// $this->assertDoesNotContain( 'blue', $tags->get_attribute( 'class' ) ); // FIXME: Broken; will be fixed by https://github.com/WordPress/gutenberg/pull/46598.
+		$this->assertStringNotContainsString( 'blue', $tags->get_attribute( 'class' ) );
 		$this->assertSame( $context_before->get_context(), $context->get_context(), 'wp-class directive changed context' );
 	}
 
@@ -63,7 +63,7 @@ class Tests_Directives_WpClass extends WP_UnitTestCase {
 			'<div wp-class:blue="context.myblock.isBlue" >Test</div>',
 			$tags->get_updated_html()
 		);
-		// $this->assertNull( $tags->get_attribute( 'class' ) ); // FIXME: Broken; will be fixed by https://github.com/WordPress/gutenberg/pull/46598.
+		$this->assertNull( $tags->get_attribute( 'class' ) );
 		$this->assertSame( $context_before->get_context(), $context->get_context(), 'wp-class directive changed context' );
 	}
 
@@ -80,7 +80,7 @@ class Tests_Directives_WpClass extends WP_UnitTestCase {
 			'<div wp-class:blue="context.myblock.isBlue" class="green red">Test</div>',
 			$tags->get_updated_html()
 		);
-		// $this->assertSame( 'green red', $tags->get_attribute( 'class' ) ); // FIXME: Broken; will be fixed by https://github.com/WordPress/gutenberg/pull/46598.
+		$this->assertSame( 'green red', $tags->get_attribute( 'class' ) );
 		$this->assertSame( $context_before->get_context(), $context->get_context(), 'wp-class directive changed context' );
 	}
 }

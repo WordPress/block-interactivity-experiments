@@ -28,7 +28,7 @@ class Tests_Directives_WpStyle extends WP_UnitTestCase {
 			'<div wp-style:color="context.myblock.color" style="background: blue;color: green;">Test</div>',
 			$tags->get_updated_html()
 		);
-		// $this->assertContains( 'red', $tags->get_attribute( 'class' ) ); // FIXME: Broken; will be fixed by https://github.com/WordPress/gutenberg/pull/46598.
+		$this->assertStringContainsString( 'color: green;', $tags->get_attribute( 'style' ) );
 		$this->assertSame( $context_before->get_context(), $context->get_context(), 'wp-style directive changed context' );
 	}
 }
