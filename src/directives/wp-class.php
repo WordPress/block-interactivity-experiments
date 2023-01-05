@@ -17,7 +17,7 @@ function process_wp_class( $tags, $context ) {
 		$class_name = $attr_parts[1];
 
 		// TODO: Properly parse $value.
-		$expr  = $tags->get_attribute( $attr );
+		$expr      = $tags->get_attribute( $attr );
 		$add_class = get_from_context( $expr, $context->get_context() );
 		if ( $add_class ) {
 			$tags->add_class( $class_name );
