@@ -40,6 +40,13 @@
 		></div>
 
 		<div
+			class="foo foo-bar"
+			wp-class:foo="state.falseValue"
+			wp-class:foo-bar="state.trueValue"
+			data-testid="handles class names that are contained inside other class names"
+		></div>
+
+		<div
 			class="foo bar baz"
 			wp-class:bar="state.trueValue"
 			data-testid="can toggle class in the middle"

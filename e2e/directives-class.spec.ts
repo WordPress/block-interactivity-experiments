@@ -41,6 +41,19 @@ test.describe('wp-class', () => {
 		await expect(el).toHaveClass('foo');
 	});
 
+	test('handles class names that are contained inside other class names', async ({
+		page,
+	}) => {
+		const el = page.getByTestId(
+			'handles class names that are contained inside other class names'
+		);
+		await expect(el).toHaveClass('foo-bar');
+		page.getByTestId('toggle falseValue').click();
+		await expect(el).toHaveClass('foo foo-bar');
+		page.getByTestId('toggle trueValue').click();
+		await expect(el).toHaveClass('foo');
+	});
+
 	test('can toggle class in the middle', async ({ page }) => {
 		const el = page.getByTestId('can toggle class in the middle');
 		await expect(el).toHaveClass('foo bar baz');
