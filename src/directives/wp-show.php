@@ -10,7 +10,7 @@ function process_wp_show( $tags, $context ) {
 	if ( 'WP-SHOW' === $tags->get_tag() ) {
 		$value = $tags->get_attribute( 'when' );
 	} else {
-		$value = $tags->get_attribute( 'wp-data' );
+		$value = $tags->get_attribute( 'wp-show' );
 	}
 
 	if ( null === $value ) {
