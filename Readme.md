@@ -20,10 +20,10 @@ _It's not a goal to do an in-depth analysis of the patterns, only to experiment 
 
   This hydration method is based on custom elements (`<wp-block>`) that hydrates isolated islands. It interconnects those islands through synchronized bridges for APIs like `context`, `Suspense` or `ErrorBoundary`.
 
-- ⚛️ **Full vDOM Hydration**
+- ⚛️ **Directives Hydration**
 
-  - Main branch: `main-full-vdom-hydration`
-  - Tracking Issue: [Tracking issue: Full vDOM Hydration ⚛](https://github.com/WordPress/block-hydration-experiments/issues/64)
+  - Main branch: `main-directives-hydration`
+  - Tracking Issue: [Tracking issue: Directives Hydration ⚛](https://github.com/WordPress/block-hydration-experiments/issues/64)
 
   This hydration method is based on the creation of a static virtual DOM from the root, where only the interactive islands are replaced by P/React components. It behaves like a single P/React application.
 
