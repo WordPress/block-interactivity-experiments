@@ -1,5 +1,5 @@
 import { useMemo, useContext } from 'preact/hooks';
-import { deepSignal } from './deepsignal';
+import { deepSignal } from 'deepsignal';
 import { component } from './hooks';
 
 export default () => {

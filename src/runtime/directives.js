@@ -1,7 +1,7 @@
 import { useContext, useMemo, useEffect } from 'preact/hooks';
 import { useSignalEffect } from '@preact/signals';
+import { deepSignal } from 'deepsignal';
 import { directive } from './hooks';
-import { deepSignal } from './deepsignal';
 import { prefetch, navigate, hasClientSideTransitions } from './router';
 
 // Until useSignalEffects is fixed:
