@@ -84,4 +84,18 @@ class Tests_Directives_WpClass extends WP_UnitTestCase {
 		$this->assertSame( 'green red', $tags->get_attribute( 'class' ) );
 		$this->assertSame( $context_before->get_context(), $context->get_context(), 'wp-class directive changed context' );
 	}
+
+	public function test_directive_ignores_empty_class_name() {
+		$markup = '<div wp-class:="context.myblock.isRed" class="blue">Test</div>';
+		$tags = new WP_HTML_Tag_Processor( $markup );
+		$tags->next_tag();
+
+		$context_before = new WP_Directive_Context( array( 'myblock' => array( 'isRed' => true ) ) );
+		$context = $context_before;
+		process_wp_class( $tags, $context );
+
+		$this->assertSame( $markup, $tags->get_updated_html() );
+		$this->assertStringNotContainsString( 'red', $tags->get_attribute( 'class' ) );
+		$this->assertSame( $context_before->get_context(), $context->get_context(), 'wp-class directive changed context' );
+	}
 }
