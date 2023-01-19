@@ -8,6 +8,8 @@
 		"build": "webpack --mode=production",
 		"start": "webpack --mode=development --watch",
 		"dev": "npm start",
+		"format:php": "wp-env run composer run-script format",
+		"lint:php": "wp-env run composer run-script lint",
 		"test": "jest",
 		"test:watch": "jest --watch",
 		"plugin-zip": "wp-scripts plugin-zip",
@@ -29,17 +31,19 @@
 		"@babel/core": "^7.17.10",
 		"@babel/preset-env": "^7.17.10",
 		"@faker-js/faker": "^7.6.0",
+		"@playwright/test": "^1.29.0",
 		"@prettier/plugin-php": "^0.18.9",
 		"@types/jest": "^27.5.1",
 		"@wordpress/env": "^4.4.0",
 		"@wordpress/scripts": "^24.3.0",
 		"babel-jest": "^28.1.0",
+		"deep-object-diff": "^1.1.9",
 		"jest": "^28.1.0",
 		"prettier": "^2.7.1"
 	},
 	"dependencies": {
 		"@preact/signals": "^1.1.2",
-		"deep-object-diff": "^1.1.9",
+		"deepsignal": "^1.1.0",
 		"hpq": "^1.3.0",
 		"preact": "^10.10.6"
 	}

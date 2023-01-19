@@ -1,5 +1,5 @@
 import { hydrate, render } from 'preact';
-import { toVdomArray, toVdomTreeWalker } from './vdom';
+import { toVdomArray, toVdomTreeWalker, hydratedIslands } from './vdom';
 import { createRootFragment } from './utils';
 import { diff } from 'deep-object-diff';
 
@@ -129,10 +129,27 @@ export const init = async () => {
 	console.log(`hydrated in ${t5 - t4} ms`);
 
 	if (hasClientSideTransitions(document.head)) {
+		// Create the root fragment to hydrate everything.
+		rootFragment = createRootFragment(
+			document.documentElement,
+			document.body
+		);
+
+		const body = toVdom(document.body);
+		hydrate(body, rootFragment);
+
 		const head = await fetchHead(document.head);
 		pages.set(
 			cleanUrl(window.location),
 			Promise.resolve({ body: vdom1, head })
 		);
+	} else {
+		document.querySelectorAll('[wp-island]').forEach((node) => {
+			if (!hydratedIslands.has(node)) {
+				const fragment = createRootFragment(node.parentNode, node);
+				const vdom = toVdom(node);
+				hydrate(vdom, fragment);
+			}
+		});
 	}
 };

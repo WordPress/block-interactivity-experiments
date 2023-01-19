@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>toVdom - islands</title>
+	</head>
+	<body>
+		<div>
+			<wp-show when="state.falseValue">
+				<span data-testid="not inside an island">
+					This should be shown because it is inside an island.
+				</span>
+			</wp-show>
+
+			<div wp-island>
+				<wp-show when="state.falseValue">
+					<span data-testid="inside an island">
+						This should not be shown because it is inside an island.
+					</span>
+				</wp-show>
+			</div>
+
+			<div wp-island>
+				<div wp-ignore>
+					<wp-show when="state.falseValue">
+						<span
+							data-testid="inside an inner block of an isolated island"
+						>
+							This should be shown because it is inside an inner
+							block of an isolated island.
+						</span>
+					</wp-show>
+				</div>
+			</div>
+
+			<div wp-island>
+				<div wp-island>
+					<wp-show
+						when="state.falseValue"
+						data-testid="island inside another island"
+					>
+						<span>
+							This should not have two template wrappers because
+							that means we hydrated twice.
+						</span>
+					</wp-show>
+				</div>
+			</div>
+
+			<div wp-island>
+				<div>
+					<div wp-island wp-ignore>
+						<wp-show when="state.falseValue">
+							<span
+								data-testid="island inside inner block of isolated island"
+							>
+								This should not be shown because even though it
+								is inside an inner block of an isolated island,
+								it's inside an new island.
+							</span>
+						</wp-show>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<script src="../build/e2e/wpx.js"></script>
+		<script src="../build/runtime.js"></script>
+		<script src="../build/vendors.js"></script>
+	</body>
+</html>
