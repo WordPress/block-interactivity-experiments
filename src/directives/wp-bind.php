@@ -7,6 +7,14 @@ function process_wp_bind( $tags, $context ) {
 		return;
 	}
 
+	/**
+	 * A `wp-bind` *tag* doesn't really make sense.
+	 * What would be the point of e.g. `<wp-bind:src="image.png">?
+	 */
+	if ( 'WP-BIND' === $tags->get_tag() ) {
+		return;
+	}
+
 	$prefixed_attributes = $tags->get_attribute_names_with_prefix( 'wp-bind:' );
 
 	foreach ( $prefixed_attributes as $attr ) {
