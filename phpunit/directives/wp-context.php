@@ -20,7 +20,7 @@ class Tests_Directives_WpContext extends WP_UnitTestCase {
 		$context = new WP_Directive_Context(
 			array(
 				'myblock'    => array( 'open' => false ),
-				'otherblock' => array( 'somekey' => 'somevalue' )
+				'otherblock' => array( 'somekey' => 'somevalue' ),
 			)
 		);
 
@@ -64,7 +64,7 @@ class Tests_Directives_WpContext extends WP_UnitTestCase {
 		$context = new WP_Directive_Context(
 			array(
 				'myblock'    => array( 'open' => false ),
-				'otherblock' => array( 'somekey' => 'somevalue' )
+				'otherblock' => array( 'somekey' => 'somevalue' ),
 			)
 		);
 
