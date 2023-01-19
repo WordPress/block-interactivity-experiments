@@ -37,7 +37,6 @@
 		"@wordpress/env": "^4.4.0",
 		"@wordpress/scripts": "^24.3.0",
 		"babel-jest": "^28.1.0",
-		"deep-object-diff": "^1.1.9",
 		"jest": "^28.1.0",
 		"prettier": "^2.7.1"
 	},
