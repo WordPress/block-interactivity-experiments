@@ -16,7 +16,7 @@ require_once __DIR__ . '/../../../gutenberg/lib/experimental/html/index.php';
  * @covers process_wp_bind
  */
 class Tests_Directives_WpBind extends WP_UnitTestCase {
-	public function test_directive() {
+	public function test_directive_sets_attribute() {
 		$markup = '<img wp-bind:src="context.myblock.imageSource" />';
 		$tags = new WP_HTML_Tag_Processor( $markup );
 		$tags->next_tag();
