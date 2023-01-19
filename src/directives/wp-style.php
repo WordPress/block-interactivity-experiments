@@ -10,11 +10,10 @@ function process_wp_style( $tags, $context ) {
 	$prefixed_attributes = $tags->get_attribute_names_with_prefix( 'wp-style:' );
 
 	foreach ( $prefixed_attributes as $attr ) {
-		$attr_parts = explode( ':', $attr );
-		if ( count( $attr_parts ) < 2 ) {
+		list( , $style_name ) = explode( ':', $attr );
+		if ( empty( $style_name ) ) {
 			continue;
 		}
-		$style_name = $attr_parts[1];
 
 		// TODO: Properly parse $value.
 		$expr        = $tags->get_attribute( $attr );

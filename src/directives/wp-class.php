@@ -10,11 +10,10 @@ function process_wp_class( $tags, $context ) {
 	$prefixed_attributes = $tags->get_attribute_names_with_prefix( 'wp-class:' );
 
 	foreach ( $prefixed_attributes as $attr ) {
-		$attr_parts = explode( ':', $attr );
-		if ( count( $attr_parts ) < 2 ) {
+		list( , $class_name ) = explode( ':', $attr );
+		if ( empty( $class_name ) ) {
 			continue;
 		}
-		$class_name = $attr_parts[1];
 
 		// TODO: Properly parse $value.
 		$expr      = $tags->get_attribute( $attr );

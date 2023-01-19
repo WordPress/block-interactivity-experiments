@@ -10,11 +10,10 @@ function process_wp_bind( $tags, $context ) {
 	$prefixed_attributes = $tags->get_attribute_names_with_prefix( 'wp-bind:' );
 
 	foreach ( $prefixed_attributes as $attr ) {
-		$attr_parts = explode( ':', $attr );
-		if ( count( $attr_parts ) < 2 ) {
+		list( , $bound_attr ) = explode( ':', $attr );
+		if ( empty( $bound_attr ) ) {
 			continue;
 		}
-		$bound_attr = $attr_parts[1];
 
 		// TODO: Properly parse $value.
 		$expr  = $tags->get_attribute( $attr );
