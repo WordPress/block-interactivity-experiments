@@ -59,4 +59,27 @@ class Tests_Directives_WpContext extends WP_UnitTestCase {
 			$context->get_context()
 		);
 	}
+
+	public function test_directive_merges_context_correctly_upon_wp_context_attribute_on_opening_tag() {
+		$context = new WP_Directive_Context(
+			array(
+				'myblock'    => array( 'open' => false ),
+				'otherblock' => array( 'somekey' => 'somevalue' )
+			)
+		);
+
+		$markup = '<div wp-context=\'{ "myblock": { "open": true } }\'>';
+		$tags = new WP_HTML_Tag_Processor( $markup );
+		$tags->next_tag();
+
+		process_wp_context( $tags, $context );
+
+		$this->assertSame(
+			array(
+				'myblock'    => array( 'open' => true ),
+				'otherblock' => array( 'somekey' => 'somevalue' ),
+			),
+			$context->get_context()
+		);
+	}
 }
