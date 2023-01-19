@@ -26,14 +26,30 @@ class WP_Directive_Context {
 		$this->set_context( $context );
 	}
 
+	/**
+	 * Return the current context.
+	 *
+	 * @return array The current context.
+	 */
 	public function get_context() {
 		return end( $this->stack );
 	}
 
+	/**
+	 * Set the current context.
+	 *
+	 * @param array $context The context to be set.
+	 * @return void
+	 */
 	public function set_context( $context ) {
 		array_push( $this->stack, array_replace_recursive( $this->get_context(), $context ) );
 	}
 
+    /**
+	 * Reset the context to its previous state.
+	 *
+	 * @return void
+	 */
 	public function rewind_context() {
 		array_pop( $this->stack );
 	}
