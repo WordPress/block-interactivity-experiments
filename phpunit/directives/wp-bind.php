@@ -4,7 +4,8 @@
  */
 
 require_once __DIR__ . '/../../src/directives/wp-bind.php';
-require_once __DIR__ . '/../../src/directives/wp-context.php';
+
+require_once __DIR__ . '/../../src/directives/class-wp-directive-context.php';
 
 require_once __DIR__ . '/../../../gutenberg/lib/experimental/html/index.php';
 
