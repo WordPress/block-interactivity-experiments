@@ -45,7 +45,7 @@ class WP_Directive_Context {
 		array_push( $this->stack, array_replace_recursive( $this->get_context(), $context ) );
 	}
 
-    /**
+	/**
 	 * Reset the context to its previous state.
 	 *
 	 * @return void
