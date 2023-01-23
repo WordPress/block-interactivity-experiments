@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>toVdom</title>
+	</head>
+	<body>
+		<div data-testid="it should delete comments">
+			<!-- ##1## -->
+			<div>
+				<!-- ##2## -->
+			</div>
+		</div>
+
+		<div data-testid="it should processing instructions">
+			<div id="replace-with-processing-instructions"></div>
+		</div>
+
+		<div data-testid="it should replace CDATA with text nodes">
+			<div id="replace-with-cdata"></div>
+		</div>
+
+		<script>
+			const cdata = `
+				<body>
+					<![CDATA[##1##]]>
+					<div>
+						<![CDATA[##2##]]>
+					</div>
+				</body>
+				`;
+
+			const cdataElement = new DOMParser()
+				.parseFromString(cdata, 'text/xml')
+				.querySelector('body');
+			document
+				.getElementById('replace-with-cdata')
+				.replaceWith(cdataElement);
+		</script>
+
+		<script>
+			const processingInstructions = `
+				<body>
+					<?xpacket ##1## ?>
+					<div>
+						<?xpacket ##2## ?>
+					</div>
+				</body>
+				`;
+
+			const processingInstructionsElement = new DOMParser()
+				.parseFromString(processingInstructions, 'text/xml')
+				.querySelector('body');
+			document
+				.getElementById('replace-with-processing-instructions')
+				.replaceWith(processingInstructionsElement);
+		</script>
+
+		<script src="../build/e2e/wpx.js"></script>
+		<script src="../build/runtime.js"></script>
+		<script src="../build/vendors.js"></script>
+	</body>
+</html>
