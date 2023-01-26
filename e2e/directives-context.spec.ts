@@ -11,8 +11,8 @@ test.describe('wp-context', () => {
 
 	test('properties can be inherited', async ({ page }) => {
 		const context = page.getByTestId('child context');
-		const prop1Button = page.getByTestId('parent prop1');
-		const prop4Button = page.getByTestId('parent obj.prop4');
+		const prop1ParentButton = page.getByTestId('parent prop1');
+		const prop4ParentButton = page.getByTestId('parent obj.prop4');
 
 		// Properties from parent should be inheried.
 		{
@@ -26,8 +26,8 @@ test.describe('wp-context', () => {
 		}
 
 		// Changes in parent context should be reflected.
-		await prop1Button.click();
-		await prop4Button.click();
+		await prop1ParentButton.click();
+		await prop4ParentButton.click();
 
 		{
 			const {
@@ -35,16 +35,16 @@ test.describe('wp-context', () => {
 				obj: { prop4 },
 			} = await parseContent(context);
 
-			expect(prop1).toBe('modified');
-			expect(prop4).toBe('modified');
+			expect(prop1).toBe('modifiedFromParent');
+			expect(prop4).toBe('modifiedFromParent');
 		}
 	});
 
 	test('inherited properties can be modified', async ({ page }) => {
 		const parentContext = page.getByTestId('parent context');
 		const childContext = page.getByTestId('child context');
-		const prop1Button = page.getByTestId('child prop1');
-		const prop4Button = page.getByTestId('child obj.prop4');
+		const prop1ChildButton = page.getByTestId('child prop1');
+		const prop4ChildButton = page.getByTestId('child obj.prop4');
 
 		// Properties from parent should be inheried.
 		{
@@ -58,8 +58,8 @@ test.describe('wp-context', () => {
 		}
 
 		// Changes in child context should be reflected in parent.
-		await prop1Button.click();
-		await prop4Button.click();
+		await prop1ChildButton.click();
+		await prop4ChildButton.click();
 
 		{
 			const {
@@ -67,8 +67,8 @@ test.describe('wp-context', () => {
 				obj: { prop4 },
 			} = await parseContent(parentContext);
 
-			expect(prop1).toBe('modified');
-			expect(prop4).toBe('modified');
+			expect(prop1).toBe('modifiedFromChild');
+			expect(prop4).toBe('modifiedFromChild');
 		}
 	});
 
