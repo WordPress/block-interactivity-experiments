@@ -3,7 +3,7 @@
  * wp-context attribute directive test.
  */
 
-require_once __DIR__ . '/../../../src/directives/attributes/wp-context.php';
+// require_once __DIR__ . '/../../../src/directives/attributes/wp-context.php'; // TODO
 
 require_once __DIR__ . '/../../../src/directives/class-wp-directive-context.php';
 
