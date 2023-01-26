@@ -1,6 +1,6 @@
 <?php
 /**
- * wp-context directive test.
+ * wp-context tag directive test.
  */
 
 require_once __DIR__ . '/../../../src/directives/wp-context.php';
@@ -10,12 +10,12 @@ require_once __DIR__ . '/../../../src/directives/class-wp-directive-context.php'
 require_once __DIR__ . '/../../../../gutenberg/lib/experimental/html/index.php';
 
 /**
- * Tests for the wp-context directive.
+ * Tests for the wp-context tag directive.
  *
  * @group  directives
- * @covers process_wp_context
+ * @covers process_wp_context_tag
  */
-class Tests_Directives_WpContext_Tag extends WP_UnitTestCase {
+class Tests_Directives_Tags_WpContext extends WP_UnitTestCase {
 	public function test_directive_merges_context_correctly_upon_opening_wp_context_tag() {
 		$context = new WP_Directive_Context(
 			array(
@@ -28,7 +28,7 @@ class Tests_Directives_WpContext_Tag extends WP_UnitTestCase {
 		$tags = new WP_HTML_Tag_Processor( $markup );
 		$tags->next_tag();
 
-		process_wp_context( $tags, $context );
+		process_wp_context_tag( $tags, $context );
 
 		$this->assertSame(
 			array(
@@ -52,7 +52,7 @@ class Tests_Directives_WpContext_Tag extends WP_UnitTestCase {
 		$tags = new WP_HTML_Tag_Processor( $markup );
 		$tags->next_tag( array( 'tag_closers' => 'visit' ) );
 
-		process_wp_context( $tags, $context );
+		process_wp_context_tag( $tags, $context );
 
 		$this->assertSame(
 			array( 'my-key' => 'original-value' ),
@@ -74,7 +74,7 @@ class Tests_Directives_WpContext_Tag extends WP_UnitTestCase {
 		$tags = new WP_HTML_Tag_Processor( $markup );
 		$tags->next_tag();
 
-		process_wp_context( $tags, $context );
+		process_wp_context_tag( $tags, $context );
 
 		$this->assertSame(
 			array(

@@ -1,6 +1,6 @@
 <?php
 
-function process_wp_context( $tags, $context ) {
+function process_wp_context_tag( $tags, $context ) {
 	if ( $tags->is_tag_closer() ) {
 		$context->rewind_context();
 		return;

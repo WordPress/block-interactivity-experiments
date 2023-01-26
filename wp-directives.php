@@ -209,11 +209,11 @@ add_filter( 'render_block_data', 'bhe_inner_blocks', 10, 3 );
 function wp_process_directives( $block_content ) {
 	// TODO: Add some directive/components registration mechanism.
 	$tag_directives = array(
-		'wp-context' => 'process_wp_context',
+		'wp-context' => 'process_wp_context_tag',
 	);
 
 	$attribute_directives = array(
-		// 'wp-context' => 'process_wp_context', // TODO
+		// 'wp-context' => 'process_wp_context_attribute', // TODO
 		'wp-bind'  => 'process_wp_bind',
 		'wp-class' => 'process_wp_class',
 		'wp-style' => 'process_wp_style',
