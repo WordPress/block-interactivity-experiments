@@ -3,11 +3,11 @@
  * wp-context directive test.
  */
 
-require_once __DIR__ . '/../../src/directives/wp-context.php';
+require_once __DIR__ . '/../../../src/directives/wp-context.php';
 
-require_once __DIR__ . '/../../src/directives/class-wp-directive-context.php';
+require_once __DIR__ . '/../../../src/directives/class-wp-directive-context.php';
 
-require_once __DIR__ . '/../../../gutenberg/lib/experimental/html/index.php';
+require_once __DIR__ . '/../../../../gutenberg/lib/experimental/html/index.php';
 
 /**
  * Tests for the wp-context directive.
@@ -15,7 +15,7 @@ require_once __DIR__ . '/../../../gutenberg/lib/experimental/html/index.php';
  * @group  directives
  * @covers process_wp_context
  */
-class Tests_Directives_WpContext extends WP_UnitTestCase {
+class Tests_Directives_WpContext_Tag extends WP_UnitTestCase {
 	public function test_directive_merges_context_correctly_upon_opening_wp_context_tag() {
 		$context = new WP_Directive_Context(
 			array(

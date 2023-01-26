@@ -3,11 +3,11 @@
  * wp-bind directive test.
  */
 
-require_once __DIR__ . '/../../src/directives/wp-bind.php';
+require_once __DIR__ . '/../../../src/directives/wp-bind.php';
 
-require_once __DIR__ . '/../../src/directives/class-wp-directive-context.php';
+require_once __DIR__ . '/../../../src/directives/class-wp-directive-context.php';
 
-require_once __DIR__ . '/../../../gutenberg/lib/experimental/html/index.php';
+require_once __DIR__ . '/../../../../gutenberg/lib/experimental/html/index.php';
 
 /**
  * Tests for the wp-bind directive.

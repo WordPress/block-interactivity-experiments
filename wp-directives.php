@@ -37,11 +37,12 @@ if ( ! is_plugin_active( 'gutenberg/gutenberg.php' ) ) {
 
 require_once __DIR__ . '/../gutenberg/lib/experimental/html/index.php';
 
-require_once __DIR__ . '/src/directives/wp-context.php';
-require_once __DIR__ . '/src/directives/wp-context.php';
-require_once __DIR__ . '/src/directives/wp-bind.php';
-require_once __DIR__ . '/src/directives/wp-class.php';
 require_once __DIR__ . '/src/directives/class-wp-directive-context.php';
+
+require_once __DIR__ . '/src/directives/attributes/wp-bind.php';
+require_once __DIR__ . '/src/directives/attributes/wp-class.php';
+require_once __DIR__ . '/src/directives/attributes/wp-style.php';
+require_once __DIR__ . '/src/directives/tags/wp-context.php';
 
 function wp_directives_loader() {
 	// Load the Admin page.
