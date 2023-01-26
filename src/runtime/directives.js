@@ -3,6 +3,7 @@ import { useSignalEffect } from '@preact/signals';
 import { deepSignal } from 'deepsignal';
 import { directive } from './hooks';
 import { prefetch, navigate, hasClientSideTransitions } from './router';
+import { mergeDeepSignals } from './wpx';
 
 // Until useSignalEffects is fixed:
 // https://github.com/preactjs/signals/issues/228
@@ -21,10 +22,17 @@ export default () => {
 				context: { default: context },
 			},
 			props: { children },
-			context: { Provider },
+			context: inherited,
 		}) => {
-			const signals = useMemo(() => deepSignal(context), [context]);
-			return <Provider value={signals}>{children}</Provider>;
+			const { Provider } = inherited;
+			const inheritedValue = useContext(inherited);
+			const value = useMemo(() => {
+				const localValue = deepSignal(context);
+				mergeDeepSignals(localValue, inheritedValue);
+				return localValue;
+			}, [context, inheritedValue]);
+
+			return <Provider value={value}>{children}</Provider>;
 		}
 	);
 
