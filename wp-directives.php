@@ -223,13 +223,14 @@ function wp_process_directives( $block_content ) {
 			call_user_func( $directives[ $tag_name ], $tags, $context );
 		} else {
 			// Components can't have directives (unless we change our mind about this).
-			foreach ( $directives as $directive => $directive_processor ) {
-				$attributes = $tags->get_attribute_names_with_prefix( $directive );
-				if ( empty( $attributes ) ) {
+			$attributes = $tags->get_attribute_names_with_prefix( 'wp-' );
+
+			foreach ( $attributes as $attribute ) {
+				if ( ! array_key_exists( $attribute, $directives ) ) {
 					continue;
 				}
 
-				call_user_func( $directive_processor, $tags, $context );
+				call_user_func( $directives[ $attribute ], $tags, $context );
 			}
 		}
 	}
