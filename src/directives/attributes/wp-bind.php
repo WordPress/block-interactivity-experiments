@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . '../utils.php';
+require_once __DIR__ . '/../utils.php';
 
 function process_wp_bind( $tags, $context ) {
 	if ( $tags->is_tag_closer() ) {
