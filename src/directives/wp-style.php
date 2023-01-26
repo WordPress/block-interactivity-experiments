@@ -7,14 +7,6 @@ function process_wp_style( $tags, $context ) {
 		return;
 	}
 
-	/**
-	 * A `wp-style` *tag* doesn't really make sense.
-	 * What would be the point of e.g. `<wp-style:color="isGreen">?
-	 */
-	if ( 'WP-STYLE' === $tags->get_tag() ) {
-		return;
-	}
-
 	$prefixed_attributes = $tags->get_attribute_names_with_prefix( 'wp-style:' );
 
 	foreach ( $prefixed_attributes as $attr ) {

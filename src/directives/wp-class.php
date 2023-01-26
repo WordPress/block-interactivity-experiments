@@ -7,14 +7,6 @@ function process_wp_class( $tags, $context ) {
 		return;
 	}
 
-	/**
-	 * A `wp-class` *tag* doesn't really make sense.
-	 * What would be the point of e.g. `<wp-class:red="isRed">?
-	 */
-	if ( 'WP-CLASS' === $tags->get_tag() ) {
-		return;
-	}
-
 	$prefixed_attributes = $tags->get_attribute_names_with_prefix( 'wp-class:' );
 
 	foreach ( $prefixed_attributes as $attr ) {

@@ -46,18 +46,4 @@ class Tests_Directives_WpStyle extends WP_UnitTestCase {
 		$this->assertStringNotContainsString( 'color: green;', $tags->get_attribute( 'style' ) );
 		$this->assertSame( $context_before->get_context(), $context->get_context(), 'wp-style directive changed context' );
 	}
-
-	public function test_directive_ignores_wp_style_tag() {
-		$markup = '<wp-style:color="context.myblock.color" style="background: blue;">Test</div>';
-		$tags = new WP_HTML_Tag_Processor( $markup );
-		$tags->next_tag();
-
-		$context_before = new WP_Directive_Context( array( 'myblock' => array( 'color' => 'green' ) ) );
-		$context = $context_before;
-		process_wp_style( $tags, $context );
-
-		$this->assertSame( $markup, $tags->get_updated_html() );
-		$this->assertStringNotContainsString( 'color: green;', $tags->get_attribute( 'style' ) );
-		$this->assertSame( $context_before->get_context(), $context->get_context(), 'wp-style directive changed context' );
-	}
 }
