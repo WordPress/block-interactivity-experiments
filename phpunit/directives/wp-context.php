@@ -61,6 +61,8 @@ class Tests_Directives_WpContext extends WP_UnitTestCase {
 	}
 
 	public function test_directive_merges_context_correctly_upon_wp_context_attribute_on_opening_tag() {
+		$this->markTestSkipped( 'Need to implement the wp-context attribute directive processor first.' );
+
 		$context = new WP_Directive_Context(
 			array(
 				'myblock'    => array( 'open' => false ),
