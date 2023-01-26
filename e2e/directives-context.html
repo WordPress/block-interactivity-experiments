@@ -57,6 +57,14 @@
                     <!-- rendered during hydration -->
                 </pre>
 				<button
+					data-testid="child prop1"
+					name="prop1"
+					value="modifiedFromChild"
+					wp-on:click="actions.updateContext"
+				>
+					prop1
+				</button>
+				<button
 					data-testid="child prop2"
 					name="prop2"
 					value="modifiedFromChild"
@@ -71,6 +79,14 @@
 					wp-on:click="actions.updateContext"
 				>
 					prop3
+				</button>
+				<button
+					data-testid="child obj.prop4"
+					name="obj.prop4"
+					value="modifiedFromChild"
+					wp-on:click="actions.updateContext"
+				>
+					obj.prop4
 				</button>
 				<button
 					data-testid="child obj.prop5"
