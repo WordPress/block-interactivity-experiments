@@ -3,7 +3,7 @@
  * wp-context tag directive test.
  */
 
-require_once __DIR__ . '/../../../src/directives/wp-context.php';
+require_once __DIR__ . '/../../../src/directives/tags/wp-context.php';
 
 require_once __DIR__ . '/../../../src/directives/class-wp-directive-context.php';
 

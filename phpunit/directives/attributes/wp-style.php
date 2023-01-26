@@ -3,7 +3,7 @@
  * wp-style directive test.
  */
 
-require_once __DIR__ . '/../../../src/directives/wp-style.php';
+require_once __DIR__ . '/../../../src/directives/attributes/wp-style.php';
 
 require_once __DIR__ . '/../../../src/directives/class-wp-directive-context.php';
 

@@ -3,7 +3,7 @@
  * wp-bind directive test.
  */
 
-require_once __DIR__ . '/../../../src/directives/wp-bind.php';
+require_once __DIR__ . '/../../../src/directives/attributes/wp-bind.php';
 
 require_once __DIR__ . '/../../../src/directives/class-wp-directive-context.php';
 
