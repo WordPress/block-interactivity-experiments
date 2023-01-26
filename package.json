@@ -41,7 +41,7 @@
 	},
 	"dependencies": {
 		"@preact/signals": "^1.1.2",
-		"deepsignal": "^1.1.0",
+		"deepsignal": "^1.2.1",
 		"hpq": "^1.3.0",
 		"preact": "^10.10.6"
 	}
