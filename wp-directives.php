@@ -35,6 +35,14 @@ if ( ! is_plugin_active( 'gutenberg/gutenberg.php' ) ) {
 	return;
 }
 
+require_once __DIR__ . '/../gutenberg/lib/experimental/html/index.php';
+
+require_once __DIR__ . '/src/directives/wp-context.php';
+require_once __DIR__ . '/src/directives/wp-context.php';
+require_once __DIR__ . '/src/directives/wp-bind.php';
+require_once __DIR__ . '/src/directives/wp-class.php';
+require_once __DIR__ . '/src/directives/class-wp-directive-context.php';
+
 function wp_directives_loader() {
 	// Load the Admin page.
 	require_once plugin_dir_path( __FILE__ ) . '/src/admin/admin-page.php';
@@ -196,3 +204,36 @@ function bhe_inner_blocks( $parsed_block, $source_block, $parent_block ) {
 	return $parsed_block;
 }
 add_filter( 'render_block_data', 'bhe_inner_blocks', 10, 3 );
+
+function wp_process_directives( $block_content ) {
+	// TODO: Add some directive/components registration mechanism.
+	$directives = array(
+		'wp-context' => 'process_wp_context',
+		'wp-bind'    => 'process_wp_bind',
+		'wp-class'   => 'process_wp_class',
+		'wp-style'   => 'process_wp_style',
+	);
+
+	$tags = new WP_HTML_Tag_Processor( $block_content );
+
+	$context = new WP_Directive_Context;
+	while ( $tags->next_tag( array( 'tag_closers' => 'visit' ) ) ) {
+		$tag_name = strtolower( $tags->get_tag() );
+		if ( array_key_exists( $tag_name, $directives ) ) {
+			call_user_func( $directives[ $tag_name ], $tags, $context );
+		} else {
+			// Components can't have directives (unless we change our mind about this).
+			foreach ( $directives as $directive => $directive_processor ) {
+				$attributes = $tags->get_attribute_names_with_prefix( $directive );
+				if ( empty( $attributes ) ) {
+					continue;
+				}
+
+				call_user_func( $directive_processor, $tags, $context );
+			}
+		}
+	}
+
+	return $block_content;
+}
+add_filter( 'render_block', 'wp_process_directives', 10, 1 );
