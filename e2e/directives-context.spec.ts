@@ -9,134 +9,127 @@ test.describe('wp-context', () => {
 		await page.goto('file://' + join(__dirname, 'directives-context.html'));
 	});
 
-	test('properties can be inherited', async ({ page }) => {
-		const context = page.getByTestId('child context');
-		const prop1ParentButton = page.getByTestId('parent prop1');
-		const prop4ParentButton = page.getByTestId('parent obj.prop4');
+	test('is correctly initialized', async ({ page }) => {
+		const parentContext = await parseContent(
+			page.getByTestId('parent context')
+		);
 
-		// Properties from parent should be inheried.
-		{
-			const {
-				prop1,
-				obj: { prop4 },
-			} = await parseContent(context);
-
-			expect(prop1).toBe('parent');
-			expect(prop4).toBe('parent');
-		}
-
-		// Changes in parent context should be reflected.
-		await prop1ParentButton.click();
-		await prop4ParentButton.click();
-
-		{
-			const {
-				prop1,
-				obj: { prop4 },
-			} = await parseContent(context);
-
-			expect(prop1).toBe('modifiedFromParent');
-			expect(prop4).toBe('modifiedFromParent');
-		}
+		expect(parentContext).toMatchObject({
+			prop1: 'parent',
+			prop2: 'parent',
+			obj: { prop4: 'parent', prop5: 'parent' },
+			array: [1, 2, 3],
+		});
 	});
 
-	test('inherited properties can be modified', async ({ page }) => {
-		const parentContext = page.getByTestId('parent context');
-		const childContext = page.getByTestId('child context');
-		const prop1ChildButton = page.getByTestId('child prop1');
-		const prop4ChildButton = page.getByTestId('child obj.prop4');
+	test('is correctly extended', async ({ page }) => {
+		const childContext = await parseContent(
+			page.getByTestId('child context')
+		);
 
-		// Properties from parent should be inheried.
-		{
-			const {
-				prop1,
-				obj: { prop4 },
-			} = await parseContent(childContext);
-
-			expect(prop1).toBe('parent');
-			expect(prop4).toBe('parent');
-		}
-
-		// Changes in child context should be reflected in parent.
-		await prop1ChildButton.click();
-		await prop4ChildButton.click();
-
-		{
-			const {
-				prop1,
-				obj: { prop4 },
-			} = await parseContent(parentContext);
-
-			expect(prop1).toBe('modifiedFromChild');
-			expect(prop4).toBe('modifiedFromChild');
-		}
+		expect(childContext).toMatchObject({
+			prop1: 'parent',
+			prop2: 'child',
+			prop3: 'child',
+			obj: { prop4: 'parent', prop5: 'child', prop6: 'child' },
+			array: [4, 5, 6],
+		});
 	});
 
-	test('properties can be shadowed', async ({ page }) => {
-		const parentContext = page.getByTestId('parent context');
-		const childContext = page.getByTestId('child context');
-		const prop1Button = page.getByTestId('child prop2');
-		const prop4Button = page.getByTestId('child obj.prop5');
+	test('changes in inherited properties are reflected (child)', async ({
+		page,
+	}) => {
+		await page.getByTestId('child prop1').click();
+		await page.getByTestId('child obj.prop4').click();
 
-		// Shadowed properties should NOT be inheried from parent.
-		{
-			const {
-				prop2,
-				obj: { prop5 },
-			} = await parseContent(childContext);
+		const childContext = await parseContent(
+			page.getByTestId('child context')
+		);
 
-			expect(prop2).toBe('child');
-			expect(prop5).toBe('child');
-		}
+		expect(childContext.prop1).toBe('modifiedFromChild');
+		expect(childContext.obj.prop4).toBe('modifiedFromChild');
 
-		// Shadowed properties should NOT have changed in parent.
-		{
-			const {
-				prop2,
-				obj: { prop5 },
-			} = await parseContent(parentContext);
+		const parentContext = await parseContent(
+			page.getByTestId('parent context')
+		);
 
-			expect(prop2).toBe('parent');
-			expect(prop5).toBe('parent');
-		}
-
-		// Changes in shadowed context should NOT affect parent.
-		await prop1Button.click();
-		await prop4Button.click();
-
-		{
-			const {
-				prop2,
-				obj: { prop5 },
-			} = await parseContent(childContext);
-
-			expect(prop2).toBe('modifiedFromChild');
-			expect(prop5).toBe('modifiedFromChild');
-		}
-
-		{
-			const {
-				prop2,
-				obj: { prop5 },
-			} = await parseContent(parentContext);
-
-			expect(prop2).toBe('parent');
-			expect(prop5).toBe('parent');
-		}
+		expect(parentContext.prop1).toBe('modifiedFromChild');
+		expect(parentContext.obj.prop4).toBe('modifiedFromChild');
 	});
 
-	test('array properties are shadowed', async ({ page }) => {
-		const parentContext = page.getByTestId('parent context');
-		const childContext = page.getByTestId('child context');
+	test('changes in inherited properties are reflected (parent)', async ({
+		page,
+	}) => {
+		await page.getByTestId('parent prop1').click();
+		await page.getByTestId('parent obj.prop4').click();
 
-		{
-			const { array } = await parseContent(parentContext);
-			expect(array).toMatchObject([1, 2, 3]);
-		}
+		const childContext = await parseContent(
+			page.getByTestId('child context')
+		);
 
-		{
-			const { array } = await parseContent(childContext);
-			expect(array).toMatchObject([4, 5, 6]);
-		}
+		expect(childContext.prop1).toBe('modifiedFromParent');
+		expect(childContext.obj.prop4).toBe('modifiedFromParent');
+
+		const parentContext = await parseContent(
+			page.getByTestId('parent context')
+		);
+
+		expect(parentContext.prop1).toBe('modifiedFromParent');
+		expect(parentContext.obj.prop4).toBe('modifiedFromParent');
+	});
+
+	test('changes in shadowed properties do not leak (child)', async ({
+		page,
+	}) => {
+		await page.getByTestId('child prop2').click();
+		await page.getByTestId('child obj.prop5').click();
+
+		const childContext = await parseContent(
+			page.getByTestId('child context')
+		);
+
+		expect(childContext.prop2).toBe('modifiedFromChild');
+		expect(childContext.obj.prop5).toBe('modifiedFromChild');
+
+		const parentContext = await parseContent(
+			page.getByTestId('parent context')
+		);
+
+		expect(parentContext.prop2).toBe('parent');
+		expect(parentContext.obj.prop5).toBe('parent');
+	});
+
+	test('changes in shadowed properties do not leak (parent)', async ({
+		page,
+	}) => {
+		await page.getByTestId('parent prop2').click();
+		await page.getByTestId('parent obj.prop5').click();
+
+		const childContext = await parseContent(
+			page.getByTestId('child context')
+		);
+
+		expect(childContext.prop2).toBe('child');
+		expect(childContext.obj.prop5).toBe('child');
+
+		const parentContext = await parseContent(
+			page.getByTestId('parent context')
+		);
+
+		expect(parentContext.prop2).toBe('modifiedFromParent');
+		expect(parentContext.obj.prop5).toBe('modifiedFromParent');
+	});
+
+	test('Array properties are shadowed', async ({ page }) => {
+		const parentContext = await parseContent(
+			page.getByTestId('parent context')
+		);
+
+		const childContext = await parseContent(
+			page.getByTestId('child context')
+		);
+
+		expect(parentContext.array).toMatchObject([1, 2, 3]);
+		expect(childContext.array).toMatchObject([4, 5, 6]);
 	});
 });
