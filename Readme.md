@@ -11,7 +11,7 @@ _It's not a goal to do an in-depth analysis of the patterns, only to experiment 
   - Main branch: `main-wp-directives-plugin` 
   - Tracking Issue: [Tracking issue: WordPress Directives Plugin 🎨](https://github.com/WordPress/block-hydration-experiments/issues/80)
 
-  An installable plugin that adds a set of basic directives and client-side transitions.
+  An installable plugin that adds a set of basic directives and client-side navigation.
 
 - 🧩 **Custom Elements Hydration**
 

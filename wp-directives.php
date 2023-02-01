@@ -56,7 +56,7 @@ function wp_directives_activate() {
 	add_option(
 		'wp_directives_plugin_settings',
 		array(
-			'client_side_transitions' => false,
+			'client_side_navigation' => false,
 		)
 	);
 }
@@ -136,33 +136,33 @@ add_filter(
 );
 
 
-function wp_directives_get_client_side_transitions() {
-	static $client_side_transitions = null;
-	if ( is_null( $client_side_transitions ) ) {
-		$client_side_transitions = apply_filters( 'client_side_transitions', false );
+function wp_directives_get_client_side_navigation() {
+	static $client_side_navigation = null;
+	if ( is_null( $client_side_navigation ) ) {
+		$client_side_navigation = apply_filters( 'client_side_navigation', false );
 	}
-	return $client_side_transitions;
+	return $client_side_navigation;
 }
 
-function wp_directives_add_client_side_transitions_meta_tag() {
-	if ( wp_directives_get_client_side_transitions() ) {
-		echo '<meta itemprop="wp-client-side-transitions" content="active">';
+function wp_directives_add_client_side_navigation_meta_tag() {
+	if ( wp_directives_get_client_side_navigation() ) {
+		echo '<meta itemprop="wp-client-side-navigation" content="active">';
 	}
 }
-add_action( 'wp_head', 'wp_directives_add_client_side_transitions_meta_tag' );
+add_action( 'wp_head', 'wp_directives_add_client_side_navigation_meta_tag' );
 
-function wp_directives_client_site_transitions_option() {
+function wp_directives_client_site_navigation_option() {
 	$options = get_option( 'wp_directives_plugin_settings' );
-	return $options['client_side_transitions'];
+	return $options['client_side_navigation'];
 }
 add_filter(
-	'client_side_transitions',
-	'wp_directives_client_site_transitions_option',
+	'client_side_navigation',
+	'wp_directives_client_site_navigation_option',
 	9
 );
 
 function wp_directives_mark_interactive_blocks( $block_content, $block, $instance ) {
-	if ( wp_directives_get_client_side_transitions() ) {
+	if ( wp_directives_get_client_side_navigation() ) {
 		return $block_content;
 	}
 

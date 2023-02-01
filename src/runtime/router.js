@@ -16,10 +16,10 @@ const cleanUrl = (url) => {
 	return u.pathname + u.search;
 };
 
-// Helper to check if a page has client-side transitions activated.
-export const hasClientSideTransitions = (dom) =>
+// Helper to check if a page can do client-side navigation.
+export const canDoClientSideNavigation = (dom) =>
 	dom
-		.querySelector("meta[itemprop='wp-client-side-transitions']")
+		.querySelector("meta[itemprop='wp-client-side-navigation']")
 		?.getAttribute('content') === 'active';
 
 // Fetch styles of a new page.
@@ -51,7 +51,7 @@ const fetchHead = async (head) => {
 const fetchPage = async (url) => {
 	const html = await window.fetch(url).then((r) => r.text());
 	const dom = new window.DOMParser().parseFromString(html, 'text/html');
-	if (!hasClientSideTransitions(dom.head)) return false;
+	if (!canDoClientSideNavigation(dom.head)) return false;
 	const head = await fetchHead(dom.head);
 	return { head, body: toVdom(dom.body) };
 };
@@ -94,7 +94,7 @@ window.addEventListener('popstate', async () => {
 
 // Initialize the router with the initial DOM.
 export const init = async () => {
-	if (hasClientSideTransitions(document.head)) {
+	if (canDoClientSideNavigation(document.head)) {
 		// Create the root fragment to hydrate everything.
 		rootFragment = createRootFragment(
 			document.documentElement,
