@@ -136,11 +136,13 @@ add_filter(
 	1
 );
 
-
 function wp_directives_get_client_side_transitions() {
 	static $client_side_transitions = null;
 	if ( is_null( $client_side_transitions ) ) {
-		$client_side_transitions = apply_filters( 'client_side_transitions', false );
+		$client_side_transitions = apply_filters(
+			'client_side_transitions',
+			false
+		);
 	}
 	return $client_side_transitions;
 }
@@ -162,12 +164,16 @@ add_filter(
 	9
 );
 
-function wp_directives_mark_interactive_blocks( $block_content, $block, $instance ) {
+function wp_directives_mark_interactive_blocks(
+	$block_content,
+	$block,
+	$instance
+) {
 	if ( wp_directives_get_client_side_transitions() ) {
 		return $block_content;
 	}
 
-		// Append the `wp-ignore` attribute for inner blocks of interactive blocks.
+	// Append the `wp-ignore` attribute for inner blocks of interactive blocks.
 	if ( isset( $instance->parsed_block['isolated'] ) ) {
 		$w = new WP_HTML_Tag_Processor( $block_content );
 		$w->next_tag();
@@ -175,17 +181,17 @@ function wp_directives_mark_interactive_blocks( $block_content, $block, $instanc
 		$block_content = (string) $w;
 	}
 
-		// Return if it's not interactive.
+	// Return if it's not interactive.
 	if ( ! block_has_support( $instance->block_type, array( 'interactivity' ) ) ) {
 		return $block_content;
 	}
 
-		// Add the `wp-island` attribute if it's interactive.
-		$w = new WP_HTML_Tag_Processor( $block_content );
-		$w->next_tag();
-		$w->set_attribute( 'wp-island', '' );
+	// Add the `wp-island` attribute if it's interactive.
+	$w = new WP_HTML_Tag_Processor( $block_content );
+	$w->next_tag();
+	$w->set_attribute( 'wp-island', '' );
 
-		return (string) $w;
+	return (string) $w;
 }
 add_filter( 'render_block', 'wp_directives_mark_interactive_blocks', 10, 3 );
 
@@ -197,7 +203,10 @@ function bhe_inner_blocks( $parsed_block, $source_block, $parent_block ) {
 		isset( $parent_block ) &&
 		block_has_support(
 			$parent_block->block_type,
-			array( 'interactivity', 'isolated' )
+			array(
+				'interactivity',
+				'isolated',
+			)
 		)
 	) {
 		$parsed_block['isolated'] = true;
@@ -221,7 +230,7 @@ function wp_process_directives( $block_content ) {
 
 	$tags = new WP_HTML_Tag_Processor( $block_content );
 
-	$context = new WP_Directive_Context;
+	$context = new WP_Directive_Context();
 	while ( $tags->next_tag( array( 'tag_closers' => 'visit' ) ) ) {
 		$tag_name = strtolower( $tags->get_tag() );
 		if ( array_key_exists( $tag_name, $tag_directives ) ) {
@@ -235,11 +244,20 @@ function wp_process_directives( $block_content ) {
 					continue;
 				}
 
-				call_user_func( $attribute_directives[ $attribute ], $tags, $context );
+				call_user_func(
+					$attribute_directives[ $attribute ],
+					$tags,
+					$context
+				);
 			}
 		}
 	}
 
 	return $block_content;
 }
-add_filter( 'render_block', 'wp_process_directives', 10, 1 );
+add_filter(
+	'render_block',
+	'wp_process_directives',
+	10,
+	1
+);
