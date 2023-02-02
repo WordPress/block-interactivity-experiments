@@ -33,7 +33,6 @@
 		"@babel/core": "^7.17.10",
 		"@babel/preset-env": "^7.17.10",
 		"@playwright/test": "^1.29.0",
-		"@prettier/plugin-php": "^0.18.9",
 		"@types/jest": "^27.5.1",
 		"@wordpress/env": "^5.8.0",
 		"@wordpress/scripts": "^24.3.0",
