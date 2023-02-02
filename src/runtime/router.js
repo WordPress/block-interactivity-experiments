@@ -1,7 +1,7 @@
 import { hydrate, render } from 'preact';
 import { toVdom, hydratedIslands } from './vdom';
 import { createRootFragment } from './utils';
-import { cstMetaTagItemprop, directivePrefix } from './constants';
+import { csnMetaTagItemprop, directivePrefix } from './constants';
 
 // The root to render the vdom (document.body).
 let rootFragment;
@@ -20,7 +20,7 @@ const cleanUrl = (url) => {
 // Helper to check if a page can do client-side navigation.
 export const canDoClientSideNavigation = (dom) =>
 	dom
-		.querySelector(`meta[itemprop='${cstMetaTagItemprop}']`)
+		.querySelector(`meta[itemprop='${csnMetaTagItemprop}']`)
 		?.getAttribute('content') === 'active';
 
 // Fetch styles of a new page.
