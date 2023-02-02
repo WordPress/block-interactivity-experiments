@@ -1,17 +1,9 @@
 <?php
 
-require_once __DIR__ . '/utils.php';
+require_once __DIR__ . '/../utils.php';
 
 function process_wp_bind( $tags, $context ) {
 	if ( $tags->is_tag_closer() ) {
-		return;
-	}
-
-	/**
-	 * A `wp-bind` *tag* doesn't really make sense.
-	 * What would be the point of e.g. `<wp-bind:src="image.png">?
-	 */
-	if ( 'WP-BIND' === $tags->get_tag() ) {
 		return;
 	}
 

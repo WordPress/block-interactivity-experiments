@@ -3,11 +3,11 @@
  * wp-class directive test.
  */
 
-require_once __DIR__ . '/../../src/directives/wp-class.php';
+require_once __DIR__ . '/../../../src/directives/attributes/wp-class.php';
 
-require_once __DIR__ . '/../../src/directives/class-wp-directive-context.php';
+require_once __DIR__ . '/../../../src/directives/class-wp-directive-context.php';
 
-require_once __DIR__ . '/../../../gutenberg/lib/experimental/html/index.php';
+require_once __DIR__ . '/../../../../gutenberg/lib/experimental/html/index.php';
 
 /**
  * Tests for the wp-class directive.
@@ -87,20 +87,6 @@ class Tests_Directives_WpClass extends WP_UnitTestCase {
 
 	public function test_directive_ignores_empty_class_name() {
 		$markup = '<div wp-class:="context.myblock.isRed" class="blue">Test</div>';
-		$tags = new WP_HTML_Tag_Processor( $markup );
-		$tags->next_tag();
-
-		$context_before = new WP_Directive_Context( array( 'myblock' => array( 'isRed' => true ) ) );
-		$context = $context_before;
-		process_wp_class( $tags, $context );
-
-		$this->assertSame( $markup, $tags->get_updated_html() );
-		$this->assertStringNotContainsString( 'red', $tags->get_attribute( 'class' ) );
-		$this->assertSame( $context_before->get_context(), $context->get_context(), 'wp-class directive changed context' );
-	}
-
-	public function test_directive_ignores_wp_class_tag() {
-		$markup = '<wp-class:red="context.myblock.isRed" class="blue">Test</div>';
 		$tags = new WP_HTML_Tag_Processor( $markup );
 		$tags->next_tag();
 

@@ -1,17 +1,9 @@
 <?php
 
-require_once __DIR__ . '/utils.php';
+require_once __DIR__ . '/../utils.php';
 
 function process_wp_style( $tags, $context ) {
 	if ( $tags->is_tag_closer() ) {
-		return;
-	}
-
-	/**
-	 * A `wp-style` *tag* doesn't really make sense.
-	 * What would be the point of e.g. `<wp-style:color="isGreen">?
-	 */
-	if ( 'WP-STYLE' === $tags->get_tag() ) {
 		return;
 	}
 

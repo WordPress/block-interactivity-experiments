@@ -1,17 +1,9 @@
 <?php
 
-require_once __DIR__ . '/utils.php';
+require_once __DIR__ . '/../utils.php';
 
 function process_wp_class( $tags, $context ) {
 	if ( $tags->is_tag_closer() ) {
-		return;
-	}
-
-	/**
-	 * A `wp-class` *tag* doesn't really make sense.
-	 * What would be the point of e.g. `<wp-class:red="isRed">?
-	 */
-	if ( 'WP-CLASS' === $tags->get_tag() ) {
 		return;
 	}
 

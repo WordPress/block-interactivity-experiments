@@ -37,11 +37,12 @@ if ( ! is_plugin_active( 'gutenberg/gutenberg.php' ) ) {
 
 require_once __DIR__ . '/../gutenberg/lib/experimental/html/index.php';
 
-require_once __DIR__ . '/src/directives/wp-context.php';
-require_once __DIR__ . '/src/directives/wp-context.php';
-require_once __DIR__ . '/src/directives/wp-bind.php';
-require_once __DIR__ . '/src/directives/wp-class.php';
 require_once __DIR__ . '/src/directives/class-wp-directive-context.php';
+
+require_once __DIR__ . '/src/directives/attributes/wp-bind.php';
+require_once __DIR__ . '/src/directives/attributes/wp-class.php';
+require_once __DIR__ . '/src/directives/attributes/wp-style.php';
+require_once __DIR__ . '/src/directives/tags/wp-context.php';
 
 function wp_directives_loader() {
 	// Load the Admin page.
@@ -207,11 +208,15 @@ add_filter( 'render_block_data', 'bhe_inner_blocks', 10, 3 );
 
 function wp_process_directives( $block_content ) {
 	// TODO: Add some directive/components registration mechanism.
-	$directives = array(
-		'wp-context' => 'process_wp_context',
-		'wp-bind'    => 'process_wp_bind',
-		'wp-class'   => 'process_wp_class',
-		'wp-style'   => 'process_wp_style',
+	$tag_directives = array(
+		'wp-context' => 'process_wp_context_tag',
+	);
+
+	$attribute_directives = array(
+		// 'wp-context' => 'process_wp_context_attribute', // TODO
+		'wp-bind'  => 'process_wp_bind',
+		'wp-class' => 'process_wp_class',
+		'wp-style' => 'process_wp_style',
 	);
 
 	$tags = new WP_HTML_Tag_Processor( $block_content );
@@ -219,17 +224,18 @@ function wp_process_directives( $block_content ) {
 	$context = new WP_Directive_Context;
 	while ( $tags->next_tag( array( 'tag_closers' => 'visit' ) ) ) {
 		$tag_name = strtolower( $tags->get_tag() );
-		if ( array_key_exists( $tag_name, $directives ) ) {
-			call_user_func( $directives[ $tag_name ], $tags, $context );
+		if ( array_key_exists( $tag_name, $tag_directives ) ) {
+			call_user_func( $tag_directives[ $tag_name ], $tags, $context );
 		} else {
 			// Components can't have directives (unless we change our mind about this).
-			foreach ( $directives as $directive => $directive_processor ) {
-				$attributes = $tags->get_attribute_names_with_prefix( $directive );
-				if ( empty( $attributes ) ) {
+			$attributes = $tags->get_attribute_names_with_prefix( 'wp-' );
+
+			foreach ( $attributes as $attribute ) {
+				if ( ! array_key_exists( $attribute, $attribute_directives ) ) {
 					continue;
 				}
 
-				call_user_func( $directive_processor, $tags, $context );
+				call_user_func( $attribute_directives[ $attribute ], $tags, $context );
 			}
 		}
 	}
