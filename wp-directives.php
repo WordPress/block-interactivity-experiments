@@ -38,6 +38,7 @@ if ( ! is_plugin_active( 'gutenberg/gutenberg.php' ) ) {
 require_once __DIR__ . '/../gutenberg/lib/experimental/html/index.php';
 
 require_once __DIR__ . '/src/directives/class-wp-directive-context.php';
+require_once __DIR__ . '/src/directives/class-wp-directive-store.php';
 
 require_once __DIR__ . '/src/directives/attributes/wp-bind.php';
 require_once __DIR__ . '/src/directives/attributes/wp-class.php';
@@ -261,3 +262,7 @@ add_filter(
 	10,
 	1
 );
+
+// TODO: check if priority 9 is enough.
+// TODO: check if `wp_footer` is the most appropriate hook.
+add_action( 'wp_footer', WP_Directive_Store::render, 9 );

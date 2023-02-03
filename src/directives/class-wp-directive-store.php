@@ -10,4 +10,19 @@ class WP_Directive_Store {
 	static function merge_data( $data ) {
 		self::$store = array_merge_recursive( selfs::$store, $data );
 	}
+
+	static function serialize() {
+		return json_enconde( self::$store );
+	}
+
+	static function render() {
+		if ( empty( self::$store ) ) {
+			return;
+		}
+
+		// TODO: find a better ID for the script tag.
+		$id    = 'store';
+		$store = self::serialize();
+		echo "<script id=\"$id\" type=\"application/json\">$store</script>";
+	}
 }
