@@ -8,7 +8,7 @@ class WP_Directive_Store {
 	}
 
 	static function merge_data( $data ) {
-		self::$store = array_merge_recursive( selfs::$store, $data );
+		self::$store = array_merge_recursive( self::$store, $data );
 	}
 
 	static function serialize() {

@@ -6,7 +6,7 @@ function store( $data ) {
 	WP_Directive_Store::merge_data( $data );
 }
 
-function evaluate( $path, $context ) {
+function evaluate( string $path, array $context = array() ) {
 	$current = array_merge(
 		WP_Directive_Store::get_data(),
 		array( 'context' => $context )
