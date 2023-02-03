@@ -15,6 +15,10 @@ class WP_Directive_Store {
 		return json_enconde( self::$store );
 	}
 
+	static function reset() {
+		self::$store = array();
+	}
+
 	static function render() {
 		if ( empty( self::$store ) ) {
 			return;
