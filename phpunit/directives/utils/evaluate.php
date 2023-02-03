@@ -41,10 +41,13 @@ class Tests_Utils_Evaluate extends WP_UnitTestCase {
 				),
 			),
 		);
-
 		$this->assertSame( 1, evaluate( 'context.core.a', $context ) );
 		$this->assertSame( 2, evaluate( 'context.core.b', $context ) );
 		$this->assertSame( 3, evaluate( 'context.core.nested.c', $context ) );
+		// Previous defined state is also accessible.
+		$this->assertSame( 1, evaluate( 'state.core.a' ) );
+		$this->assertSame( 2, evaluate( 'state.core.b' ) );
+		$this->assertSame( 3, evaluate( 'state.core.nested.c' ) );
 	}
 
 	public function test_evaluate_function_should_return_null_for_unresolved_paths() {
