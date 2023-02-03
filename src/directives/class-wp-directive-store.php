@@ -8,11 +8,11 @@ class WP_Directive_Store {
 	}
 
 	static function merge_data( $data ) {
-		self::$store = array_merge_recursive( self::$store, $data );
+		self::$store = array_replace_recursive( self::$store, $data );
 	}
 
 	static function serialize() {
-		return json_enconde( self::$store );
+		return json_encode( self::$store );
 	}
 
 	static function reset() {
