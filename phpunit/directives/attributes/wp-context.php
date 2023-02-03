@@ -27,7 +27,7 @@ class Tests_Directives_Attributes_WpContext extends WP_UnitTestCase {
 		);
 
 		$markup = '<div wp-context=\'{ "myblock": { "open": true } }\'>';
-		$tags = new WP_HTML_Tag_Processor( $markup );
+		$tags   = new WP_HTML_Tag_Processor( $markup );
 		$tags->next_tag();
 
 		process_wp_context_attribute( $tags, $context );

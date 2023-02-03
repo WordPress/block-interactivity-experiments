@@ -18,11 +18,11 @@ require_once __DIR__ . '/../../../../gutenberg/lib/experimental/html/index.php';
 class Tests_Directives_WpBind extends WP_UnitTestCase {
 	public function test_directive_sets_attribute() {
 		$markup = '<img wp-bind:src="context.myblock.imageSource" />';
-		$tags = new WP_HTML_Tag_Processor( $markup );
+		$tags   = new WP_HTML_Tag_Processor( $markup );
 		$tags->next_tag();
 
 		$context_before = new WP_Directive_Context( array( 'myblock' => array( 'imageSource' => './wordpress.png' ) ) );
-		$context = $context_before;
+		$context        = $context_before;
 		process_wp_bind( $tags, $context );
 
 		$this->assertSame(
@@ -35,11 +35,11 @@ class Tests_Directives_WpBind extends WP_UnitTestCase {
 
 	public function test_directive_ignores_empty_bound_attribute() {
 		$markup = '<img wp-bind:="context.myblock.imageSource" />';
-		$tags = new WP_HTML_Tag_Processor( $markup );
+		$tags   = new WP_HTML_Tag_Processor( $markup );
 		$tags->next_tag();
 
 		$context_before = new WP_Directive_Context( array( 'myblock' => array( 'imageSource' => './wordpress.png' ) ) );
-		$context = $context_before;
+		$context        = $context_before;
 		process_wp_bind( $tags, $context );
 
 		$this->assertSame( $markup, $tags->get_updated_html() );

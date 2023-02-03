@@ -25,7 +25,7 @@ class Tests_Directives_Tags_WpContext extends WP_UnitTestCase {
 		);
 
 		$markup = '<wp-context data=\'{ "myblock": { "open": true } }\'>';
-		$tags = new WP_HTML_Tag_Processor( $markup );
+		$tags   = new WP_HTML_Tag_Processor( $markup );
 		$tags->next_tag();
 
 		process_wp_context_tag( $tags, $context );
@@ -49,7 +49,7 @@ class Tests_Directives_Tags_WpContext extends WP_UnitTestCase {
 		);
 
 		$markup = '</wp-context>';
-		$tags = new WP_HTML_Tag_Processor( $markup );
+		$tags   = new WP_HTML_Tag_Processor( $markup );
 		$tags->next_tag( array( 'tag_closers' => 'visit' ) );
 
 		process_wp_context_tag( $tags, $context );
@@ -71,7 +71,7 @@ class Tests_Directives_Tags_WpContext extends WP_UnitTestCase {
 		);
 
 		$markup = '<div wp-context=\'{ "myblock": { "open": true } }\'>';
-		$tags = new WP_HTML_Tag_Processor( $markup );
+		$tags   = new WP_HTML_Tag_Processor( $markup );
 		$tags->next_tag();
 
 		process_wp_context_tag( $tags, $context );
