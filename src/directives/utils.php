@@ -1,15 +1,26 @@
 <?php
 
-function get_from_context( $expr, $context ) {
-	$path = explode( '.', $expr );
-	if ( count( $path ) > 0 && 'context' === $path[0] ) {
-		array_shift( $path );
-		$result = $context;
-		foreach ( $path as $key ) {
-			$result = $result[ $key ];
+require_once  __DIR__ . '/class-wp-directive-store.php';
+
+function store( $data ) {
+	WP_Directive_Store::merge_data( $data );
+}
+
+function evaluate( $path, $context ) {
+	$current = array_merge(
+		WP_Directive_Store::get_data(),
+		array( 'context' => $context )
+	);
+
+	$array = explode( '.', $path );
+	foreach ( $array as $p ) {
+		if ( isset( $current[ $p ] ) ) {
+			$current = $current[ $p ];
+		} else {
+			return null;
 		}
 	}
-	return $result;
+	return $current;
 }
 
 function set_style( $style, $name, $value ) {

@@ -17,7 +17,7 @@ function process_wp_bind( $tags, $context ) {
 
 		// TODO: Properly parse $value.
 		$expr  = $tags->get_attribute( $attr );
-		$value = get_from_context( $expr, $context->get_context() );
+		$value = evaluate( $expr, $context->get_context() );
 		$tags->set_attribute( $bound_attr, $value );
 	}
 }

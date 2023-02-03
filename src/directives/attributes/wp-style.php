@@ -17,7 +17,7 @@ function process_wp_style( $tags, $context ) {
 
 		// TODO: Properly parse $value.
 		$expr        = $tags->get_attribute( $attr );
-		$style_value = get_from_context( $expr, $context->get_context() );
+		$style_value = evaluate( $expr, $context->get_context() );
 		if ( $style_value ) {
 			$style_attr = $tags->get_attribute( 'style' );
 			$style_attr = set_style( $style_attr, $style_name, $style_value );
