@@ -18,11 +18,11 @@ class Tests_Utils_Evaluate extends WP_UnitTestCase {
 			array(
 				'state' => array(
 					'core' => array(
-						'a' => 1,
-						'b' => 2,
+						'a'      => 1,
+						'b'      => 2,
 						'nested' => array(
-							'c' => 3
-						)
+							'c' => 3,
+						),
 					),
 				),
 			)
@@ -34,14 +34,14 @@ class Tests_Utils_Evaluate extends WP_UnitTestCase {
 	public function test_evaluate_function_should_access_passed_context() {
 		$context = array(
 			'core' => array(
-				'a' => 1,
-				'b' => 2,
+				'a'      => 1,
+				'b'      => 2,
 				'nested' => array(
-					'c' => 3
-				)
+					'c' => 3,
+				),
 			),
 		);
-		
+
 		$this->assertSame( 1, evaluate( 'context.core.a', $context ) );
 		$this->assertSame( 2, evaluate( 'context.core.b', $context ) );
 		$this->assertSame( 3, evaluate( 'context.core.nested.c', $context ) );
