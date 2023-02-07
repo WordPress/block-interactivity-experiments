@@ -16,7 +16,23 @@ export const deepMerge = (target, source) => {
 	}
 };
 
-const rawState = {};
+const getSerializedState = () => {
+	// TODO: change the store tag ID for a better one.
+	const storeTag = document.querySelector(
+		`script[type="application/json"]#store`
+	);
+	if (!storeTag) return {};
+	try {
+		const { state } = JSON.parse(storeTag.textContent);
+		if (isObject(state)) return state;
+		throw Error('Parsed state is not an object');
+	} catch (e) {
+		console.log(e);
+	}
+	return {};
+};
+
+const rawState = getSerializedState();
 export const rawStore = { state: deepSignal(rawState) };
 
 if (typeof window !== 'undefined') window.store = rawStore;
