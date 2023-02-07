@@ -1,6 +1,6 @@
-import { wpx } from '../src/runtime/wpx';
+import { store } from '../src/runtime';
 
-wpx({
+store({
 	state: {
 		trueValue: true,
 		falseValue: false,
