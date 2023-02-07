@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Store -- hydration</title>
+		<meta itemprop="wp-client-side-transitions" content="active" />
+	</head>
+
+	<body>
+		<div>
+			Counter:
+			<span
+				wp-bind:children="state.counter.value"
+				data-testid="counter value"
+				>3</span
+			>
+			<br />
+			Double:
+			<span
+				wp-bind:children="state.counter.double"
+				data-testid="counter double"
+				>6</span
+			>
+			<br />
+			<button
+				wp-on:click="actions.counter.increment"
+				data-testid="counter button"
+			>
+				+1
+			</button>
+			<span
+				wp-bind:children="state.counter.clicks"
+				data-testid="counter clicks"
+				>0</span
+			>
+			clicks
+		</div>
+		<script src="../build/e2e/store.js"></script>
+		<script src="../build/runtime.js"></script>
+		<script src="../build/vendors.js"></script>
+	</body>
+</html>
