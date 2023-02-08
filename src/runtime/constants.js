@@ -1,3 +1,3 @@
-export const cstMetaTagItemprop = 'wp-client-side-transitions';
+export const csnMetaTagItemprop = 'wp-client-side-navigation';
 export const componentPrefix = 'wp-';
 export const directivePrefix = 'wp-';

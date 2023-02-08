@@ -32,7 +32,7 @@ function wp_directives_register_settings() {
 		array(
 			'type'              => 'object',
 			'default'           => array(
-				'client_side_transitions' => false,
+				'client_side_navigation' => false,
 			),
 			'sanitize_callback' => 'wp_directives_validate_settings',
 		)
@@ -46,9 +46,9 @@ function wp_directives_register_settings() {
 	);
 
 	add_settings_field(
-		'client_side_transitions',
-		'Client Side Transitions',
-		'wp_directives_client_side_transitions_input',
+		'client_side_navigation',
+		'Client Side Navigation',
+		'wp_directives_client_side_navigation_input',
 		'wp_directives_plugin_page',
 		'wp_directives_plugin_section'
 	);
@@ -56,19 +56,19 @@ function wp_directives_register_settings() {
 add_action( 'admin_init', 'wp_directives_register_settings' );
 
 function wp_directives_validate_settings( $input ) {
-	$output                            = get_option( 'wp_directives_plugin_settings' );
-	$output['client_side_transitions'] =
-		isset( $input ) && $input['client_side_transitions'] ? true : false;
+	$output                           = get_option( 'wp_directives_plugin_settings' );
+	$output['client_side_navigation'] =
+		isset( $input ) && $input['client_side_navigation'] ? true : false;
 	return $output;
 }
 
-function wp_directives_client_side_transitions_input() {
+function wp_directives_client_side_navigation_input() {
 	$options = get_option( 'wp_directives_plugin_settings' );
 	?>
 
 	<input type="checkbox" 
-		name="<?php echo esc_attr( 'wp_directives_plugin_settings[client_side_transitions]' ); ?>" 
-		<?php echo $options['client_side_transitions'] ? 'checked' : ''; ?>
+		name="<?php echo esc_attr( 'wp_directives_plugin_settings[client_side_navigation]' ); ?>" 
+		<?php echo $options['client_side_navigation'] ? 'checked' : ''; ?>
 	>
 
 	<?php
