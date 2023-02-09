@@ -7,7 +7,7 @@ require_once __DIR__ . '/../../../src/directives/tags/wp-context.php';
 
 require_once __DIR__ . '/../../../src/directives/class-wp-directive-context.php';
 
-require_once __DIR__ . '/../../../../gutenberg/lib/experimental/html/index.php';
+require_once __DIR__ . '/../../../../gutenberg/lib/experimental/html/wp-html.php';
 
 /**
  * Tests for the wp-context tag directive.
