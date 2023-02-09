@@ -18,36 +18,36 @@ class Tests_Utils_Evaluate extends WP_UnitTestCase {
 			array(
 				'state' => array(
 					'core' => array(
-						'a'      => 1,
-						'b'      => 2,
+						'number' => 1,
+						'bool'   => true,
 						'nested' => array(
-							'c' => 3,
+							'string' => 'hi',
 						),
 					),
 				),
 			)
 		);
-		$this->assertSame( 1, evaluate( 'state.core.a' ) );
-		$this->assertSame( 2, evaluate( 'state.core.b' ) );
-		$this->assertSame( 3, evaluate( 'state.core.nested.c' ) );
+		$this->assertSame( 1, evaluate( 'state.core.number' ) );
+		$this->assertTrue( evaluate( 'state.core.bool' ) );
+		$this->assertSame( 'hi', evaluate( 'state.core.nested.string' ) );
 	}
 	public function test_evaluate_function_should_access_passed_context() {
 		$context = array(
-			'core' => array(
-				'a'      => 1,
-				'b'      => 2,
+			'local' => array(
+				'number' => 2,
+				'bool'   => false,
 				'nested' => array(
-					'c' => 3,
+					'string' => 'bye',
 				),
 			),
 		);
-		$this->assertSame( 1, evaluate( 'context.core.a', $context ) );
-		$this->assertSame( 2, evaluate( 'context.core.b', $context ) );
-		$this->assertSame( 3, evaluate( 'context.core.nested.c', $context ) );
+		$this->assertSame( 2, evaluate( 'context.local.number', $context ) );
+		$this->assertFalse( evaluate( 'context.local.bool', $context ) );
+		$this->assertSame( 'bye', evaluate( 'context.local.nested.string', $context ) );
 		// Previous defined state is also accessible.
-		$this->assertSame( 1, evaluate( 'state.core.a' ) );
-		$this->assertSame( 2, evaluate( 'state.core.b' ) );
-		$this->assertSame( 3, evaluate( 'state.core.nested.c' ) );
+		$this->assertSame( 1, evaluate( 'state.core.number' ) );
+		$this->assertTrue( evaluate( 'state.core.bool' ) );
+		$this->assertSame( 'hi', evaluate( 'state.core.nested.string' ) );
 	}
 
 	public function test_evaluate_function_should_return_null_for_unresolved_paths() {
