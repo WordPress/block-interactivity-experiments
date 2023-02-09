@@ -3,7 +3,7 @@
  * wp-context attribute directive test.
  */
 
-// require_once __DIR__ . '/../../../src/directives/attributes/wp-context.php'; // TODO
+require_once __DIR__ . '/../../../src/directives/attributes/wp-context.php';
 
 require_once __DIR__ . '/../../../src/directives/class-wp-directive-context.php';
 
@@ -17,8 +17,6 @@ require_once __DIR__ . '/../../../../gutenberg/lib/experimental/html/index.php';
  */
 class Tests_Directives_Attributes_WpContext extends WP_UnitTestCase {
 	public function test_directive_merges_context_correctly_upon_wp_context_attribute_on_opening_tag() {
-		$this->markTestSkipped( 'Need to implement the wp-context attribute directive processor first.' );
-
 		$context = new WP_Directive_Context(
 			array(
 				'myblock'    => array( 'open' => false ),
@@ -37,6 +35,27 @@ class Tests_Directives_Attributes_WpContext extends WP_UnitTestCase {
 				'myblock'    => array( 'open' => true ),
 				'otherblock' => array( 'somekey' => 'somevalue' ),
 			),
+			$context->get_context()
+		);
+	}
+
+	public function test_directive_resets_context_correctly_upon_closing_tag() {
+		$context = new WP_Directive_Context(
+			array( 'my-key' => 'original-value' )
+		);
+
+		$context->set_context(
+			array( 'my-key' => 'new-value' )
+		);
+
+		$markup = '</div>';
+		$tags = new WP_HTML_Tag_Processor( $markup );
+		$tags->next_tag( array( 'tag_closers' => 'visit' ) );
+
+		process_wp_context_tag( $tags, $context );
+
+		$this->assertSame(
+			array( 'my-key' => 'original-value' ),
 			$context->get_context()
 		);
 	}
