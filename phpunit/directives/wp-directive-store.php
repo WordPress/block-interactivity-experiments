@@ -107,7 +107,7 @@ class Tests_Directives_WPDirectiveStore extends WP_UnitTestCase {
 		);
 	}
 
-	public function test_store_should_be_correctly_render() {
+	public function test_store_should_be_correctly_rendered() {
 		WP_Directive_Store::merge_data(
 			array(
 				'state' => array(
