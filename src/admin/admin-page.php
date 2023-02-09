@@ -56,7 +56,7 @@ function wp_directives_register_settings() {
 add_action( 'admin_init', 'wp_directives_register_settings' );
 
 function wp_directives_validate_settings( $input ) {
-	$output                            = get_option( 'wp_directives_plugin_settings' );
+	$output                           = get_option( 'wp_directives_plugin_settings' );
 	$output['client_side_navigation'] =
 		isset( $input ) && $input['client_side_navigation'] ? true : false;
 	return $output;

@@ -7,7 +7,7 @@ require_once __DIR__ . '/../../../src/directives/attributes/wp-context.php';
 
 require_once __DIR__ . '/../../../src/directives/class-wp-directive-context.php';
 
-require_once __DIR__ . '/../../../../gutenberg/lib/experimental/html/index.php';
+require_once __DIR__ . '/../../../../gutenberg/lib/experimental/html/wp-html.php';
 
 /**
  * Tests for the wp-context attribute directive.
@@ -25,7 +25,7 @@ class Tests_Directives_Attributes_WpContext extends WP_UnitTestCase {
 		);
 
 		$markup = '<div wp-context=\'{ "myblock": { "open": true } }\'>';
-		$tags = new WP_HTML_Tag_Processor( $markup );
+		$tags   = new WP_HTML_Tag_Processor( $markup );
 		$tags->next_tag();
 
 		process_wp_context_attribute( $tags, $context );
@@ -49,7 +49,7 @@ class Tests_Directives_Attributes_WpContext extends WP_UnitTestCase {
 		);
 
 		$markup = '</div>';
-		$tags = new WP_HTML_Tag_Processor( $markup );
+		$tags   = new WP_HTML_Tag_Processor( $markup );
 		$tags->next_tag( array( 'tag_closers' => 'visit' ) );
 
 		process_wp_context_tag( $tags, $context );

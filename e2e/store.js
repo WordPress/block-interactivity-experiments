@@ -1,6 +1,6 @@
-import { wpx } from '../src/runtime/wpx';
+import { store } from '../src/runtime/store';
 
-wpx({
+store({
 	state: {
 		trueValue: true,
 		falseValue: false,
@@ -25,6 +25,26 @@ wpx({
 			const [key, ...path] = name.split('.').reverse();
 			const obj = path.reduceRight((o, k) => o[k], context);
 			obj[key] = value;
+		},
+	},
+});
+
+// State for the store hydration tests.
+store({
+	state: {
+		counter: {
+			// TODO: replace this with a getter.
+			// `value` is defined in the server.
+			double: ({ state }) => state.counter.value * 2,
+			clicks: 0,
+		},
+	},
+	actions: {
+		counter: {
+			increment: ({ state }) => {
+				state.counter.value += 1;
+				state.counter.clicks += 1;
+			},
 		},
 	},
 });
