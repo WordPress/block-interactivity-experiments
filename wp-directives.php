@@ -258,4 +258,4 @@ add_filter(
 
 // TODO: check if priority 9 is enough.
 // TODO: check if `wp_footer` is the most appropriate hook.
-add_action( 'wp_footer', WP_Directive_Store::render, 9 );
+add_action( 'wp_footer', array( 'WP_Directive_Store', 'render' ), 9 );
