@@ -216,7 +216,7 @@ function wp_process_directives( $block_content ) {
 	);
 
 	$attribute_directives = array(
-		// 'wp-context' => 'process_wp_context_attribute', // TODO
+		'wp-context' => 'process_wp_context_attribute',
 		'wp-bind'  => 'process_wp_bind',
 		'wp-class' => 'process_wp_class',
 		'wp-style' => 'process_wp_style',
@@ -234,12 +234,13 @@ function wp_process_directives( $block_content ) {
 			$attributes = $tags->get_attribute_names_with_prefix( 'wp-' );
 
 			foreach ( $attributes as $attribute ) {
-				if ( ! array_key_exists( $attribute, $attribute_directives ) ) {
+				list( $type ) = explode( ':', $attribute );
+				if ( ! array_key_exists( $type, $attribute_directives ) ) {
 					continue;
 				}
 
 				call_user_func(
-					$attribute_directives[ $attribute ],
+					$attribute_directives[ $type ],
 					$tags,
 					$context
 				);
@@ -247,7 +248,7 @@ function wp_process_directives( $block_content ) {
 		}
 	}
 
-	return $block_content;
+	return $tags->get_updated_html();
 }
 add_filter(
 	'render_block',
