@@ -63,6 +63,19 @@ test.describe('wp-class', () => {
 		await expect(el).toHaveClass('foo bar baz');
 	});
 
+	test('can toggle class when class attribute is missing', async ({
+		page,
+	}) => {
+		const el = page.getByTestId(
+			'can toggle class when class attribute is missing'
+		);
+		await expect(el).toHaveClass('');
+		page.getByTestId('toggle falseValue').click();
+		await expect(el).toHaveClass('foo');
+		page.getByTestId('toggle falseValue').click();
+		await expect(el).toHaveClass('');
+	});
+
 	test('can use context values', async ({ page }) => {
 		const el = page.getByTestId('can use context values');
 		await expect(el).toHaveClass('');
