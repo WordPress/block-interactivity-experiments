@@ -39,11 +39,12 @@ require_once __DIR__ . '/../gutenberg/lib/experimental/html/wp-html.php';
 
 require_once __DIR__ . '/src/directives/class-wp-directive-context.php';
 require_once __DIR__ . '/src/directives/class-wp-directive-store.php';
+require_once __DIR__ . 'src/directives/wp-process-directives.php';
 
-require_once __DIR__ . '/src/directives/attributes/wp-bind.php';
-require_once __DIR__ . '/src/directives/attributes/wp-class.php';
-require_once __DIR__ . '/src/directives/attributes/wp-style.php';
-require_once __DIR__ . '/src/directives/tags/wp-context.php';
+require_once __DIR__ . '/attributes/wp-bind.php';
+require_once __DIR__ . '/attributes/wp-class.php';
+require_once __DIR__ . '/attributes/wp-style.php';
+require_once __DIR__ . '/tags/wp-context.php';
 
 function wp_directives_loader() {
 	// Load the Admin page.
@@ -209,7 +210,7 @@ function bhe_inner_blocks( $parsed_block, $source_block, $parent_block ) {
 }
 add_filter( 'render_block_data', 'bhe_inner_blocks', 10, 3 );
 
-function wp_process_directives( $block_content ) {
+function process_directives_in_block( $block_content ) {
 	// TODO: Add some directive/components registration mechanism.
 	$tag_directives = array(
 		'wp-context' => 'process_wp_context_tag',
@@ -223,35 +224,12 @@ function wp_process_directives( $block_content ) {
 	);
 
 	$tags = new WP_HTML_Tag_Processor( $block_content );
-
-	$context = new WP_Directive_Context();
-	while ( $tags->next_tag( array( 'tag_closers' => 'visit' ) ) ) {
-		$tag_name = strtolower( $tags->get_tag() );
-		if ( array_key_exists( $tag_name, $tag_directives ) ) {
-			call_user_func( $tag_directives[ $tag_name ], $tags, $context );
-		} else {
-			// Components can't have directives (unless we change our mind about this).
-			$attributes = $tags->get_attribute_names_with_prefix( 'wp-' );
-
-			foreach ( $attributes as $attribute ) {
-				if ( ! array_key_exists( $attribute, $attribute_directives ) ) {
-					continue;
-				}
-
-				call_user_func(
-					$attribute_directives[ $attribute ],
-					$tags,
-					$context
-				);
-			}
-		}
-	}
-
-	return $block_content;
+	$tags = wp_process_directives( $tags, 'wp-', $tag_directives, $attribute_directives );
+	return $tags->get_updated_html();
 }
 add_filter(
 	'render_block',
-	'wp_process_directives',
+	'process_directives_in_block',
 	10,
 	1
 );
