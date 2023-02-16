@@ -30,7 +30,12 @@ function wp_process_directives( $tags, $prefix, $tag_directives, $attribute_dire
 					}
 				}
 			} else {
+				$get_directive_type = function ( $attr ) {
+					return strtok( $attr, ':' );
+				};
+
 				$attributes = $tags->get_attribute_names_with_prefix( $prefix );
+				$attributes = array_map( $get_directive_type, $attributes );
 				$attributes = array_intersect( $attributes, array_keys( $attribute_directives ) );
 
 				// If this is an open tag, and if it either has attribute directives,
