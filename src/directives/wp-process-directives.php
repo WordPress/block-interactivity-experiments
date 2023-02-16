@@ -30,6 +30,8 @@ function wp_process_directives( $tags, $prefix, $tag_directives, $attribute_dire
 					}
 				}
 			} else {
+				// Helper that removes the part after the colon before looking
+				// for the directive processor inside `$attribute_directives`.
 				$get_directive_type = function ( $attr ) {
 					return strtok( $attr, ':' );
 				};
