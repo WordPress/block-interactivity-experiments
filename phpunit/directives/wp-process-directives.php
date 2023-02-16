@@ -47,4 +47,18 @@ class Tests_Directives_WpProcessDirectives extends WP_UnitTestCase {
 		$tags   = new WP_HTML_Tag_Processor( $markup );
 		wp_process_directives( $tags, 'foo-', array(), $attribute_directives );
 	}
+
+	public function test_directives_with_type_and_name_are_processed_correctly() {
+		$test_helper = $this->createMock( Helper_Class::class );
+		$test_helper->expects( $this->atLeastOnce() )
+					->method( 'process_foo_test' );
+
+		$attribute_directives = array(
+			'foo-test' => array( $test_helper, 'process_foo_test' ),
+		);
+
+		$markup = '<div foo-test:value="abc"></div>';
+		$tags   = new WP_HTML_Tag_Processor( $markup );
+		wp_process_directives( $tags, 'foo-', array(), $attribute_directives );
+	}
 }
