@@ -48,7 +48,7 @@ class Tests_Directives_WpProcessDirectives extends WP_UnitTestCase {
 		wp_process_directives( $tags, 'foo-', array(), $attribute_directives );
 	}
 
-	public function test_directives_with_type_and_name_are_processed_correctly() {
+	public function test_directives_with_colon_processed_correctly() {
 		$test_helper = $this->createMock( Helper_Class::class );
 		$test_helper->expects( $this->atLeastOnce() )
 					->method( 'process_foo_test' );
