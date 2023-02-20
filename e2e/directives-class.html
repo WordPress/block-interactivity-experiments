@@ -52,6 +52,11 @@
 			data-testid="can toggle class in the middle"
 		></div>
 
+		<div
+			wp-class:foo="state.falseValue"
+			data-testid="can toggle class when class attribute is missing"
+		></div>
+
 		<wp-context data='{ "falseValue": false }'>
 			<div
 				class="foo"
