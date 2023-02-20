@@ -217,10 +217,10 @@ function process_directives_in_block( $block_content ) {
 	);
 
 	$attribute_directives = array(
-		// 'wp-context' => 'process_wp_context_attribute', // TODO
-		'wp-bind'  => 'process_wp_bind',
-		'wp-class' => 'process_wp_class',
-		'wp-style' => 'process_wp_style',
+		'wp-context' => 'process_wp_context_attribute',
+		'wp-bind'    => 'process_wp_bind',
+		'wp-class'   => 'process_wp_class',
+		'wp-style'   => 'process_wp_style',
 	);
 
 	$tags = new WP_HTML_Tag_Processor( $block_content );
