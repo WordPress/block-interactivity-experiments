@@ -162,4 +162,24 @@ export default () => {
 			}
 		}
 	);
+
+	// wp-show
+	directive(
+		'show',
+		({
+			directives: {
+				show: { default: show },
+			},
+			props: { children },
+			evaluate,
+			context,
+		}) => {
+			const contextValue = useContext(context);
+			if (evaluate(show, { context: contextValue })) {
+				return children;
+			} else {
+				return <template>{children}</template>;
+			}
+		}
+	);
 };
