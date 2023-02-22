@@ -170,16 +170,15 @@ export default () => {
 			directives: {
 				show: { default: show },
 			},
-			props: { children },
+			element,
 			evaluate,
 			context,
 		}) => {
 			const contextValue = useContext(context);
-			if (evaluate(show, { context: contextValue })) {
-				return children;
-			} else {
-				return <template>{children}</template>;
-			}
+			if (!evaluate(show, { context: contextValue }))
+				element.props.children = (
+					<template>{element.props.children}</template>
+				);
 		}
 	);
 };
