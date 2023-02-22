@@ -34,7 +34,20 @@
 			<p>falseValue children</p>
 		</div>
 
-		<div>Add block with context</div>
+		<div wp-context='{ "falseValue": false }'>
+			<div
+				wp-show="context.falseValue"
+				data-testid="can use context values"
+			>
+				falseValue
+			</div>
+			<button
+				wp-on:click="actions.toggleContextFalseValue"
+				data-testid="toggle context false value"
+			>
+				Toggle context falseValue
+			</button>
+		</div>
 
 		<script src="../build/e2e/store.js"></script>
 		<script src="../build/runtime.js"></script>
