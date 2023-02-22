@@ -39,12 +39,12 @@ require_once __DIR__ . '/../gutenberg/lib/experimental/html/wp-html.php';
 
 require_once __DIR__ . '/src/directives/class-wp-directive-context.php';
 require_once __DIR__ . '/src/directives/class-wp-directive-store.php';
-require_once __DIR__ . 'src/directives/wp-process-directives.php';
+require_once __DIR__ . '/src/directives/wp-process-directives.php';
 
-require_once __DIR__ . '/attributes/wp-bind.php';
-require_once __DIR__ . '/attributes/wp-class.php';
-require_once __DIR__ . '/attributes/wp-style.php';
-require_once __DIR__ . '/tags/wp-context.php';
+require_once __DIR__ . '/src/directives/attributes/wp-bind.php';
+require_once __DIR__ . '/src/directives/attributes/wp-class.php';
+require_once __DIR__ . '/src/directives/attributes/wp-style.php';
+require_once __DIR__ . '/src/directives/tags/wp-context.php';
 
 function wp_directives_loader() {
 	// Load the Admin page.
@@ -217,10 +217,10 @@ function process_directives_in_block( $block_content ) {
 	);
 
 	$attribute_directives = array(
-		// 'wp-context' => 'process_wp_context_attribute', // TODO
-		'wp-bind'  => 'process_wp_bind',
-		'wp-class' => 'process_wp_class',
-		'wp-style' => 'process_wp_style',
+		'wp-context' => 'process_wp_context_attribute',
+		'wp-bind'    => 'process_wp_bind',
+		'wp-class'   => 'process_wp_class',
+		'wp-style'   => 'process_wp_style',
 	);
 
 	$tags = new WP_HTML_Tag_Processor( $block_content );
