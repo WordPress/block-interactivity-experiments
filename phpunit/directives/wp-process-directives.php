@@ -5,7 +5,7 @@
 
 require_once __DIR__ . '/../../src/directives/wp-process-directives.php';
 
-require_once __DIR__ . '/../../../gutenberg/lib/experimental/html/wp-html.php';
+require_once __DIR__ . '/../../src/directives/wp-html.php';
 
 class Helper_Class {
 	function process_foo_test( $tags, $context ) {
