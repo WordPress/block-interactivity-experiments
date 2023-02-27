@@ -35,7 +35,7 @@ if ( ! is_plugin_active( 'gutenberg/gutenberg.php' ) ) {
 	return;
 }
 
-require_once __DIR__ . '/../gutenberg/lib/experimental/html/wp-html.php';
+require_once __DIR__ . '/src/directives/wp-html.php';
 
 require_once __DIR__ . '/src/directives/class-wp-directive-context.php';
 require_once __DIR__ . '/src/directives/class-wp-directive-store.php';
