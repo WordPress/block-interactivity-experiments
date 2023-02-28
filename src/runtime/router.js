@@ -127,7 +127,7 @@ export const init = async () => {
 		hydrate(body, rootFragment);
 
 		// Cache the scripts. Has to be called before fetching the head.
-		[].map.call(document.head.querySelectorAll('script'), (script) => {
+		[].map.call(document.head.querySelectorAll('script[src]'), (script) => {
 			scripts.set(script.getAttribute('src'), script.textContent);
 		});
 
