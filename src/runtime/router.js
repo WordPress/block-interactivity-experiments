@@ -6,9 +6,10 @@ import { csnMetaTagItemprop, directivePrefix } from './constants';
 // The root to render the vdom (document.body).
 let rootFragment;
 
-// The cache of visited and prefetched pages and stylesheets.
+// The cache of visited and prefetched pages, stylesheets and scripts.
 const pages = new Map();
 const stylesheets = new Map();
+const scripts = new Map();
 
 // Helper to remove domain and hash from the URL. We are only interesting in
 // caching the path and the query.
@@ -41,7 +42,27 @@ const fetchHead = async (head) => {
 		style.textContent = sheet;
 		return style;
 	});
+
+	const scriptsToLoad = await Promise.all(
+		[].map.call(head.querySelectorAll('script[src]'), (script) => {
+			const src = script.getAttribute('src');
+			if (!scripts.has(src))
+				scripts.set(
+					src,
+					fetch(src).then((r) => r.text())
+				);
+			return scripts.get(src);
+		})
+	);
+
+	const scriptTags = scriptsToLoad.map((script) => {
+		const scriptEl = document.createElement('script');
+		scriptEl.textContent = script;
+		return scriptEl;
+	});
+
 	return [
+		...scriptTags,
 		head.querySelector('title'),
 		...head.querySelectorAll('style'),
 		...stylesFromSheets,
@@ -104,6 +125,11 @@ export const init = async () => {
 
 		const body = toVdom(document.body);
 		hydrate(body, rootFragment);
+
+		// Cache the scripts. Has to be called before fetching the head.
+		[].map.call(document.head.querySelectorAll('script'), (script) => {
+			scripts.set(script.getAttribute('src'), script.textContent);
+		});
 
 		const head = await fetchHead(document.head);
 		pages.set(cleanUrl(window.location), Promise.resolve({ body, head }));
