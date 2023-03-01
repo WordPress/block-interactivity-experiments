@@ -212,9 +212,7 @@ add_filter( 'render_block_data', 'bhe_inner_blocks', 10, 3 );
 
 function process_directives_in_block( $block_content ) {
 	// TODO: Add some directive/components registration mechanism.
-	$tag_directives = array(
-		'wp-context' => 'process_wp_context_tag',
-	);
+	$tag_directives = array();
 
 	$attribute_directives = array(
 		'wp-context' => 'process_wp_context_attribute',
