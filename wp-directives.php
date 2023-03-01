@@ -215,7 +215,7 @@ function process_directives_in_block( $block_content ) {
 	$tag_directives = array();
 
 	$attribute_directives = array(
-		'wp-context' => 'process_wp_context_attribute',
+		'wp-context' => 'process_wp_context',
 		'wp-bind'    => 'process_wp_bind',
 		'wp-class'   => 'process_wp_class',
 		'wp-style'   => 'process_wp_style',
