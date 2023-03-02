@@ -47,6 +47,7 @@ require_once __DIR__ . '/src/directives/attributes/wp-bind.php';
 require_once __DIR__ . '/src/directives/attributes/wp-context.php';
 require_once __DIR__ . '/src/directives/attributes/wp-class.php';
 require_once __DIR__ . '/src/directives/attributes/wp-html.php';
+require_once __DIR__ . '/src/directives/attributes/wp-show.php';
 require_once __DIR__ . '/src/directives/attributes/wp-style.php';
 require_once __DIR__ . '/src/directives/attributes/wp-text.php';
 
@@ -261,6 +262,7 @@ function process_directives_in_block( $block_content ) {
 		'data-wp-bind'    => 'process_wp_bind',
 		'data-wp-class'   => 'process_wp_class',
 		'data-wp-html'    => 'process_wp_html',
+		'data-wp-show'    => 'process_wp_show',
 		'data-wp-style'   => 'process_wp_style',
 		'data-wp-text'    => 'process_wp_text',
 	);
