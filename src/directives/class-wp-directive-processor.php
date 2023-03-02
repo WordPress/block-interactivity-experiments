@@ -89,4 +89,49 @@ class WP_Directive_Processor extends WP_HTML_Tag_Processor {
 		$this->lexical_updates[] = new WP_HTML_Text_Replacement( $start, $end, $new_html );
 		return true;
 	}
+
+	public function get_outer_html( $new_html ) {
+		$this->set_bookmark( 'start' );
+		if ( ! $this->next_balanced_closer() ) {
+			$this->release_bookmark( 'start' );
+			return false;
+		}
+		$this->set_bookmark( 'end' );
+
+		$start = $this->bookmarks['start']->start;
+		$end   = $this->bookmarks['end']->end + 1;
+
+		$this->release_bookmark( 'start' );
+		$this->release_bookmark( 'end' );
+
+		// For consistency with set_outer_html:
+		$this->next_tag();
+		return substr( $this->html, $start, $end - $start );
+	}
+
+	public function set_outer_html( $new_html ) {
+		$this->set_bookmark( 'start' );
+		if ( ! $this->next_balanced_closer() ) {
+			$this->release_bookmark( 'start' );
+			return false;
+		}
+		$this->set_bookmark( 'end' );
+
+		$start = $this->bookmarks['start']->start;
+		$end   = $this->bookmarks['end']->end + 1;
+
+		$this->release_bookmark( 'start' );
+		$this->release_bookmark( 'end' );
+
+		$this->next_tag();
+		$this->set_bookmark( 'next' );
+		$this->lexical_updates[] = new WP_HTML_Text_Replacement( $start, $end, $new_html );
+		// updates before the current position are not supported well and we end
+		// up at an invalid combination of copied bytes and parsed bytes index. 
+		// bookmarks are updated correctly, though, so seek() makes it right again.
+		$this->seek('next');
+		$this->release_bookmark( 'next' );
+		return true;
+	}
+	
 }
