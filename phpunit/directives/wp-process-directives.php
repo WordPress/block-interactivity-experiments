@@ -39,13 +39,13 @@ class Tests_Directives_WpProcessDirectives extends WP_UnitTestCase {
 						)
 					);
 
-		$attribute_directives = array(
+		$directives = array(
 			'foo-test' => array( $test_helper, 'process_foo_test' ),
 		);
 
 		$markup = '<div>Example: <div foo-test="abc"><img><span>This is a test></span><div>Here is a nested div</div></div></div>';
 		$tags   = new WP_HTML_Tag_Processor( $markup );
-		wp_process_directives( $tags, 'foo-', array(), $attribute_directives );
+		wp_process_directives( $tags, 'foo-', $directives );
 	}
 
 	public function test_directives_with_colon_processed_correctly() {
@@ -53,12 +53,12 @@ class Tests_Directives_WpProcessDirectives extends WP_UnitTestCase {
 		$test_helper->expects( $this->atLeastOnce() )
 					->method( 'process_foo_test' );
 
-		$attribute_directives = array(
+		$directives = array(
 			'foo-test' => array( $test_helper, 'process_foo_test' ),
 		);
 
 		$markup = '<div foo-test:value="abc"></div>';
 		$tags   = new WP_HTML_Tag_Processor( $markup );
-		wp_process_directives( $tags, 'foo-', array(), $attribute_directives );
+		wp_process_directives( $tags, 'foo-', $directives );
 	}
 }

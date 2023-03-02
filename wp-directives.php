@@ -212,19 +212,15 @@ add_filter( 'render_block_data', 'bhe_inner_blocks', 10, 3 );
 
 function process_directives_in_block( $block_content ) {
 	// TODO: Add some directive/components registration mechanism.
-	$tag_directives = array(
-		'wp-context' => 'process_wp_context_tag',
-	);
-
-	$attribute_directives = array(
-		'wp-context' => 'process_wp_context_attribute',
+	$directives = array(
+		'wp-context' => 'process_wp_context',
 		'wp-bind'    => 'process_wp_bind',
 		'wp-class'   => 'process_wp_class',
 		'wp-style'   => 'process_wp_style',
 	);
 
 	$tags = new WP_HTML_Tag_Processor( $block_content );
-	$tags = wp_process_directives( $tags, 'wp-', $tag_directives, $attribute_directives );
+	$tags = wp_process_directives( $tags, 'wp-', $directives );
 	return $tags->get_updated_html();
 }
 add_filter(
