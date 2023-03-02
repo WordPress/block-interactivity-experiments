@@ -7,7 +7,7 @@ require_once __DIR__ . '/../../../src/directives/attributes/wp-each.php';
 
 require_once __DIR__ . '/../../../src/directives/class-wp-directive-context.php';
 
-require_once __DIR__ . '/../../../src/directives/wp-html.php';
+require_once __DIR__ . '/../../../src/class-wp-directive-processor.php';
 
 /**
  * Tests for the wp-context attribute directive.
@@ -52,7 +52,7 @@ class Tests_Directives_Attributes_WpEach extends WP_UnitTestCase {
                 </tbody>
             </table>
 EOF;
-		$tags   = new WP_HTML_Tag_Processor( $markup );
+		$tags   = new WP_Directive_Processor( $markup );
 		$tags->next_tag(); // table
 		$tags->next_tag(); // tbody
 
