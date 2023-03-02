@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . '/../class-wp-directive-processor.php';
+require_once __DIR__ . '/../../class-wp-directive-processor.php';
 
 function process_wp_each( $tags, $context ) {
 	if ( $tags->is_tag_closer() ) {
