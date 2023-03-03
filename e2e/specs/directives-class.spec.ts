@@ -1,9 +1,8 @@
-import { join } from 'path';
-import { test, expect } from '@playwright/test';
+import { test, expect } from '../tests';
 
 test.describe('wp-class', () => {
-	test.beforeEach(async ({ page }) => {
-		await page.goto('file://' + join(__dirname, 'directives-class.html'));
+	test.beforeEach(async ({ goToFile }) => {
+		await goToFile('directives-class.html');
 	});
 
 	test('remove class if callback returns falsy value', async ({ page }) => {
