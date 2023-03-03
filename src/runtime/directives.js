@@ -181,4 +181,21 @@ export default () => {
 				);
 		}
 	);
+
+	// wp-ignore
+	directive(
+		'ignore',
+		({
+			element: {
+				type: Type,
+				props: { innerHTML, ...rest },
+			},
+		}) => {
+			// Preserve the initial inner HTML.
+			const cached = useMemo(() => innerHTML, []);
+			return (
+				<Type dangerouslySetInnerHTML={{ __html: cached }} {...rest} />
+			);
+		}
+	);
 };
