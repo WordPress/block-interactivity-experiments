@@ -12,6 +12,10 @@ module.exports = [
 		output: {
 			filename: '[name].js',
 			path: resolve(process.cwd(), 'build'),
+			library: {
+				name: ['wp', 'interactivity'],
+				type: 'window',
+			},
 		},
 		optimization: {
 			runtimeChunk: {
