@@ -2,8 +2,6 @@ import { test, expect } from '../tests';
 
 test.describe('toVdom - full', () => {
 	test.beforeEach(async ({ goToFile }) => {
-		// Helpers to use URLs with http:// instead of file:// to avoid errors
-		// inside `fetch` calls.
 		await goToFile('tovdom-full.html');
 	});
 
