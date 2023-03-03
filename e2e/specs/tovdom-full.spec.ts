@@ -1,20 +1,10 @@
-import { join } from 'path';
-import { test, expect } from '@playwright/test';
+import { test, expect } from '../tests';
 
 test.describe('toVdom - full', () => {
-	test.beforeEach(async ({ page }) => {
+	test.beforeEach(async ({ goToFile }) => {
 		// Helpers to use URLs with http:// instead of file:// to avoid errors
 		// inside `fetch` calls.
-		await page.route('**/*.html', async (route, req) => {
-			const { pathname } = new URL(req.url());
-			route.fulfill({ path: join(__dirname, pathname) });
-		});
-		await page.route('**/*.js', async (route, req) => {
-			const { pathname } = new URL(req.url());
-			route.fulfill({ path: join(__dirname, '..', pathname) });
-		});
-
-		await page.goto('http://a.b/tovdom-full.html');
+		await goToFile('tovdom-full.html');
 	});
 
 	test('it should stop when it founds wp-ignore', async ({ page }) => {

@@ -1,12 +1,12 @@
-import { join } from 'path';
-import { test, expect, Locator } from '@playwright/test';
+import { Locator } from '@playwright/test';
+import { test, expect } from '../tests';
 
 const parseContent = async (loc: Locator) =>
 	JSON.parse((await loc.textContent()) || '');
 
 test.describe('wp-context', () => {
-	test.beforeEach(async ({ page }) => {
-		await page.goto('file://' + join(__dirname, 'directives-context.html'));
+	test.beforeEach(async ({ goToFile }) => {
+		await goToFile('directives-context.html');
 	});
 
 	test('is correctly initialized', async ({ page }) => {

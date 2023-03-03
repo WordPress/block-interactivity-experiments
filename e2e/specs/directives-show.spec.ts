@@ -1,9 +1,8 @@
-import { join } from 'path';
-import { test, expect } from '@playwright/test';
+import { test, expect } from '../tests';
 
 test.describe('wp-show', () => {
-	test.beforeEach(async ({ page }) => {
-		await page.goto('file://' + join(__dirname, 'directives-show.html'));
+	test.beforeEach(async ({ goToFile }) => {
+		await goToFile('directives-show.html');
 	});
 
 	test('show if callback returns truthy value', async ({ page }) => {
@@ -13,7 +12,9 @@ test.describe('wp-show', () => {
 	});
 
 	test('do not show if callback returns falsy value', async ({ page }) => {
-		const el = page.getByTestId('do not show if callback returns false value')
+		const el = page.getByTestId(
+			'do not show if callback returns false value'
+		);
 		await expect(el).toBeHidden();
 	});
 
@@ -27,7 +28,9 @@ test.describe('wp-show', () => {
 	});
 
 	test('show when toggling false value to truthy', async ({ page }) => {
-		const el = page.getByTestId('do not show if callback returns false value');
+		const el = page.getByTestId(
+			'do not show if callback returns false value'
+		);
 		await expect(el).toBeHidden();
 		page.getByTestId('toggle falseValue').click();
 		await expect(el).toBeVisible();

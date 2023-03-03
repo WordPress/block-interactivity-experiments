@@ -1,9 +1,8 @@
-import { join } from 'path';
-import { test, expect } from '@playwright/test';
+import { test, expect } from '../tests';
 
 test.describe('toVdom - isands', () => {
-	test.beforeEach(async ({ page }) => {
-		await page.goto('file://' + join(__dirname, 'tovdom-islands.html'));
+	test.beforeEach(async ({ goToFile }) => {
+		await goToFile('tovdom-islands.html');
 	});
 
 	test('directives that are not inside islands should not be hydrated', async ({
