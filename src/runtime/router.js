@@ -24,42 +24,60 @@ export const canDoClientSideNavigation = (dom) =>
 		.querySelector(`meta[itemprop='${csnMetaTagItemprop}']`)
 		?.getAttribute('content') === 'active';
 
+/**
+ * Finds the elements in the head that match the selector and fetch them.
+ * For each element found, fetch the content and store it in the cache.
+ * Returns an array of elements to add to the head.
+ *
+ * @param {string} selector - CSS selector used to find the elements.
+ * @param {'href'|'src'} attribute - Attribute that determines where to fetch
+ * the styles or scripts from. Also used as the key for the cache.
+ * @param {Map} cache - Cache to use for the elements. Can be `stylesheets` or `scripts`.
+ * @param {'style'|'script'} elementToCreate - Element to create for each fetched
+ * item. Can be 'style' or 'script'.
+ * @returns {Promise<Array<HTMLElement>>} - Array of elements to add to the head.
+ */
+const fetchScriptOrStyle = (selector, attribute, cache, elementToCreate) => {
+	const fetchedItems = Promise.all(
+		[].map.call(head.querySelectorAll(selector), (el) => {
+			const attributeValue = el.getAttribute(attribute);
+			if (!cache.has(attributeValue))
+				cache.set(
+					attributeValue,
+					fetch(attributeValue).then((r) => r.text())
+				);
+			return cache.get(attributeValue);
+		})
+	);
+
+	return fetchedItems.map((item) => {
+		const element = document.createElement(elementToCreate);
+		element.textContent = item;
+		return element;
+	});
+};
+
 // Fetch styles of a new page.
 const fetchHead = async (head) => {
-	const sheets = await Promise.all(
-		[].map.call(head.querySelectorAll("link[rel='stylesheet']"), (link) => {
-			const href = link.getAttribute('href');
-			if (!stylesheets.has(href))
-				stylesheets.set(
-					href,
-					fetch(href).then((r) => r.text())
-				);
-			return stylesheets.get(href);
-		})
+	const stylesFromSheets = await fetchScriptOrStyle(
+		'link[rel=stylesheet]',
+		'href',
+		stylesheets,
+		'style'
 	);
-	const stylesFromSheets = sheets.map((sheet) => {
-		const style = document.createElement('style');
-		style.textContent = sheet;
-		return style;
-	});
-
-	const scriptsToLoad = await Promise.all(
-		[].map.call(head.querySelectorAll('script[src]'), (script) => {
-			const src = script.getAttribute('src');
-			if (!scripts.has(src))
-				scripts.set(
-					src,
-					fetch(src).then((r) => r.text())
-				);
-			return scripts.get(src);
-		})
+	const scriptTags = await fetchScriptOrStyle(
+		'script[src]',
+		'src',
+		scripts,
+		'script'
 	);
-
-	const scriptTags = scriptsToLoad.map((script) => {
-		const scriptEl = document.createElement('script');
-		scriptEl.textContent = script;
-		return scriptEl;
-	});
+	const moduleScripts = await fetchScriptOrStyle(
+		'script[type=module]',
+		'src',
+		scripts,
+		'script'
+	);
+	moduleScripts.forEach((script) => script.setAttribute('type', 'module'));
 
 	return [
 		...scriptTags,
