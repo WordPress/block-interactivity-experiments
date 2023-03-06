@@ -45,6 +45,7 @@ require_once __DIR__ . '/src/directives/attributes/wp-bind.php';
 require_once __DIR__ . '/src/directives/attributes/wp-context.php';
 require_once __DIR__ . '/src/directives/attributes/wp-class.php';
 require_once __DIR__ . '/src/directives/attributes/wp-style.php';
+require_once __DIR__ . '/src/directives/attributes/wp-text.php';
 
 function wp_directives_loader() {
 	// Load the Admin page.
@@ -217,6 +218,7 @@ function process_directives_in_block( $block_content ) {
 		'data-wp-bind'    => 'process_wp_bind',
 		'data-wp-class'   => 'process_wp_class',
 		'data-wp-style'   => 'process_wp_style',
+		'data-wp-text'    => 'process_wp_text',
 	);
 
 	$tags = new WP_HTML_Tag_Processor( $block_content );
