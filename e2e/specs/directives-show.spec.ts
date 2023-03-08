@@ -6,7 +6,6 @@ test.describe('wp-show', () => {
 	});
 
 	test('show if callback returns truthy value', async ({ page }) => {
-		await page.pause();
 		const el = page.getByTestId('show if callback returns truthy value');
 		await expect(el).toBeVisible();
 	});

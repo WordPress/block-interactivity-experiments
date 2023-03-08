@@ -4,6 +4,7 @@ store({
 	state: {
 		trueValue: true,
 		falseValue: false,
+		text: 'Text 1',
 	},
 	derived: {
 		renderContext: ({ context }) => {
@@ -25,6 +26,16 @@ store({
 			const [key, ...path] = name.split('.').reverse();
 			const obj = path.reduceRight((o, k) => o[k], context);
 			obj[key] = value;
+		},
+		toggleStateText: ({ state }) => {
+			state.text === 'Text 1'
+				? (state.text = 'Text 2')
+				: (state.text = 'Text 1');
+		},
+		toggleContextText: ({ context }) => {
+			context.text === 'Text 1'
+				? (context.text = 'Text 2')
+				: (context.text = 'Text 1');
 		},
 	},
 });

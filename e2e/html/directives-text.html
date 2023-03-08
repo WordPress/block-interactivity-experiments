@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Directives -- wp-show</title>
+		<meta itemprop="wp-client-side-navigation" content="active" />
+	</head>
+	<body>
+		<div>
+			<span wp-text="state.text" data-testid="show state text"></span>
+			<button
+				wp-on:click="actions.toggleStateText"
+				data-testid="toggle state text"
+			>
+				Toggle State Text
+			</button>
+		</div>
+
+		<div wp-context='{ "text": "Text 1" }'>
+			<span wp-text="context.text" data-testid="show context text"></span>
+			<button
+				wp-on:click="actions.toggleContextText"
+				data-testid="toggle context text"
+			>
+				Toggle Context Text
+			</button>
+		</div>
+
+		<script src="../build/e2e/store.js"></script>
+		<script src="../build/runtime.js"></script>
+		<script src="../build/vendors.js"></script>
+	</body>
+</html>
