@@ -13,7 +13,7 @@ module.exports = [
 			filename: '[name].js',
 			path: resolve(process.cwd(), 'build'),
 			library: {
-				name: ['wp', 'interactivity'],
+				name: '__experimentalInteractivity',
 				type: 'window',
 			},
 		},
