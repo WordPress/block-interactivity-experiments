@@ -2,7 +2,7 @@
 	"name": "wordpress/block-interactivity-experiments",
 	"type": "wordpress-plugin",
 	"license": "GPL-2.0-or-later",
-	"description": "Experiments to add interactivity to blocks",
+	"description": "Experiments to add frontend interactivity to blocks",
 	"homepage": "https://wordpress.github.io/gutenberg/",
 	"keywords": [
 		"block-interactivity-experiments",
