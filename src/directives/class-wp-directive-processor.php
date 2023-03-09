@@ -66,6 +66,7 @@ class WP_Directive_Processor extends WP_HTML_Tag_Processor {
 		$start = $this->bookmarks['start']->end + 1;
 		$end   = $this->bookmarks['end']->start;
 
+		$this->seek( 'start' ); // Return to original position.
 		$this->release_bookmark( 'start' );
 		$this->release_bookmark( 'end' );
 
@@ -83,6 +84,7 @@ class WP_Directive_Processor extends WP_HTML_Tag_Processor {
 		$start = $this->bookmarks['start']->end + 1;
 		$end   = $this->bookmarks['end']->start;
 
+		$this->seek( 'start' ); // Return to original position.
 		$this->release_bookmark( 'start' );
 		$this->release_bookmark( 'end' );
 
