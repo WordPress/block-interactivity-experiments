@@ -74,6 +74,8 @@ class WP_Directive_Processor extends WP_HTML_Tag_Processor {
 	}
 
 	public function set_inner_html( $new_html ) {
+		$this->get_updated_html(); // Apply potential previous updates.
+
 		$this->set_bookmark( 'start' );
 		if ( ! $this->next_balanced_closer() ) {
 			$this->release_bookmark( 'start' );
