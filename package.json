@@ -1,5 +1,5 @@
 {
-	"name": "block-hydration-experiments",
+	"name": "block-interactivity-experiments",
 	"version": "0.1.0",
 	"author": "The WordPress Contributors",
 	"license": "GPL-2.0-or-later",
@@ -12,7 +12,7 @@
 		"lint:php": "wp-env run composer run-script lint",
 		"test": "jest",
 		"pretest:unit:php": "wp-env start",
-		"test:unit:php": "wp-env run tests-wordpress /var/www/html/wp-content/plugins/block-hydration-experiments/vendor/bin/phpunit -c /var/www/html/wp-content/plugins/block-hydration-experiments/phpunit.xml.dist --verbose",
+		"test:unit:php": "wp-env run tests-wordpress /var/www/html/wp-content/plugins/block-interactivity-experiments/vendor/bin/phpunit -c /var/www/html/wp-content/plugins/block-interactivity-experiments/phpunit.xml.dist --verbose",
 		"test:watch": "jest --watch",
 		"plugin-zip": "wp-scripts plugin-zip",
 		"wp-env": "wp-env"
