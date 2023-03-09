@@ -198,4 +198,20 @@ export default () => {
 			);
 		}
 	);
+
+	// wp-text
+	directive(
+		'text',
+		({
+			directives: {
+				text: { default: text },
+			},
+			element,
+			evaluate,
+			context,
+		}) => {
+			const contextValue = useContext(context);
+			element.props.children = evaluate(text, { context: contextValue });
+		}
+	);
 };
