@@ -7,7 +7,7 @@ require_once __DIR__ . '/../../../src/directives/attributes/wp-each.php';
 
 require_once __DIR__ . '/../../../src/directives/class-wp-directive-context.php';
 
-require_once __DIR__ . '/../../../src/class-wp-directive-processor.php';
+require_once __DIR__ . '/../../../src/directives/class-wp-directive-processor.php';
 
 /**
  * Tests for the wp-context attribute directive.
