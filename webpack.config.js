@@ -12,6 +12,10 @@ module.exports = [
 		output: {
 			filename: '[name].js',
 			path: resolve(process.cwd(), 'build'),
+			library: {
+				name: '__experimentalInteractivity',
+				type: 'window',
+			},
 		},
 		optimization: {
 			runtimeChunk: {

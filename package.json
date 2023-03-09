@@ -14,7 +14,7 @@
 		"pretest:unit:php": "wp-env start",
 		"test:unit:php": "wp-env run tests-wordpress /var/www/html/wp-content/plugins/block-interactivity-experiments/vendor/bin/phpunit -c /var/www/html/wp-content/plugins/block-interactivity-experiments/phpunit.xml.dist --verbose",
 		"test:watch": "jest --watch",
-		"plugin-zip": "wp-scripts plugin-zip",
+		"plugin-zip": "node .github/scripts/build-plugin.js",
 		"wp-env": "wp-env"
 	},
 	"prettier": {
@@ -36,6 +36,7 @@
 		"@types/jest": "^27.5.1",
 		"@wordpress/env": "^5.8.0",
 		"@wordpress/scripts": "^24.3.0",
+		"archiver": "^5.3.1",
 		"babel-jest": "^28.1.0",
 		"jest": "^28.1.0",
 		"prettier": "^2.7.1"
