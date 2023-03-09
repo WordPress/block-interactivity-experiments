@@ -1,7 +1,7 @@
 {
 	"plugins": [
 		".",
-		"https://github.com/WordPress/gutenberg/releases/download/v15.3.0-rc.2/gutenberg.zip"
+		"https://downloads.wordpress.org/plugin/gutenberg.latest-stable.zip"
 	],
 	"config": {
 		"SCRIPT_DEBUG": true
