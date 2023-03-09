@@ -99,6 +99,8 @@ class WP_Directive_Processor_Test extends WP_UnitTestCase {
 	}
 
 	public function test_set_inner_html_invalidates_bookmarks_that_point_to_replaced_content() {
+		$this->markTestSkipped( "This requires on bookmark invalidation, which is only in GB's WP 6.3 compat layer." );
+
 		$tags = new WP_Directive_Processor( self::HTML );
 
 		$tags->next_tag( 'section' );
