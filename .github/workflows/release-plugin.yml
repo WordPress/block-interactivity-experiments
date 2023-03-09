@@ -3,7 +3,7 @@ name: Build Plugin ZIP
 on:
     push:
         branches:
-            - main
+            - main-wp-directives-plugin
 
 jobs:
     bump-version:
