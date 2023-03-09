@@ -1,18 +1,18 @@
 {
-	"name": "wordpress/block-hydration-experiments",
+	"name": "wordpress/block-interactivity-experiments",
 	"type": "wordpress-plugin",
 	"license": "GPL-2.0-or-later",
-	"description": "Experiments with frontend hydration for blocks",
+	"description": "Experiments to add interactivity to blocks",
 	"homepage": "https://wordpress.github.io/gutenberg/",
 	"keywords": [
-		"block-hydration-experiments",
+		"block-interactivity-experiments",
 		"wordpress",
 		"wp",
 		"react",
 		"javascript"
 	],
 	"support": {
-		"issues": "https://github.com/WordPress/block-hydration-experiments/issues"
+		"issues": "https://github.com/WordPress/block-interactivity-experiments/issues"
 	},
 	"config": {
 		"process-timeout": 0,

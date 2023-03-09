@@ -193,7 +193,7 @@ add_filter( 'render_block', 'wp_directives_mark_interactive_blocks', 10, 3 );
 /**
  * Add a flag to mark inner blocks of isolated interactive blocks.
  */
-function bhe_inner_blocks( $parsed_block, $source_block, $parent_block ) {
+function wp_directives_inner_blocks( $parsed_block, $source_block, $parent_block ) {
 	if (
 		isset( $parent_block ) &&
 		block_has_support(
@@ -208,7 +208,7 @@ function bhe_inner_blocks( $parsed_block, $source_block, $parent_block ) {
 	}
 	return $parsed_block;
 }
-add_filter( 'render_block_data', 'bhe_inner_blocks', 10, 3 );
+add_filter( 'render_block_data', 'wp_directives_inner_blocks', 10, 3 );
 
 function process_directives_in_block( $block_content ) {
 	// TODO: Add some directive/components registration mechanism.
