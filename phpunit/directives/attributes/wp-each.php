@@ -87,10 +87,7 @@ EOF;
                     </td>
                     <td class="col-md-6"></td>
                     </tr>
-                </tbody>
-            </table>
-            <table class="table table-hover table-striped test-data">
-                <tbody wp-each:item="context.data" wp-key="id">
+                
                     <tr class="" wp-class:danger="state.isSelected">
                     <td class="col-md-1" wp-text="context.item.id">456</td>
                     <td class="col-md-4">
@@ -101,10 +98,7 @@ EOF;
                     </td>
                     <td class="col-md-6"></td>
                     </tr>
-                </tbody>
-            </table>
-            <table class="table table-hover table-striped test-data">
-                <tbody wp-each:item="context.data" wp-key="id">
+                
                     <tr class="" wp-class:danger="state.isSelected">
                     <td class="col-md-1" wp-text="context.item.id">789</td>
                     <td class="col-md-4">
