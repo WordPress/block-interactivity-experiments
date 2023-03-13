@@ -36,5 +36,5 @@ function process_wp_each( $tags, $context ) {
 		$context->rewind_context();
 	}
 	$tags->set_inner_html( $loop_inner_html );
-	$tags->find_balanced_tag();
+	$tags->next_balanced_closer();
 }
