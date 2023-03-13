@@ -3,7 +3,7 @@
 require_once __DIR__ . '/class-wp-directive-context.php';
 require_once __DIR__ . '/class-wp-directive-processor.php';
 
-function wp_process_directives( $tags, $prefix, $directives, $context ) {
+function wp_process_directives( $tags, $prefix, $directives, $context = null ) {
 	if ( ! $context ) {
 		$context = new WP_Directive_Context;
 	}
