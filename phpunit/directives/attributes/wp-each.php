@@ -30,6 +30,7 @@ class Tests_Directives_Attributes_WpEach extends WP_UnitTestCase {
 
 				$text = evaluate( $value, $context->get_context() );
 				$tags->set_inner_html( $text );
+				$tags->get_updated_html(); // FIXME: We shouldn't need to do this here.
 			},
 		);
 
