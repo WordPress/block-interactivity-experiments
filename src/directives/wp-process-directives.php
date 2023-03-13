@@ -3,8 +3,10 @@
 require_once __DIR__ . '/class-wp-directive-context.php';
 require_once __DIR__ . '/class-wp-directive-processor.php';
 
-function wp_process_directives( $tags, $prefix, $directives ) {
-	$context = new WP_Directive_Context;
+function wp_process_directives( $tags, $prefix, $directives, $context ) {
+	if ( ! $context ) {
+		$context = new WP_Directive_Context;
+	}
 
 	$tag_stack = array();
 	while ( $tags->next_tag( array( 'tag_closers' => 'visit' ) ) ) {

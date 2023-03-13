@@ -30,9 +30,8 @@ function process_wp_each( $tags, $context, $directives ) {
 
 		$inner_html       = $tags->get_inner_html();
 		$inner_tags       = new WP_Directive_Processor( $inner_html );
-		$inner_tags       = wp_process_directives( $inner_tags, 'wp-', $directives );
+		$inner_tags       = wp_process_directives( $inner_tags, 'wp-', $directives, $context );
 		$loop_inner_html .= $inner_tags->get_inner_html();
-
 		$context->rewind_context();
 	}
 	$tags->set_inner_html( $loop_inner_html );
