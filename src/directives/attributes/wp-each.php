@@ -2,7 +2,7 @@
 
 require_once __DIR__ . '/../class-wp-directive-processor.php';
 
-function process_wp_each( $tags, $context ) {
+function process_wp_each( $tags, $context, $directives ) {
 	if ( $tags->is_tag_closer() ) {
 		return;
 	}
@@ -30,7 +30,7 @@ function process_wp_each( $tags, $context ) {
 
 		$inner_html       = $tags->get_inner_html();
 		$inner_tags       = new WP_Directive_Processor( $inner_html );
-		$inner_tags       = wp_process_directives( $inner_tags, $context );
+		$inner_tags       = wp_process_directives( $inner_tags, 'wp-', $directives );
 		$loop_inner_html .= $inner_tags->get_inner_html();
 
 		$context->rewind_context();

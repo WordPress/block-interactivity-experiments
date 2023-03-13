@@ -17,6 +17,22 @@ require_once __DIR__ . '/../../../src/directives/class-wp-directive-processor.ph
  */
 class Tests_Directives_Attributes_WpEach extends WP_UnitTestCase {
 	public function test_directive_expands_correctly() {
+		$directives = array(
+			'wp-text' => function( $tags, $context ) {
+				if ( $tags->is_tag_closer() ) {
+					return;
+				}
+
+				$value = $tags->get_attribute( 'wp-text' );
+				if ( null === $value ) {
+					return;
+				}
+
+				$text = evaluate( $value, $context->get_context() );
+				$tags->set_inner_html( $text );
+			},
+		);
+
 		$context = new WP_Directive_Context(
 			array(
 				'data' => array(
@@ -56,7 +72,7 @@ EOF;
 		$tags->next_tag(); // table
 		$tags->next_tag(); // tbody
 
-		process_wp_each( $tags, $context );
+		process_wp_each( $tags, $context, $directives );
 
 		$updated_markup = <<<EOF
             <table class="table table-hover table-striped test-data">

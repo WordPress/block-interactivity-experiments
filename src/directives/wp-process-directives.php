@@ -50,7 +50,7 @@ function wp_process_directives( $tags, $prefix, $directives ) {
 		}
 
 		foreach ( $attributes as $attribute ) {
-			call_user_func( $directives[ $attribute ], $tags, $context );
+			call_user_func( $directives[ $attribute ], $tags, $context, $directives );
 		}
 	}
 
