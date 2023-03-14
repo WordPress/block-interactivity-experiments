@@ -93,4 +93,26 @@ class WP_Directive_Processor extends WP_HTML_Tag_Processor {
 		$this->lexical_updates[] = new WP_HTML_Text_Replacement( $start, $end, $new_html );
 		return true;
 	}
+
+	public static function is_html_void_element( $tag_name ) {
+		switch ( $tag_name ) {
+			case 'AREA':
+			case 'BASE':
+			case 'BR':
+			case 'COL':
+			case 'EMBED':
+			case 'HR':
+			case 'IMG':
+			case 'INPUT':
+			case 'LINK':
+			case 'META':
+			case 'SOURCE':
+			case 'TRACK':
+			case 'WBR':
+				return true;
+
+			default:
+				return false;
+		}
+	}
 }
