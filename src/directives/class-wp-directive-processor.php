@@ -74,6 +74,29 @@ class WP_Directive_Processor extends WP_HTML_Tag_Processor {
 	public function set_inner_html( $new_html ) {
 		$this->get_updated_html(); // Apply potential previous updates.
 
+		$bookmarks = $this->get_balanced_tag_bookmarks();
+		if ( ! $bookmarks ) {
+			return false;
+		}
+		list( $start_name, $end_name ) = $bookmarks;
+
+		$start = $this->bookmarks[ $start_name ]->end + 1;
+		$end   = $this->bookmarks[ $end_name ]->start;
+
+		$this->seek( $start_name ); // Return to original position.
+		$this->release_bookmark( $start_name );
+		$this->release_bookmark( $end_name );
+
+		$this->lexical_updates[] = new WP_HTML_Text_Replacement( $start, $end, $new_html );
+		return true;
+	}
+
+	/**
+	 * Return a pair of bookmarks for the current opening tag and the matching closing tag.
+	 *
+	 * @return array|false A pair of bookmarks, or false if there's no matching closing tag.
+	 */
+	public function get_balanced_tag_bookmarks() {
 		$i = 0;
 		while ( array_key_exists( 'start' . $i , $this->bookmarks ) ) {
 			++$i;
@@ -93,15 +116,7 @@ class WP_Directive_Processor extends WP_HTML_Tag_Processor {
 		$end_name = 'end' . $i;
 		$this->set_bookmark( $end_name );
 
-		$start = $this->bookmarks[ $start_name ]->end + 1;
-		$end   = $this->bookmarks[ $end_name ]->start;
-
-		$this->seek( $start_name ); // Return to original position.
-		$this->release_bookmark( $start_name );
-		$this->release_bookmark( $end_name );
-
-		$this->lexical_updates[] = new WP_HTML_Text_Replacement( $start, $end, $new_html );
-		return true;
+		return array( $start_name, $end_name );
 	}
 
 	/**
