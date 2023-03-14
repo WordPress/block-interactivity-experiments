@@ -12,7 +12,7 @@ class WP_Directive_Processor extends WP_HTML_Tag_Processor {
 
 		$this->prefix = $prefix;
 
-		if ( false === stripos( $this->prefix, $html ) ) {
+		if ( false === stripos( $html, $this->prefix ) ) {
 			$this->might_have_directives = false;
 		}
 	}
@@ -24,7 +24,7 @@ class WP_Directive_Processor extends WP_HTML_Tag_Processor {
 
 		while ( $this->next_tag( array( 'tag_closers' => 'visit' ) ) ) {
 			$tag_name = $this->get_tag();
-			if ( 0 === stripos( $this->prefix, $tag_name ) ) {
+			if ( 0 === stripos( $tag_name, $this->prefix ) ) {
 				return true;
 			}
 
