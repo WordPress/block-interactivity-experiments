@@ -1,16 +1,18 @@
 <?php
 
 class WP_Directive_Processor extends WP_HTML_Tag_Processor {
-	const DIRECTIVE_PREFIX = 'WPX-';
-
 	public $html;
+
+	public $prefix;
 
 	public $might_have_directives = true;
 
-	public function __construct( $html ) {
+	public function __construct( $html, $prefix = 'wp-' ) {
 		parent::__construct( $html );
 
-		if ( false === stripos( self::DIRECTIVE_PREFIX, $html ) ) {
+		$this->prefix = $prefix;
+
+		if ( false === stripos( $this->prefix, $html ) ) {
 			$this->might_have_directives = false;
 		}
 	}
@@ -22,11 +24,11 @@ class WP_Directive_Processor extends WP_HTML_Tag_Processor {
 
 		while ( $this->next_tag( array( 'tag_closers' => 'visit' ) ) ) {
 			$tag_name = $this->get_tag();
-			if ( 0 === stripos( self::DIRECTIVE_PREFIX, $tag_name ) ) {
+			if ( 0 === stripos( $this->prefix, $tag_name ) ) {
 				return true;
 			}
 
-			$attribute_directives = $this->get_attribute_names_with_prefix( self::DIRECTIVE_PREFIX );
+			$attribute_directives = $this->get_attribute_names_with_prefix( $this->prefix );
 			if ( 0 < count( $attribute_directives ) ) {
 				return true;
 			}
