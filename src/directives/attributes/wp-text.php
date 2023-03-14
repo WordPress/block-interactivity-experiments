@@ -13,5 +13,5 @@ function process_wp_text( $tags, $context ) {
 	}
 
 	$text = evaluate( $value, $context->get_context() );
-	$tags->set_inner_html( $text );
+	$tags->set_inner_html( esc_html( $text ) );
 }
