@@ -74,19 +74,31 @@ class WP_Directive_Processor extends WP_HTML_Tag_Processor {
 	public function set_inner_html( $new_html ) {
 		$this->get_updated_html(); // Apply potential previous updates.
 
-		$this->set_bookmark( 'start' );
+		$i = 0;
+		while ( array_key_exists( 'start' . $i , $this->bookmarks ) ) {
+			++$i;
+		}
+		$start_name = 'start' . $i;
+
+		$this->set_bookmark( $start_name );
 		if ( ! $this->next_balanced_closer() ) {
-			$this->release_bookmark( 'start' );
+			$this->release_bookmark( $start_name );
 			return false;
 		}
-		$this->set_bookmark( 'end' );
 
-		$start = $this->bookmarks['start']->end + 1;
-		$end   = $this->bookmarks['end']->start;
+		$i = 0;
+		while ( array_key_exists( 'end' . $i , $this->bookmarks ) ) {
+			++$i;
+		}
+		$end_name = 'end' . $i;
+		$this->set_bookmark( $end_name );
 
-		$this->seek( 'start' ); // Return to original position.
-		$this->release_bookmark( 'start' );
-		$this->release_bookmark( 'end' );
+		$start = $this->bookmarks[ $start_name ]->end + 1;
+		$end   = $this->bookmarks[ $end_name ]->start;
+
+		$this->seek( $start_name ); // Return to original position.
+		$this->release_bookmark( $start_name );
+		$this->release_bookmark( $end_name );
 
 		$this->lexical_updates[] = new WP_HTML_Text_Replacement( $start, $end, $new_html );
 		return true;
