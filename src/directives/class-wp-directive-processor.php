@@ -1,42 +1,6 @@
 <?php
 
 class WP_Directive_Processor extends WP_HTML_Tag_Processor {
-	public $html;
-
-	public $prefix;
-
-	public $might_have_directives = true;
-
-	public function __construct( $html, $prefix = 'wp-' ) {
-		parent::__construct( $html );
-
-		$this->prefix = $prefix;
-
-		if ( false === stripos( $html, $this->prefix ) ) {
-			$this->might_have_directives = false;
-		}
-	}
-
-	public function next_directive() {
-		if ( false === $this->might_have_directives ) {
-			return false;
-		}
-
-		while ( $this->next_tag( array( 'tag_closers' => 'visit' ) ) ) {
-			$tag_name = $this->get_tag();
-			if ( 0 === stripos( $tag_name, $this->prefix ) ) {
-				return true;
-			}
-
-			$attribute_directives = $this->get_attribute_names_with_prefix( $this->prefix );
-			if ( 0 < count( $attribute_directives ) ) {
-				return true;
-			}
-		}
-
-		return false;
-	}
-
 	/**
 	 * Find the matching closing tag for an opening tag.
 	 *
