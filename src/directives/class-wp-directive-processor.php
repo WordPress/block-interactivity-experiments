@@ -45,19 +45,18 @@ class WP_Directive_Processor extends WP_HTML_Tag_Processor {
 	 * @return string The content between the current opening and its matching closing tag.
 	 */
 	public function get_inner_html() {
-		$this->set_bookmark( 'start' );
-		if ( ! $this->next_balanced_closer() ) {
-			$this->release_bookmark( 'start' );
+		$bookmarks = $this->get_balanced_tag_bookmarks();
+		if ( ! $bookmarks ) {
 			return false;
 		}
-		$this->set_bookmark( 'end' );
+		list( $start_name, $end_name ) = $bookmarks;
 
-		$start = $this->bookmarks['start']->end + 1;
-		$end   = $this->bookmarks['end']->start;
+		$start = $this->bookmarks[ $start_name ]->end + 1;
+		$end   = $this->bookmarks[ $end_name ]->start;
 
-		$this->seek( 'start' ); // Return to original position.
-		$this->release_bookmark( 'start' );
-		$this->release_bookmark( 'end' );
+		$this->seek( $start_name ); // Return to original position.
+		$this->release_bookmark( $start_name );
+		$this->release_bookmark( $end_name );
 
 		return substr( $this->html, $start, $end - $start );
 	}
