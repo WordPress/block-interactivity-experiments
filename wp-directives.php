@@ -217,6 +217,7 @@ function process_directives_in_block( $block_content ) {
 		'data-wp-context' => 'process_wp_context',
 		'data-wp-bind'    => 'process_wp_bind',
 		'data-wp-class'   => 'process_wp_class',
+		'data-wp-html'    => 'process_wp_html',
 		'data-wp-style'   => 'process_wp_style',
 		'data-wp-text'    => 'process_wp_text',
 	);
