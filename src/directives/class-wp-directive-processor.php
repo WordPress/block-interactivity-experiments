@@ -39,6 +39,11 @@ class WP_Directive_Processor extends WP_HTML_Tag_Processor {
 		$depth = 0;
 
 		$tag_name = $this->get_tag();
+
+		if ( self::is_html_void_element( $tag_name ) ) {
+			return false;
+		}
+
 		while ( $this->next_tag( array( 'tag_name' => $tag_name, 'tag_closers' => 'visit' ) ) ) {
 			if ( ! $this->is_tag_closer() ) {
 				$depth++;

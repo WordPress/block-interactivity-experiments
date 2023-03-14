@@ -12,6 +12,15 @@ require_once __DIR__ . '/../../src/directives/class-wp-directive-processor.php';
 class WP_Directive_Processor_Test extends WP_UnitTestCase {
 	const HTML = '<div>outside</div><section><div><img>inside</div></section>';
 
+	public function test_next_balanced_closer_stays_on_void_tag() {
+		$tags = new WP_Directive_Processor( self::HTML );
+
+		$tags->next_tag( 'img' );
+		$result = $tags->next_balanced_closer();
+		$this->assertSame( 'IMG', $tags->get_tag() );
+		$this->assertFalse( $result );
+	}
+
 	public function test_next_balanced_closer_proceeds_to_correct_tag() {
 		$tags = new WP_Directive_Processor( self::HTML );
 
