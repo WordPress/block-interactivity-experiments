@@ -20,7 +20,12 @@ class WP_Directive_Processor extends WP_HTML_Tag_Processor {
 			return false;
 		}
 
-		while ( $this->next_tag( array( 'tag_name' => $tag_name, 'tag_closers' => 'visit' ) ) ) {
+		while ( $this->next_tag(
+			array(
+				'tag_name'    => $tag_name,
+				'tag_closers' => 'visit',
+			)
+		) ) {
 			if ( ! $this->is_tag_closer() ) {
 				$depth++;
 				continue;
@@ -97,7 +102,7 @@ class WP_Directive_Processor extends WP_HTML_Tag_Processor {
 	 */
 	public function get_balanced_tag_bookmarks() {
 		$i = 0;
-		while ( array_key_exists( 'start' . $i , $this->bookmarks ) ) {
+		while ( array_key_exists( 'start' . $i, $this->bookmarks ) ) {
 			++$i;
 		}
 		$start_name = 'start' . $i;
@@ -109,7 +114,7 @@ class WP_Directive_Processor extends WP_HTML_Tag_Processor {
 		}
 
 		$i = 0;
-		while ( array_key_exists( 'end' . $i , $this->bookmarks ) ) {
+		while ( array_key_exists( 'end' . $i, $this->bookmarks ) ) {
 			++$i;
 		}
 		$end_name = 'end' . $i;

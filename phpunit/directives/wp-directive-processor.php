@@ -30,7 +30,7 @@ class WP_Directive_Processor_Test extends WP_UnitTestCase {
 		$this->assertTrue( $tags->is_tag_closer() );
 	}
 
-    public function test_next_balanced_closer_proceeds_to_correct_tag_for_nested_tag() {
+	public function test_next_balanced_closer_proceeds_to_correct_tag_for_nested_tag() {
 		$tags = new WP_Directive_Processor( self::HTML );
 
 		$tags->next_tag( 'div' );
