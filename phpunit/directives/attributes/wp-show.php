@@ -7,7 +7,7 @@
 
  require_once __DIR__ . '/../../../src/directives/class-wp-directive-context.php';
  require_once __DIR__ . '/../../../src/directives/class-wp-directive-processor.php';
- 
+
  require_once __DIR__ . '/../../../src/directives/wp-html.php';
 
 /**
@@ -23,7 +23,7 @@ class Tests_Directives_WpShow extends WP_UnitTestCase {
 				I should be shown!
 			</div>
 EOF;
-		$tags = new WP_Directive_Processor( $markup );
+		$tags   = new WP_Directive_Processor( $markup );
 		$tags->next_tag();
 
 		$context_before = new WP_Directive_Context( array( 'myblock' => array( 'open' => true ) ) );
@@ -43,7 +43,7 @@ EOF;
 				I should be shown!
 			</div>
 EOF;
-		$tags = new WP_Directive_Processor( $markup );
+		$tags   = new WP_Directive_Processor( $markup );
 		$tags->next_tag();
 
 		$context_before = new WP_Directive_Context( array( 'myblock' => array( 'open' => false ) ) );
