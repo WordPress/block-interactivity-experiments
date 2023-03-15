@@ -125,4 +125,12 @@ class WP_Directive_Processor_Test extends WP_UnitTestCase {
 		$successful_seek = $tags->seek( 'replaced' );
 		$this->assertFalse( $successful_seek );
 	}
+
+	public function test_wrap_in_tag_wraps_tag_correctly() {
+		$tags = new WP_Directive_Processor( self::HTML );
+
+		$tags->next_tag( 'section' );
+		$tags->wrap_in_tag( 'TEMPLATE' );
+		$this->assertSame( '<div>outside</div><template><section><div><img>inside</div></section></template>', $tags->get_updated_html() );
+	}
 }

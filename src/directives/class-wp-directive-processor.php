@@ -131,6 +131,32 @@ class WP_Directive_Processor extends WP_HTML_Tag_Processor {
 		return array( $start_name, $end_name );
 	}
 
+	public function wrap_in_tag( $tag ) {
+		$tag = strtolower( $tag ); // TODO: Allow passing in tags with attributes, e.g. <template id="abc">?
+
+		$this->get_updated_html(); // Apply potential previous updates.
+
+		$bookmarks = $this->get_balanced_tag_bookmarks();
+		if ( ! $bookmarks ) {
+			return false;
+		}
+		list( $start_name, $end_name ) = $bookmarks;
+
+		$start = $this->bookmarks[ $start_name ]->start;
+		$end   = $this->bookmarks[ $end_name ]->end + 1;
+
+		$this->seek( $start_name ); // Return to original position.
+		$this->release_bookmark( $start_name );
+		$this->release_bookmark( $end_name );
+
+		$outer_html = substr( $this->html, $start, $end - $start );
+
+		$this->lexical_updates[] = new WP_HTML_Text_Replacement( $start, $end, "<$tag>$outer_html</$tag>" );
+		// TODO: Make sure pointer is still pointing correctly to its original position!
+		// TODO: Adjust bookmarks if necessary!
+		return true;
+	}
+
 	/**
 	 * Whether a given HTML element is void (e.g. <br>).
 	 *
