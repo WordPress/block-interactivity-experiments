@@ -44,6 +44,7 @@ require_once __DIR__ . '/src/directives/wp-process-directives.php';
 require_once __DIR__ . '/src/directives/attributes/wp-bind.php';
 require_once __DIR__ . '/src/directives/attributes/wp-context.php';
 require_once __DIR__ . '/src/directives/attributes/wp-class.php';
+require_once __DIR__ . '/src/directives/attributes/wp-html.php';
 require_once __DIR__ . '/src/directives/attributes/wp-style.php';
 require_once __DIR__ . '/src/directives/attributes/wp-text.php';
 
