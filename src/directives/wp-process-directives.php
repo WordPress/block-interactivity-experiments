@@ -1,6 +1,7 @@
 <?php
 
 require_once __DIR__ . '/class-wp-directive-context.php';
+require_once __DIR__ . '/class-wp-directive-processor.php';
 
 function wp_process_directives( $tags, $prefix, $directives ) {
 	$context = new WP_Directive_Context;
@@ -41,7 +42,7 @@ function wp_process_directives( $tags, $prefix, $directives ) {
 			// directives so we can call its directive processor once we encounter the
 			// matching closing tag.
 			if (
-				! is_html_void_element( $tags->get_tag() ) &&
+				! WP_Directive_Processor::is_html_void_element( $tags->get_tag() ) &&
 				( 0 !== count( $attributes ) || 0 !== count( $tag_stack ) )
 			) {
 				$tag_stack[] = array( $tag_name, $attributes );
@@ -56,26 +57,3 @@ function wp_process_directives( $tags, $prefix, $directives ) {
 	return $tags;
 }
 
-// TODO: Move into `WP_HTML_Tag_Processor` (or `WP_HTML_Processor`).
-// See e.g. https://github.com/WordPress/gutenberg/pull/47573.
-function is_html_void_element( $tag_name ) {
-	switch ( $tag_name ) {
-		case 'AREA':
-		case 'BASE':
-		case 'BR':
-		case 'COL':
-		case 'EMBED':
-		case 'HR':
-		case 'IMG':
-		case 'INPUT':
-		case 'LINK':
-		case 'META':
-		case 'SOURCE':
-		case 'TRACK':
-		case 'WBR':
-			return true;
-
-		default:
-			return false;
-	}
-}
