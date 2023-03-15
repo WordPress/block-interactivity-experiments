@@ -14,7 +14,6 @@ function process_wp_show( $tags, $context ) {
 
 	$show = evaluate( $value, $context->get_context() );
 	if ( ! $show ) {
-		$content = $tags->get_inner_html();
-		$tags->set_inner_html( '<template>' . $content . '</template>' );
+		$tags->wrap_in_tag( 'TEMPLATE' );
 	}
 }

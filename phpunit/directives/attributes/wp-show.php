@@ -54,9 +54,9 @@ EOF;
 		process_wp_show( $tags, $context );
 
 		$updated_markup = <<<EOF
-			<div wp-show="context.myblock.open"><template>
+			<template><div wp-show="context.myblock.open">
 				I should be shown!
-			</template></div>
+			</div></template>
 EOF;
 		$this->assertSame( $updated_markup, $tags->get_updated_html() );
 		$this->assertSame( $context_before->get_context(), $context->get_context(), 'wp-show directive changed context' );
