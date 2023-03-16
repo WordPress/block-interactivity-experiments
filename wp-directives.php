@@ -114,11 +114,11 @@ function wp_directives_add_wp_link_attribute( $block_content ) {
 				str_contains( $classes, 'page-numbers' )
 			) {
 				$w->set_attribute(
-					'wp-link',
+					'data-wp-link',
 					'{ "prefetch": true, "scroll": false }'
 				);
 			} else {
-				$w->set_attribute( 'wp-link', '{ "prefetch": true }' );
+				$w->set_attribute( 'data-wp-link', '{ "prefetch": true }' );
 			}
 		}
 	}
