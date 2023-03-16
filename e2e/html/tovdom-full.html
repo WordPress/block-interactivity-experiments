@@ -5,14 +5,16 @@
 		<meta itemprop="wp-client-side-navigation" content="active" />
 	</head>
 	<body>
-		<div wp-ignore>
-			<wp-show when="state.falseValue">
-				<span data-testid="inside wp-ignore">
+		<div data-wp-ignore>
+			<div wp-show="state.falseValue">
+				<span data-testid="inside data-wp-ignore">
 					This should not be shown because we are in full mode.
 				</span>
-			</wp-show>
+			</div>
 		</div>
-		<a href="./tovdom-full-next.html" wp-link data-testid="next">next</a>
+		<a href="./tovdom-full-next.html" data-wp-link data-testid="next"
+			>next</a
+		>
 
 		<script src="../build/e2e/store.js"></script>
 		<script src="../build/runtime.js"></script>
