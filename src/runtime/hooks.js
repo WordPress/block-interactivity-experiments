@@ -2,6 +2,7 @@ import { h, options, createContext } from 'preact';
 import { useRef } from 'preact/hooks';
 import { rawStore as store } from './store';
 import { componentPrefix } from './constants';
+import { peek } from 'deepsignal';
 
 // Main context.
 const context = createContext({});
@@ -30,13 +31,21 @@ const getEvaluate =
 	({ ref } = {}) =>
 	(path, extraArgs = {}) => {
 		const value = resolve(path, extraArgs.context);
-		return typeof value === 'function'
-			? value({
-					state: store.state,
-					...(ref !== undefined ? { ref } : {}),
-					...extraArgs,
-			  })
-			: value;
+		if (typeof value === 'function') {
+			const returnValue = value({
+				state: store.state,
+				...(ref !== undefined ? { ref } : {}),
+				...extraArgs,
+			});
+			// Only send actions to devtools
+			if (path.startsWith('actions.')) {
+				const actionName = path.split('actions.')[1];
+				window?.__interactivity_devtools?.send(actionName, store);
+			}
+			return returnValue;
+		} else {
+			return value;
+		}
 	};
 
 // Directive wrapper.
