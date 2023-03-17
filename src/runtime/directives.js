@@ -48,7 +48,7 @@ export default () => {
 		}
 	);
 
-	// data-wp-effect:[name]
+	// data-wp-effect.[name]
 	directive('effect', ({ directives: { effect }, context, evaluate }) => {
 		const contextValue = useContext(context);
 		Object.values(effect).forEach((path) => {
@@ -58,7 +58,7 @@ export default () => {
 		});
 	});
 
-	// data-wp-on:[event]
+	// data-wp-on.[event]
 	directive('on', ({ directives: { on }, element, evaluate, context }) => {
 		const contextValue = useContext(context);
 		Object.entries(on).forEach(([name, path]) => {
@@ -68,7 +68,7 @@ export default () => {
 		});
 	});
 
-	// data-wp-class:[classname]
+	// data-wp-class.[classname]
 	directive(
 		'class',
 		({ directives: { class: className }, element, evaluate, context }) => {
@@ -108,7 +108,7 @@ export default () => {
 		}
 	);
 
-	// data-wp-bind:[attribute]
+	// data-wp-bind.[attribute]
 	directive(
 		'bind',
 		({ directives: { bind }, element, context, evaluate }) => {
