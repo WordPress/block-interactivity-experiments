@@ -37,8 +37,14 @@ export const canDoClientSideNavigation = (dom) =>
  * item. Can be 'style' or 'script'.
  * @returns {Promise<Array<HTMLElement>>} - Array of elements to add to the head.
  */
-const fetchScriptOrStyle = (selector, attribute, cache, elementToCreate) => {
-	const fetchedItems = Promise.all(
+const fetchScriptOrStyle = async (
+	head,
+	selector,
+	attribute,
+	cache,
+	elementToCreate
+) => {
+	const fetchedItems = await Promise.all(
 		[].map.call(head.querySelectorAll(selector), (el) => {
 			const attributeValue = el.getAttribute(attribute);
 			if (!cache.has(attributeValue))
@@ -60,18 +66,21 @@ const fetchScriptOrStyle = (selector, attribute, cache, elementToCreate) => {
 // Fetch styles of a new page.
 const fetchHead = async (head) => {
 	const stylesFromSheets = await fetchScriptOrStyle(
+		head,
 		'link[rel=stylesheet]',
 		'href',
 		stylesheets,
 		'style'
 	);
 	const scriptTags = await fetchScriptOrStyle(
+		head,
 		'script[src]',
 		'src',
 		scripts,
 		'script'
 	);
 	const moduleScripts = await fetchScriptOrStyle(
+		head,
 		'script[type=module]',
 		'src',
 		scripts,
