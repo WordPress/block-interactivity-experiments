@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name:       wp-directives
- * Version:           0.1.0
+ * Version:           0.1.3
  * Requires at least: 6.0
  * Requires PHP:      5.6
  * Author:            Gutenberg Team
@@ -35,15 +35,16 @@ if ( ! is_plugin_active( 'gutenberg/gutenberg.php' ) ) {
 	return;
 }
 
-require_once __DIR__ . '/../gutenberg/lib/experimental/html/wp-html.php';
+require_once __DIR__ . '/src/directives/wp-html.php';
 
 require_once __DIR__ . '/src/directives/class-wp-directive-context.php';
 require_once __DIR__ . '/src/directives/class-wp-directive-store.php';
+require_once __DIR__ . '/src/directives/wp-process-directives.php';
 
 require_once __DIR__ . '/src/directives/attributes/wp-bind.php';
+require_once __DIR__ . '/src/directives/attributes/wp-context.php';
 require_once __DIR__ . '/src/directives/attributes/wp-class.php';
 require_once __DIR__ . '/src/directives/attributes/wp-style.php';
-require_once __DIR__ . '/src/directives/tags/wp-context.php';
 
 function wp_directives_loader() {
 	// Load the Admin page.
@@ -192,7 +193,7 @@ add_filter( 'render_block', 'wp_directives_mark_interactive_blocks', 10, 3 );
 /**
  * Add a flag to mark inner blocks of isolated interactive blocks.
  */
-function bhe_inner_blocks( $parsed_block, $source_block, $parent_block ) {
+function wp_directives_inner_blocks( $parsed_block, $source_block, $parent_block ) {
 	if (
 		isset( $parent_block ) &&
 		block_has_support(
@@ -207,51 +208,24 @@ function bhe_inner_blocks( $parsed_block, $source_block, $parent_block ) {
 	}
 	return $parsed_block;
 }
-add_filter( 'render_block_data', 'bhe_inner_blocks', 10, 3 );
+add_filter( 'render_block_data', 'wp_directives_inner_blocks', 10, 3 );
 
-function wp_process_directives( $block_content ) {
+function process_directives_in_block( $block_content ) {
 	// TODO: Add some directive/components registration mechanism.
-	$tag_directives = array(
-		'wp-context' => 'process_wp_context_tag',
-	);
-
-	$attribute_directives = array(
-		// 'wp-context' => 'process_wp_context_attribute', // TODO
-		'wp-bind'  => 'process_wp_bind',
-		'wp-class' => 'process_wp_class',
-		'wp-style' => 'process_wp_style',
+	$directives = array(
+		'wp-context' => 'process_wp_context',
+		'wp-bind'    => 'process_wp_bind',
+		'wp-class'   => 'process_wp_class',
+		'wp-style'   => 'process_wp_style',
 	);
 
 	$tags = new WP_HTML_Tag_Processor( $block_content );
-
-	$context = new WP_Directive_Context();
-	while ( $tags->next_tag( array( 'tag_closers' => 'visit' ) ) ) {
-		$tag_name = strtolower( $tags->get_tag() );
-		if ( array_key_exists( $tag_name, $tag_directives ) ) {
-			call_user_func( $tag_directives[ $tag_name ], $tags, $context );
-		} else {
-			// Components can't have directives (unless we change our mind about this).
-			$attributes = $tags->get_attribute_names_with_prefix( 'wp-' );
-
-			foreach ( $attributes as $attribute ) {
-				if ( ! array_key_exists( $attribute, $attribute_directives ) ) {
-					continue;
-				}
-
-				call_user_func(
-					$attribute_directives[ $attribute ],
-					$tags,
-					$context
-				);
-			}
-		}
-	}
-
-	return $block_content;
+	$tags = wp_process_directives( $tags, 'wp-', $directives );
+	return $tags->get_updated_html();
 }
 add_filter(
 	'render_block',
-	'wp_process_directives',
+	'process_directives_in_block',
 	10,
 	1
 );

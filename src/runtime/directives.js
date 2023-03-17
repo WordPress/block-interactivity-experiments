@@ -80,19 +80,19 @@ export default () => {
 						className: name,
 						context: contextValue,
 					});
+					const currentClass = element.props.class || '';
+					const classFinder = new RegExp(
+						`(^|\\s)${name}(\\s|$)`,
+						'g'
+					);
 					if (!result)
-						element.props.class = element.props.class
-							.replace(
-								new RegExp(`(^|\\s)${name}(\\s|$)`, 'g'),
-								' '
-							)
+						element.props.class = currentClass
+							.replace(classFinder, ' ')
 							.trim();
-					else if (
-						!new RegExp(`(^|\\s)${name}(\\s|$)`).test(
-							element.props.class
-						)
-					)
-						element.props.class += ` ${name}`;
+					else if (!classFinder.test(currentClass))
+						element.props.class = currentClass
+							? `${currentClass} ${name}`
+							: name;
 
 					useEffect(() => {
 						// This seems necessary because Preact doesn't change the class names
@@ -160,6 +160,58 @@ export default () => {
 					}
 				};
 			}
+		}
+	);
+
+	// wp-show
+	directive(
+		'show',
+		({
+			directives: {
+				show: { default: show },
+			},
+			element,
+			evaluate,
+			context,
+		}) => {
+			const contextValue = useContext(context);
+			if (!evaluate(show, { context: contextValue }))
+				element.props.children = (
+					<template>{element.props.children}</template>
+				);
+		}
+	);
+
+	// wp-ignore
+	directive(
+		'ignore',
+		({
+			element: {
+				type: Type,
+				props: { innerHTML, ...rest },
+			},
+		}) => {
+			// Preserve the initial inner HTML.
+			const cached = useMemo(() => innerHTML, []);
+			return (
+				<Type dangerouslySetInnerHTML={{ __html: cached }} {...rest} />
+			);
+		}
+	);
+
+	// wp-text
+	directive(
+		'text',
+		({
+			directives: {
+				text: { default: text },
+			},
+			element,
+			evaluate,
+			context,
+		}) => {
+			const contextValue = useContext(context);
+			element.props.children = evaluate(text, { context: contextValue });
 		}
 	);
 };
