@@ -33,4 +33,14 @@ test.describe('toVdom - full', () => {
         const newTitle = page.getByTestId('csn-heading-page-2');
         await expect(newTitle).toHaveCSS('color', 'rgb(0, 0, 255)');
 	});
+
+	test('it should apply new scripts after navigation', async ({
+		page,
+	}) => {
+		await page.getByTestId('csn-next-page').click();
+		const el = page.getByTestId('show when newValue is true');
+		await expect(el).toBeVisible();
+		await page.getByTestId('toggle newValue').click();
+		await expect(el).toBeHidden();
+	});
 });
