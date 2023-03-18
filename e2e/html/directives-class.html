@@ -1,19 +1,19 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>Directives -- wp-class</title>
+		<title>Directives -- data-wp-class</title>
 		<meta itemprop="wp-client-side-navigation" content="active" />
 	</head>
 	<body>
 		<button
-			wp-on:click="actions.toggleTrueValue"
+			data-wp-on:click="actions.toggleTrueValue"
 			data-testid="toggle trueValue"
 		>
 			Toggle trueValue
 		</button>
 
 		<button
-			wp-on:click="actions.toggleFalseValue"
+			data-wp-on:click="actions.toggleFalseValue"
 			data-testid="toggle falseValue"
 		>
 			Toggle falseValue
@@ -21,55 +21,55 @@
 
 		<div
 			class="foo bar"
-			wp-class:foo="state.falseValue"
+			data-wp-class:foo="state.falseValue"
 			data-testid="remove class if callback returns falsy value"
 		></div>
 
 		<div
 			class="foo"
-			wp-class:bar="state.trueValue"
+			data-wp-class:bar="state.trueValue"
 			data-testid="add class if callback returns truthy value"
 		></div>
 
 		<div
 			class="foo bar"
-			wp-class:foo="state.falseValue"
-			wp-class:bar="state.trueValue"
-			wp-class:baz="state.trueValue"
+			data-wp-class:foo="state.falseValue"
+			data-wp-class:bar="state.trueValue"
+			data-wp-class:baz="state.trueValue"
 			data-testid="handles multiple classes and callbacks"
 		></div>
 
 		<div
 			class="foo foo-bar"
-			wp-class:foo="state.falseValue"
-			wp-class:foo-bar="state.trueValue"
+			data-wp-class:foo="state.falseValue"
+			data-wp-class:foo-bar="state.trueValue"
 			data-testid="handles class names that are contained inside other class names"
 		></div>
 
 		<div
 			class="foo bar baz"
-			wp-class:bar="state.trueValue"
+			data-wp-class:bar="state.trueValue"
 			data-testid="can toggle class in the middle"
 		></div>
 
 		<div
-			wp-class:foo="state.falseValue"
+			data-wp-class:foo="state.falseValue"
 			data-testid="can toggle class when class attribute is missing"
 		></div>
 
-		<wp-context data='{ "falseValue": false }'>
+		<div data-wp-context='{ "falseValue": false }'>
 			<div
 				class="foo"
-				wp-class:foo="context.falseValue"
+				data-wp-class:foo="context.falseValue"
 				data-testid="can use context values"
 			></div>
 			<button
-				wp-on:click="actions.toggleContextFalseValue"
+				data-wp-on:click="actions.toggleContextFalseValue"
 				data-testid="toggle context false value"
 			>
 				Toggle context falseValue
 			</button>
-		</wp-context>
+		</div>
 
 		<script src="../build/e2e/store.js"></script>
 		<script src="../build/runtime.js"></script>

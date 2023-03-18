@@ -114,11 +114,11 @@ function wp_directives_add_wp_link_attribute( $block_content ) {
 				str_contains( $classes, 'page-numbers' )
 			) {
 				$w->set_attribute(
-					'wp-link',
+					'data-wp-link',
 					'{ "prefetch": true, "scroll": false }'
 				);
 			} else {
-				$w->set_attribute( 'wp-link', '{ "prefetch": true }' );
+				$w->set_attribute( 'data-wp-link', '{ "prefetch": true }' );
 			}
 		}
 	}
@@ -168,11 +168,11 @@ function wp_directives_mark_interactive_blocks( $block_content, $block, $instanc
 		return $block_content;
 	}
 
-	// Append the `wp-ignore` attribute for inner blocks of interactive blocks.
+	// Append the `data-wp-ignore` attribute for inner blocks of interactive blocks.
 	if ( isset( $instance->parsed_block['isolated'] ) ) {
 		$w = new WP_HTML_Tag_Processor( $block_content );
 		$w->next_tag();
-		$w->set_attribute( 'wp-ignore', '' );
+		$w->set_attribute( 'data-wp-ignore', '' );
 		$block_content = (string) $w;
 	}
 
@@ -181,10 +181,10 @@ function wp_directives_mark_interactive_blocks( $block_content, $block, $instanc
 		return $block_content;
 	}
 
-	// Add the `wp-island` attribute if it's interactive.
+	// Add the `data-wp-island` attribute if it's interactive.
 	$w = new WP_HTML_Tag_Processor( $block_content );
 	$w->next_tag();
-	$w->set_attribute( 'wp-island', '' );
+	$w->set_attribute( 'data-wp-island', '' );
 
 	return (string) $w;
 }
@@ -213,14 +213,14 @@ add_filter( 'render_block_data', 'wp_directives_inner_blocks', 10, 3 );
 function process_directives_in_block( $block_content ) {
 	// TODO: Add some directive/components registration mechanism.
 	$directives = array(
-		'wp-context' => 'process_wp_context',
-		'wp-bind'    => 'process_wp_bind',
-		'wp-class'   => 'process_wp_class',
-		'wp-style'   => 'process_wp_style',
+		'data-wp-context' => 'process_wp_context',
+		'data-wp-bind'    => 'process_wp_bind',
+		'data-wp-class'   => 'process_wp_class',
+		'data-wp-style'   => 'process_wp_style',
 	);
 
 	$tags = new WP_HTML_Tag_Processor( $block_content );
-	$tags = wp_process_directives( $tags, 'wp-', $directives );
+	$tags = wp_process_directives( $tags, 'data-wp-', $directives );
 	return $tags->get_updated_html();
 }
 add_filter(
