@@ -3,12 +3,12 @@
  * data-wp-show tag directive test.
  */
 
- require_once __DIR__ . '/../../../src/directives/attributes/wp-show.php';
+require_once __DIR__ . '/../../../src/directives/attributes/wp-show.php';
 
- require_once __DIR__ . '/../../../src/directives/class-wp-directive-context.php';
- require_once __DIR__ . '/../../../src/directives/class-wp-directive-processor.php';
+require_once __DIR__ . '/../../../src/directives/class-wp-directive-context.php';
+require_once __DIR__ . '/../../../src/directives/class-wp-directive-processor.php';
 
- require_once __DIR__ . '/../../../src/directives/wp-html.php';
+require_once __DIR__ . '/../../../src/directives/wp-html.php';
 
 /**
  * Tests for the wp-show tag directive.
