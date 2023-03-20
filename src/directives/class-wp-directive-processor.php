@@ -144,25 +144,42 @@ class WP_Directive_Processor extends WP_HTML_Tag_Processor {
 	 * @todo Allow passing in tags with attributes, e.g. <template id="abc">?
 	 */
 	public function wrap_in_tag( $tag ) {
-		$tag = strtolower( $tag );
-
 		$this->get_updated_html(); // Apply potential previous updates.
 
-		$bookmarks = $this->get_balanced_tag_bookmarks();
-		if ( ! $bookmarks ) {
-			return false;
+		if ( self::is_html_void_element( $this->get_tag() ) ) {
+			// We don't have direct access to the start and end position of the
+			// current tag. As a workaround, we set a bookmark that we then
+			// release immediately.
+			$i = 0;
+			while ( array_key_exists( 'void' . $i, $this->bookmarks ) ) {
+				++$i;
+			}
+			$bookmark_name = 'void' . $i;
+
+			$this->set_bookmark( $bookmark_name );
+
+			$start = $this->bookmarks[ $bookmark_name ]->start;
+			$end   = $this->bookmarks[ $bookmark_name ]->end + 1;
+
+			$this->release_bookmark( $bookmark_name );
+		} else {
+			$bookmarks = $this->get_balanced_tag_bookmarks();
+			if ( ! $bookmarks ) {
+				return false;
+			}
+			list( $start_name, $end_name ) = $bookmarks;
+
+			$start = $this->bookmarks[ $start_name ]->start;
+			$end   = $this->bookmarks[ $end_name ]->end + 1;
+
+			$this->seek( $start_name ); // Return to original position.
+			$this->release_bookmark( $start_name );
+			$this->release_bookmark( $end_name );
 		}
-		list( $start_name, $end_name ) = $bookmarks;
-
-		$start = $this->bookmarks[ $start_name ]->start;
-		$end   = $this->bookmarks[ $end_name ]->end + 1;
-
-		$this->seek( $start_name ); // Return to original position.
-		$this->release_bookmark( $start_name );
-		$this->release_bookmark( $end_name );
 
 		$outer_html = substr( $this->html, $start, $end - $start );
 
+		$tag                     = strtolower( $tag );
 		$this->lexical_updates[] = new WP_HTML_Text_Replacement( $start, $end, "<$tag>$outer_html</$tag>" );
 		// TODO: Make sure pointer is still pointing correctly to its original position!
 		// TODO: Adjust bookmarks if necessary!
