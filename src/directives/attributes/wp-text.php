@@ -7,7 +7,7 @@ function process_wp_text( $tags, $context ) {
 		return;
 	}
 
-	$value = $tags->get_attribute( 'wp-text' );
+	$value = $tags->get_attribute( 'data-wp-text' );
 	if ( null === $value ) {
 		return;
 	}

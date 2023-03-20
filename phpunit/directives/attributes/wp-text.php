@@ -1,6 +1,6 @@
 <?php
 /**
- * wp-text tag directive test.
+ * data-wp-text tag directive test.
  */
 
 require_once __DIR__ . '/../../../src/directives/attributes/wp-text.php';
@@ -11,14 +11,14 @@ require_once __DIR__ . '/../../../src/directives/class-wp-directive-processor.ph
 require_once __DIR__ . '/../../../src/directives/wp-html.php';
 
 /**
- * Tests for the wp-text tag directive.
+ * Tests for the data-wp-text tag directive.
  *
  * @group  directives
  * @covers process_wp_text
  */
 class Tests_Directives_WpText extends WP_UnitTestCase {
 	public function test_directive_sets_inner_html_based_on_attribute_value_and_escapes_html() {
-		$markup = '<div wp-text="context.myblock.someText"></div>';
+		$markup = '<div data-wp-text="context.myblock.someText"></div>';
 
 		$tags = new WP_Directive_Processor( $markup );
 		$tags->next_tag();
@@ -27,13 +27,13 @@ class Tests_Directives_WpText extends WP_UnitTestCase {
 		$context        = clone $context_before;
 		process_wp_text( $tags, $context );
 
-		$expected_markup = '<div wp-text="context.myblock.someText">The HTML tag &lt;br&gt; produces a line break.</div>';
+		$expected_markup = '<div data-wp-text="context.myblock.someText">The HTML tag &lt;br&gt; produces a line break.</div>';
 		$this->assertSame( $expected_markup, $tags->get_updated_html() );
-		$this->assertSame( $context_before->get_context(), $context->get_context(), 'wp-text directive changed context' );
+		$this->assertSame( $context_before->get_context(), $context->get_context(), 'data-wp-text directive changed context' );
 	}
 
 	public function test_directive_overwrites_inner_html_based_on_attribute_value() {
-		$markup = '<div wp-text="context.myblock.someText">Lorem ipsum dolor sit.</div>';
+		$markup = '<div data-wp-text="context.myblock.someText">Lorem ipsum dolor sit.</div>';
 
 		$tags = new WP_Directive_Processor( $markup );
 		$tags->next_tag();
@@ -42,8 +42,8 @@ class Tests_Directives_WpText extends WP_UnitTestCase {
 		$context        = clone $context_before;
 		process_wp_text( $tags, $context );
 
-		$expected_markup = '<div wp-text="context.myblock.someText">Honi soit qui mal y pense.</div>';
+		$expected_markup = '<div data-wp-text="context.myblock.someText">Honi soit qui mal y pense.</div>';
 		$this->assertSame( $expected_markup, $tags->get_updated_html() );
-		$this->assertSame( $context_before->get_context(), $context->get_context(), 'wp-text directive changed context' );
+		$this->assertSame( $context_before->get_context(), $context->get_context(), 'data-wp-text directive changed context' );
 	}
 }

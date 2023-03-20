@@ -7,7 +7,7 @@ function process_wp_html( $tags, $context ) {
 		return;
 	}
 
-	$value = $tags->get_attribute( 'wp-html' );
+	$value = $tags->get_attribute( 'data-wp-html' );
 	if ( null === $value ) {
 		return;
 	}
