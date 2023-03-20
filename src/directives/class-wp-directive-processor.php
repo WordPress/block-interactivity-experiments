@@ -181,8 +181,7 @@ class WP_Directive_Processor extends WP_HTML_Tag_Processor {
 
 		$tag                     = strtolower( $tag );
 		$this->lexical_updates[] = new WP_HTML_Text_Replacement( $start, $end, "<$tag>$outer_html</$tag>" );
-		// TODO: Make sure pointer is still pointing correctly to its original position!
-		// TODO: Adjust bookmarks if necessary!
+
 		return true;
 	}
 
