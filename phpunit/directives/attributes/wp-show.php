@@ -1,6 +1,6 @@
 <?php
 /**
- * wp-show tag directive test.
+ * data-wp-show tag directive test.
  */
 
  require_once __DIR__ . '/../../../src/directives/attributes/wp-show.php';
@@ -19,7 +19,7 @@
 class Tests_Directives_WpShow extends WP_UnitTestCase {
 	public function test_directive_leaves_content_unchanged_if_when_is_true() {
 		$markup = <<<EOF
-			<div wp-show="context.myblock.open">
+			<div data-wp-show="context.myblock.open">
 				I should be shown!
 			</div>
 EOF;
@@ -34,12 +34,12 @@ EOF;
 		process_wp_show( $tags, $context );
 
 		$this->assertSame( $markup, $tags->get_updated_html() );
-		$this->assertSame( $context_before->get_context(), $context->get_context(), 'wp-show directive changed context' );
+		$this->assertSame( $context_before->get_context(), $context->get_context(), 'data-wp-show directive changed context' );
 	}
 
 	public function test_directive_wraps_content_in_template_if_when_is_false() {
 		$markup = <<<EOF
-			<div wp-show="context.myblock.open">
+			<div data-wp-show="context.myblock.open">
 				I should be shown!
 			</div>
 EOF;
@@ -54,11 +54,11 @@ EOF;
 		process_wp_show( $tags, $context );
 
 		$updated_markup = <<<EOF
-			<template><div wp-show="context.myblock.open">
+			<template><div data-wp-show="context.myblock.open">
 				I should be shown!
 			</div></template>
 EOF;
 		$this->assertSame( $updated_markup, $tags->get_updated_html() );
-		$this->assertSame( $context_before->get_context(), $context->get_context(), 'wp-show directive changed context' );
+		$this->assertSame( $context_before->get_context(), $context->get_context(), 'data-wp-show directive changed context' );
 	}
 }

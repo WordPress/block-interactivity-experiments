@@ -7,7 +7,7 @@ function process_wp_show( $tags, $context ) {
 		return;
 	}
 
-	$value = $tags->get_attribute( 'wp-show' );
+	$value = $tags->get_attribute( 'data-wp-show' );
 	if ( null === $value ) {
 		return;
 	}
