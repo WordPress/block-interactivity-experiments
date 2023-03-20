@@ -61,4 +61,22 @@ EOF;
 		$this->assertSame( $updated_markup, $tags->get_updated_html() );
 		$this->assertSame( $context_before->get_context(), $context->get_context(), 'data-wp-show directive changed context' );
 	}
+
+	public function test_directive_wraps_void_tag_in_template_if_when_is_false() {
+		$markup = '<img data-wp-show="context.myblock.open">';
+		$tags   = new WP_Directive_Processor( $markup );
+		$tags->next_tag();
+
+		$context_before = new WP_Directive_Context( array( 'myblock' => array( 'open' => false ) ) );
+		$context        = clone $context_before;
+		process_wp_show( $tags, $context );
+
+		$tags->next_tag( array( 'tag_closers' => 'visit' ) );
+		process_wp_show( $tags, $context );
+
+		$updated_markup = '<template><img data-wp-show="context.myblock.open"></template>';
+
+		$this->assertSame( $updated_markup, $tags->get_updated_html() );
+		$this->assertSame( $context_before->get_context(), $context->get_context(), 'data-wp-show directive changed context' );
+	}
 }
