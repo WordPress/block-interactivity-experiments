@@ -7,7 +7,7 @@ function process_wp_each( $tags, $context, $directives ) {
 		return;
 	}
 
-	$prefixed_attributes = $tags->get_attribute_names_with_prefix( 'wp-each:' );
+	$prefixed_attributes = $tags->get_attribute_names_with_prefix( 'data-wp-each:' );
 	if ( 0 === count( $prefixed_attributes ) ) {
 		return;
 	}
@@ -30,7 +30,7 @@ function process_wp_each( $tags, $context, $directives ) {
 
 		$inner_html       = $tags->get_inner_html();
 		$inner_tags       = new WP_Directive_Processor( $inner_html );
-		$inner_tags       = wp_process_directives( $inner_tags, 'wp-', $directives, $context );
+		$inner_tags       = wp_process_directives( $inner_tags, 'data-wp-', $directives, $context );
 		$loop_inner_html .= $inner_tags->get_updated_html();
 		$context->rewind_context();
 	}

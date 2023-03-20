@@ -1,6 +1,6 @@
 <?php
 /**
- * wp-each attribute directive test.
+ * data-wp-each attribute directive test.
  */
 
 require_once __DIR__ . '/../../../src/directives/attributes/wp-each.php';
@@ -10,7 +10,7 @@ require_once __DIR__ . '/../../../src/directives/class-wp-directive-context.php'
 require_once __DIR__ . '/../../../src/directives/class-wp-directive-processor.php';
 
 /**
- * Tests for the wp-context attribute directive.
+ * Tests for the data-wp-each attribute directive.
  *
  * @group  directives
  * @covers process_wp_each
@@ -18,12 +18,12 @@ require_once __DIR__ . '/../../../src/directives/class-wp-directive-processor.ph
 class Tests_Directives_Attributes_WpEach extends WP_UnitTestCase {
 	public function test_directive_expands_correctly() {
 		$directives = array(
-			'wp-text' => function( $tags, $context ) {
+			'data-wp-text' => function( $tags, $context ) {
 				if ( $tags->is_tag_closer() ) {
 					return;
 				}
 
-				$value = $tags->get_attribute( 'wp-text' );
+				$value = $tags->get_attribute( 'data-wp-text' );
 				if ( null === $value ) {
 					return;
 				}
@@ -55,11 +55,11 @@ class Tests_Directives_Attributes_WpEach extends WP_UnitTestCase {
 
 		$markup = <<<EOF
             <table class="table table-hover table-striped test-data">
-                <tbody wp-each:item="context.data" wp-key="id">
-                    <tr class="" wp-class:danger="state.isSelected">
-                    <td class="col-md-1" wp-text="context.item.id"></td>
+                <tbody data-wp-each:item="context.data" wp-key="id">
+                    <tr class="" data-wp-class:danger="state.isSelected">
+                    <td class="col-md-1" data-wp-text="context.item.id"></td>
                     <td class="col-md-4">
-                        <a wp-on:click="actions.select" wp-text="context.item.label"></a>
+                        <a wp-on:click="actions.select" data-wp-text="context.item.label"></a>
                     </td>
                     <td class="col-md-1">
                         <a wp-on:click="actions.remove"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a>
@@ -77,11 +77,11 @@ EOF;
 
 		$updated_markup = <<<EOF
             <table class="table table-hover table-striped test-data">
-                <tbody wp-each:item="context.data" wp-key="id">
-                    <tr class="" wp-class:danger="state.isSelected">
-                    <td class="col-md-1" wp-text="context.item.id">123</td>
+                <tbody data-wp-each:item="context.data" wp-key="id">
+                    <tr class="" data-wp-class:danger="state.isSelected">
+                    <td class="col-md-1" data-wp-text="context.item.id">123</td>
                     <td class="col-md-4">
-                        <a wp-on:click="actions.select" wp-text="context.item.label">foo</a>
+                        <a wp-on:click="actions.select" data-wp-text="context.item.label">foo</a>
                     </td>
                     <td class="col-md-1">
                         <a wp-on:click="actions.remove"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a>
@@ -89,10 +89,10 @@ EOF;
                     <td class="col-md-6"></td>
                     </tr>
                 
-                    <tr class="" wp-class:danger="state.isSelected">
-                    <td class="col-md-1" wp-text="context.item.id">456</td>
+                    <tr class="" data-wp-class:danger="state.isSelected">
+                    <td class="col-md-1" data-wp-text="context.item.id">456</td>
                     <td class="col-md-4">
-                        <a wp-on:click="actions.select" wp-text="context.item.label">bar</a>
+                        <a wp-on:click="actions.select" data-wp-text="context.item.label">bar</a>
                     </td>
                     <td class="col-md-1">
                         <a wp-on:click="actions.remove"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a>
@@ -100,10 +100,10 @@ EOF;
                     <td class="col-md-6"></td>
                     </tr>
                 
-                    <tr class="" wp-class:danger="state.isSelected">
-                    <td class="col-md-1" wp-text="context.item.id">789</td>
+                    <tr class="" data-wp-class:danger="state.isSelected">
+                    <td class="col-md-1" data-wp-text="context.item.id">789</td>
                     <td class="col-md-4">
-                        <a wp-on:click="actions.select" wp-text="context.item.label">foobar</a>
+                        <a wp-on:click="actions.select" data-wp-text="context.item.label">foobar</a>
                     </td>
                     <td class="col-md-1">
                         <a wp-on:click="actions.remove"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a>
