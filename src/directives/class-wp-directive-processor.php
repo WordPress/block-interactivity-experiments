@@ -131,8 +131,20 @@ class WP_Directive_Processor extends WP_HTML_Tag_Processor {
 		return array( $start_name, $end_name );
 	}
 
+	/**
+	 * Wrap the current node in a given tag.
+	 *
+	 * When positioned on a tag opener, locate its matching closer, and wrap everything
+	 * in the tag specified as an argument. When positioned on a void element, wrap that
+	 * element in the argument tag.
+	 *
+	 * @param string $tag An HTML tag, specified in uppercase (e.g. "DIV").
+	 * @return bool Whether the operation was successful.
+	 *
+	 * @todo Allow passing in tags with attributes, e.g. <template id="abc">?
+	 */
 	public function wrap_in_tag( $tag ) {
-		$tag = strtolower( $tag ); // TODO: Allow passing in tags with attributes, e.g. <template id="abc">?
+		$tag = strtolower( $tag );
 
 		$this->get_updated_html(); // Apply potential previous updates.
 
