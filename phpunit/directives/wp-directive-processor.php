@@ -132,6 +132,8 @@ class WP_Directive_Processor_Test extends WP_UnitTestCase {
 		$tags->next_tag( 'section' );
 		$tags->wrap_in_tag( 'TEMPLATE' );
 		$this->assertSame( '<div>outside</div><template><section><div><img>inside</div></section></template>', $tags->get_updated_html() );
+		$this->assertSame( 'SECTION', $tags->get_tag() );
+		$this->assertFalse( $tags->is_tag_closer() );
 	}
 
 	public function test_wrap_in_tag_wraps_void_tag_correctly() {
@@ -140,6 +142,7 @@ class WP_Directive_Processor_Test extends WP_UnitTestCase {
 		$tags->next_tag( 'img' );
 		$tags->wrap_in_tag( 'TEMPLATE' );
 		$this->assertSame( '<div>outside</div><section><div><template><img></template>inside</div></section>', $tags->get_updated_html() );
+		$this->assertSame( 'IMG', $tags->get_tag() );
 	}
 
 	public function test_wrap_in_tag_followed_by_two_subsequent_calls_of_get_updated_html_works_correctly() {
@@ -149,5 +152,6 @@ class WP_Directive_Processor_Test extends WP_UnitTestCase {
 		$tags->wrap_in_tag( 'TEMPLATE' );
 		$tags->get_updated_html();
 		$this->assertSame( '<div>outside</div><section><div><template><img></template>inside</div></section>', $tags->get_updated_html() );
+		$this->assertSame( 'IMG', $tags->get_tag() );
 	}
 }

@@ -138,6 +138,9 @@ class WP_Directive_Processor extends WP_HTML_Tag_Processor {
 	 * in the tag specified as an argument. When positioned on a void element, wrap that
 	 * element in the argument tag.
 	 *
+	 * Note that the internal pointer will continue to point to the same tag as before
+	 * calling the function.
+	 *
 	 * @param string $tag An HTML tag, specified in uppercase (e.g. "DIV").
 	 * @return bool Whether the operation was successful.
 	 *
