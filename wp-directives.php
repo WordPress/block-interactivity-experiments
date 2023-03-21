@@ -223,7 +223,7 @@ function process_directives_in_block( $block_content ) {
 		'data-wp-text'    => 'process_wp_text',
 	);
 
-	$tags = new WP_HTML_Tag_Processor( $block_content );
+	$tags = new WP_Directive_Processor( $block_content );
 	$tags = wp_process_directives( $tags, 'data-wp-', $directives );
 	return $tags->get_updated_html();
 }
