@@ -18,11 +18,7 @@ require_once __DIR__ . '/../../../src/directives/wp-html.php';
  */
 class Tests_Directives_WpShow extends WP_UnitTestCase {
 	public function test_directive_leaves_content_unchanged_if_when_is_true() {
-		$markup = <<<EOF
-			<div data-wp-show="context.myblock.open">
-				I should be shown!
-			</div>
-EOF;
+		$markup = '<div data-wp-show="context.myblock.open">I should be shown!</div>';
 		$tags   = new WP_Directive_Processor( $markup );
 		$tags->next_tag();
 
@@ -38,12 +34,9 @@ EOF;
 	}
 
 	public function test_directive_wraps_content_in_template_if_when_is_false() {
-		$markup = <<<EOF
-			<div data-wp-show="context.myblock.open">
-				I should be shown!
-			</div>
-EOF;
-		$tags   = new WP_Directive_Processor( $markup );
+		$markup = '<div data-wp-show="context.myblock.open">I should not be shown!</div>';
+
+		$tags = new WP_Directive_Processor( $markup );
 		$tags->next_tag();
 
 		$context_before = new WP_Directive_Context( array( 'myblock' => array( 'open' => false ) ) );
@@ -53,11 +46,8 @@ EOF;
 		$tags->next_tag( array( 'tag_closers' => 'visit' ) );
 		process_wp_show( $tags, $context );
 
-		$updated_markup = <<<EOF
-			<template><div data-wp-show="context.myblock.open">
-				I should be shown!
-			</div></template>
-EOF;
+		$updated_markup = '<template><div data-wp-show="context.myblock.open">I should not be shown!</div></template>';
+
 		$this->assertSame( $updated_markup, $tags->get_updated_html() );
 		$this->assertSame( $context_before->get_context(), $context->get_context(), 'data-wp-show directive changed context' );
 	}
