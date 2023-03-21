@@ -177,10 +177,9 @@ class WP_Directive_Processor extends WP_HTML_Tag_Processor {
 			$this->release_bookmark( $end_name );
 		}
 
-		$outer_html = substr( $this->html, $start, $end - $start );
-
 		$tag                     = strtolower( $tag );
-		$this->lexical_updates[] = new WP_HTML_Text_Replacement( $start, $end, "<$tag>$outer_html</$tag>" );
+		$this->lexical_updates[] = new WP_HTML_Text_Replacement( $start, $start, "<$tag>" );
+		$this->lexical_updates[] = new WP_HTML_Text_Replacement( $end, $end, "</$tag>" );
 
 		$this->seek( $start_name ); // Return to original position.
 		$this->release_bookmark( $start_name );
