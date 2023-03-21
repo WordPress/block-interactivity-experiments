@@ -154,14 +154,12 @@ class WP_Directive_Processor extends WP_HTML_Tag_Processor {
 			while ( array_key_exists( 'void' . $i, $this->bookmarks ) ) {
 				++$i;
 			}
-			$bookmark_name = 'void' . $i;
+			$start_name = 'void' . $i;
 
-			$this->set_bookmark( $bookmark_name );
+			$this->set_bookmark( $start_name );
 
-			$start = $this->bookmarks[ $bookmark_name ]->start;
-			$end   = $this->bookmarks[ $bookmark_name ]->end + 1;
-
-			$this->release_bookmark( $bookmark_name );
+			$start = $this->bookmarks[ $start_name ]->start;
+			$end   = $this->bookmarks[ $start_name ]->end + 1;
 		} else {
 			$bookmarks = $this->get_balanced_tag_bookmarks();
 			if ( ! $bookmarks ) {
@@ -172,8 +170,6 @@ class WP_Directive_Processor extends WP_HTML_Tag_Processor {
 			$start = $this->bookmarks[ $start_name ]->start;
 			$end   = $this->bookmarks[ $end_name ]->end + 1;
 
-			$this->seek( $start_name ); // Return to original position.
-			$this->release_bookmark( $start_name );
 			$this->release_bookmark( $end_name );
 		}
 
@@ -181,6 +177,9 @@ class WP_Directive_Processor extends WP_HTML_Tag_Processor {
 
 		$tag                     = strtolower( $tag );
 		$this->lexical_updates[] = new WP_HTML_Text_Replacement( $start, $end, "<$tag>$outer_html</$tag>" );
+
+		$this->seek( $start_name ); // Return to original position.
+		$this->release_bookmark( $start_name );
 
 		return true;
 	}
