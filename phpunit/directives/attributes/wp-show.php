@@ -46,7 +46,7 @@ class Tests_Directives_WpShow extends WP_UnitTestCase {
 		$tags->next_tag( array( 'tag_closers' => 'visit' ) );
 		process_wp_show( $tags, $context );
 
-		$updated_markup = '<template><div data-wp-show="context.myblock.open">I should not be shown!</div></template>';
+		$updated_markup = '<template data-wp-show="context.myblock.open"><div >I should not be shown!</div></template>';
 
 		$this->assertSame( $updated_markup, $tags->get_updated_html() );
 		$this->assertSame( $context_before->get_context(), $context->get_context(), 'data-wp-show directive changed context' );
@@ -64,7 +64,7 @@ class Tests_Directives_WpShow extends WP_UnitTestCase {
 		$tags->next_tag( array( 'tag_closers' => 'visit' ) );
 		process_wp_show( $tags, $context );
 
-		$updated_markup = '<template><img data-wp-show="context.myblock.open"></template>';
+		$updated_markup = '<template data-wp-show="context.myblock.open"><img ></template>';
 
 		$this->assertSame( $updated_markup, $tags->get_updated_html() );
 		$this->assertSame( $context_before->get_context(), $context->get_context(), 'data-wp-show directive changed context' );

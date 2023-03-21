@@ -142,7 +142,8 @@ class WP_Directive_Processor extends WP_HTML_Tag_Processor {
 	 * calling the function.
 	 *
 	 * @param string $tag An HTML tag, specified in uppercase (e.g. "DIV").
-	 * @return bool Whether the operation was successful.
+	 * @return string|false The name of a bookmark pointing to the wrapping tag opener
+	 *                      if successful; false otherwise.
 	 *
 	 * @todo Allow passing in tags with attributes, e.g. <template id="abc">?
 	 */
@@ -187,7 +188,16 @@ class WP_Directive_Processor extends WP_HTML_Tag_Processor {
 		$this->seek( $start_name ); // Return to original position.
 		$this->release_bookmark( $start_name );
 
-		return true;
+		$i = 0;
+		while ( array_key_exists( $tag . $i, $this->bookmarks ) ) {
+			++$i;
+		}
+		$bookmark_name                     = $tag . $i;
+		$this->bookmarks[ $bookmark_name ] = new WP_HTML_Span(
+			$start,
+			$start + strlen( $tag ) + 2
+		);
+		return $bookmark_name;
 	}
 
 	/**
