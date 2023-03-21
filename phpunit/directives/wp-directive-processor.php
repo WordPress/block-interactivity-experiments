@@ -141,4 +141,13 @@ class WP_Directive_Processor_Test extends WP_UnitTestCase {
 		$tags->wrap_in_tag( 'TEMPLATE' );
 		$this->assertSame( '<div>outside</div><section><div><template><img></template>inside</div></section>', $tags->get_updated_html() );
 	}
+
+	public function test_wrap_in_tag_followed_by_two_subsequent_calls_of_get_updated_html_works_correctly() {
+		$tags = new WP_Directive_Processor( self::HTML );
+
+		$tags->next_tag( 'img' );
+		$tags->wrap_in_tag( 'TEMPLATE' );
+		$tags->get_updated_html();
+		$this->assertSame( '<div>outside</div><section><div><template><img></template>inside</div></section>', $tags->get_updated_html() );
+	}
 }
