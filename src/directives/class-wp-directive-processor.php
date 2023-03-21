@@ -144,6 +144,10 @@ class WP_Directive_Processor extends WP_HTML_Tag_Processor {
 	 * @todo Allow passing in tags with attributes, e.g. <template id="abc">?
 	 */
 	public function wrap_in_tag( $tag ) {
+		if ( $this->is_tag_closer() ) {
+			return false;
+		}
+
 		$this->get_updated_html(); // Apply potential previous updates.
 
 		if ( self::is_html_void_element( $this->get_tag() ) ) {
