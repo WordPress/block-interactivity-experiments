@@ -85,7 +85,7 @@ class WP_Directive_Processor extends WP_HTML_Tag_Processor {
 		list( $start_name, $end_name ) = $bookmarks;
 
 		$start = $this->bookmarks[ $start_name ]->end + 1;
-		$end   = $this->bookmarks[ $end_name ]->start - 1;
+		$end   = $this->bookmarks[ $end_name ]->start;
 
 		$this->seek( $start_name ); // Return to original position.
 		$this->release_bookmark( $start_name );
