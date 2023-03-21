@@ -27,10 +27,10 @@ function wp_process_directives( $tags, $prefix, $directives ) {
 				}
 			}
 		} else {
-			// Helper that removes the part after the colon before looking
+			// Helper that removes the part after the dot before looking
 			// for the directive processor inside `$attribute_directives`.
 			$get_directive_type = function ( $attr ) {
-				return strtok( $attr, ':' );
+				return strtok( $attr, '.' );
 			};
 
 			$attributes = $tags->get_attribute_names_with_prefix( $prefix );

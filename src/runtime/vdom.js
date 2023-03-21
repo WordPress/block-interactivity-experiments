@@ -3,7 +3,7 @@ import { directivePrefix as p } from './constants';
 
 const ignoreAttr = `${p}ignore`;
 const islandAttr = `${p}island`;
-const directiveParser = new RegExp(`${p}([^:]+):?(.*)$`);
+const directiveParser = new RegExp(`${p}([^.]+)\.?(.*)$`);
 
 export const hydratedIslands = new WeakSet();
 
