@@ -152,6 +152,15 @@ class WP_Directive_Processor extends WP_HTML_Tag_Processor {
 			return false;
 		}
 
+		if ( self::is_html_void_element( $tag ) ) {
+			// _doing_it_wrong(
+			// __METHOD__,
+			// __( 'Cannot wrap HTML in void tag.' ),
+			// '6.3.0'
+			// );
+			return false;
+		}
+
 		$this->get_updated_html(); // Apply potential previous updates.
 
 		if ( self::is_html_void_element( $this->get_tag() ) ) {

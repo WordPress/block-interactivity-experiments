@@ -154,4 +154,14 @@ class WP_Directive_Processor_Test extends WP_UnitTestCase {
 		$this->assertSame( '<div>outside</div><section><div><template><img></template>inside</div></section>', $tags->get_updated_html() );
 		$this->assertSame( 'IMG', $tags->get_tag() );
 	}
+
+	public function test_wrap_in_tag_fails_if_passed_void_tag() {
+		$tags = new WP_Directive_Processor( self::HTML );
+
+		$tags->next_tag( 'section' );
+
+		$this->assertFalse( $tags->wrap_in_tag( 'IMG' ) );
+		$this->assertSame( self::HTML, $tags->get_updated_html() );
+		$this->assertSame( 'SECTION', $tags->get_tag() );
+	}
 }
