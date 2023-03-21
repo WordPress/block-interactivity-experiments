@@ -5,6 +5,16 @@ test.describe('toVdom - full', () => {
 		await goToFile('csn-page-1.html');
 	});
 
+	test('it should navigate in the client', async ({
+		page,
+	}) => {
+        const csnPage1 = await page.evaluate('window.csn');
+		expect(csnPage1).toBeTruthy();
+		await page.getByTestId('csn-next-page').click();
+		const csnPage2 = await page.evaluate('window.csn');
+		expect(csnPage2).toBeTruthy();
+	});
+
 	test('it should load update content after navigation', async ({
 		page,
 	}) => {
