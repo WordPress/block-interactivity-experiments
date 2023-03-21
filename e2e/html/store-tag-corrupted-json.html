@@ -9,26 +9,26 @@
 		<div>
 			Counter:
 			<span
-				wp-bind:children="state.counter.value"
+				data-wp-bind.children="state.counter.value"
 				data-testid="counter value"
 				>3</span
 			>
 			<br />
 			Double:
 			<span
-				wp-bind:children="state.counter.double"
+				data-wp-bind.children="state.counter.double"
 				data-testid="counter double"
 				>6</span
 			>
 			<br />
 			<button
-				wp-on:click="actions.counter.increment"
+				data-wp-on.click="actions.counter.increment"
 				data-testid="counter button"
 			>
 				+1
 			</button>
 			<span
-				wp-bind:children="state.counter.clicks"
+				data-wp-bind.children="state.counter.clicks"
 				data-testid="counter clicks"
 				>0</span
 			>

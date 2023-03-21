@@ -6,9 +6,9 @@ function process_wp_context( $tags, $context ) {
 		return;
 	}
 
-	$value = $tags->get_attribute( 'wp-context' );
+	$value = $tags->get_attribute( 'data-wp-context' );
 	if ( null === $value ) {
-		// No wp-context directive.
+		// No data-wp-context directive.
 		return;
 	}
 

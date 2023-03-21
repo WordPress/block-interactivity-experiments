@@ -4,7 +4,7 @@ import { test, expect } from '../tests';
 const parseContent = async (loc: Locator) =>
 	JSON.parse((await loc.textContent()) || '');
 
-test.describe('wp-context', () => {
+test.describe('data-wp-context', () => {
 	test.beforeEach(async ({ goToFile }) => {
 		await goToFile('directives-context.html');
 	});
