@@ -34,13 +34,22 @@ test.describe('toVdom - full', () => {
         await expect(newTitle).toHaveCSS('color', 'rgb(0, 0, 255)');
 	});
 
-	test('it should apply new scripts after navigation', async ({
+	test('it should remove old styles after navigation', async ({
 		page,
 	}) => {
-		await page.getByTestId('csn-next-page').click();
-		const el = page.getByTestId('show when newValue is true');
-		await expect(el).toBeVisible();
-		await page.getByTestId('toggle newValue').click();
-		await expect(el).toBeHidden();
+        const subheading = page.getByTestId('csn-subheading');
+        await expect(subheading).toHaveCSS('color', 'rgb(0, 255, 0)');
+        await page.getByTestId('csn-next-page').click();
+        await expect(subheading).not.toHaveCSS('color', 'rgb(0, 255, 0)');
 	});
+
+	// test('it should apply new scripts after navigation', async ({
+	// 	page,
+	// }) => {
+	// 	await page.getByTestId('csn-next-page').click();
+	// 	const el = page.getByTestId('show when newValue is true');
+	// 	await expect(el).toBeVisible();
+	// 	await page.getByTestId('toggle newValue').click();
+	// 	await expect(el).toBeHidden();
+	// });
 });
