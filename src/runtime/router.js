@@ -25,9 +25,9 @@ export const canDoClientSideNavigation = (dom) =>
 		?.getAttribute('content') === 'active';
 
 /**
- * Finds the elements in the head that match the selector and fetch them.
+ * Finds the elements in the document that match the selector and fetch them.
  * For each element found, fetch the content and store it in the cache.
- * Returns an array of elements to add to the head.
+ * Returns an array of elements to add to the document.
  *
  * @param {string} selector - CSS selector used to find the elements.
  * @param {'href'|'src'} attribute - Attribute that determines where to fetch
@@ -35,17 +35,17 @@ export const canDoClientSideNavigation = (dom) =>
  * @param {Map} cache - Cache to use for the elements. Can be `stylesheets` or `scripts`.
  * @param {'style'|'script'} elementToCreate - Element to create for each fetched
  * item. Can be 'style' or 'script'.
- * @returns {Promise<Array<HTMLElement>>} - Array of elements to add to the head.
+ * @returns {Promise<Array<HTMLElement>>} - Array of elements to add to the document.
  */
 const fetchScriptOrStyle = async (
-	head,
+	document,
 	selector,
 	attribute,
 	cache,
 	elementToCreate
 ) => {
 	const fetchedItems = await Promise.all(
-		[].map.call(head.querySelectorAll(selector), (el) => {
+		[].map.call(document.querySelectorAll(selector), (el) => {
 			const attributeValue = el.getAttribute(attribute);
 			if (!cache.has(attributeValue))
 				cache.set(
@@ -64,23 +64,23 @@ const fetchScriptOrStyle = async (
 };
 
 // Fetch styles of a new page.
-const fetchHead = async (head) => {
+const fetchAssets = async (document) => {
 	const stylesFromSheets = await fetchScriptOrStyle(
-		head,
+		document,
 		'link[rel=stylesheet]',
 		'href',
 		stylesheets,
 		'style'
 	);
 	const scriptTags = await fetchScriptOrStyle(
-		head,
+		document,
 		'script[src]',
 		'src',
 		scripts,
 		'script'
 	);
 	const moduleScripts = await fetchScriptOrStyle(
-		head,
+		document,
 		'script[type=module]',
 		'src',
 		scripts,
@@ -90,8 +90,8 @@ const fetchHead = async (head) => {
 
 	return [
 		...scriptTags,
-		head.querySelector('title'),
-		...head.querySelectorAll('style'),
+		document.querySelector('title'),
+		...document.querySelectorAll('style'),
 		...stylesFromSheets,
 	];
 };
@@ -101,7 +101,7 @@ const fetchPage = async (url) => {
 	const html = await window.fetch(url).then((r) => r.text());
 	const dom = new window.DOMParser().parseFromString(html, 'text/html');
 	if (!canDoClientSideNavigation(dom.head)) return false;
-	const head = await fetchHead(dom.head);
+	const head = await fetchAssets(dom);
 	return { head, body: toVdom(dom.body) };
 };
 
@@ -153,12 +153,12 @@ export const init = async () => {
 		const body = toVdom(document.body);
 		hydrate(body, rootFragment);
 
-		// Cache the scripts. Has to be called before fetching the head.
-		[].map.call(document.head.querySelectorAll('script[src]'), (script) => {
+		// Cache the scripts. Has to be called before fetching the assets.
+		[].map.call(document.querySelectorAll('script[src]'), (script) => {
 			scripts.set(script.getAttribute('src'), script.textContent);
 		});
 
-		const head = await fetchHead(document.head);
+		const head = await fetchAssets(document);
 		pages.set(cleanUrl(window.location), Promise.resolve({ body, head }));
 	} else {
 		document
