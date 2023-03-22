@@ -7,10 +7,10 @@ function process_wp_class( $tags, $context ) {
 		return;
 	}
 
-	$prefixed_attributes = $tags->get_attribute_names_with_prefix( 'wp-class:' );
+	$prefixed_attributes = $tags->get_attribute_names_with_prefix( 'data-wp-class.' );
 
 	foreach ( $prefixed_attributes as $attr ) {
-		list( , $class_name ) = explode( ':', $attr );
+		list( , $class_name ) = explode( '.', $attr );
 		if ( empty( $class_name ) ) {
 			continue;
 		}

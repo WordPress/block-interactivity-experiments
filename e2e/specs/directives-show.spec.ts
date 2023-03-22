@@ -1,6 +1,6 @@
 import { test, expect } from '../tests';
 
-test.describe('wp-show', () => {
+test.describe('data-wp-show', () => {
 	test.beforeEach(async ({ goToFile }) => {
 		await goToFile('directives-show.html');
 	});
