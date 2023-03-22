@@ -38,8 +38,11 @@
 		"@wordpress/scripts": "^24.3.0",
 		"archiver": "^5.3.1",
 		"babel-jest": "^28.1.0",
+		"css-loader": "^6.7.3",
 		"jest": "^28.1.0",
-		"prettier": "^2.7.1"
+		"mini-css-extract-plugin": "^2.7.5",
+		"prettier": "^2.7.1",
+		"style-loader": "^3.3.2"
 	},
 	"dependencies": {
 		"@preact/signals": "^1.1.2",

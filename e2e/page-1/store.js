@@ -1,4 +1,4 @@
-import { store } from '../src/runtime/store';
+import { store } from '../../src/runtime/store';
 
 store({
 	state: {
