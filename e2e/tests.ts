@@ -35,6 +35,11 @@ export const test = base.extend<Fixtures>({
 			route.fulfill({ path: join(__dirname, '..', pathname) });
 		});
 
+		await page.route('**/*.css', async (route, req) => {
+			const { pathname } = new URL(req.url());
+			route.fulfill({ path: join(__dirname, '..', pathname) });
+		});
+
 		await use(async (filename, options) =>
 			page.goto(join('http://a.b', filename), options)
 		);

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>CSN - Page 2</title>
+		<meta itemprop="wp-client-side-navigation" content="active" />
+		<link
+			rel="stylesheet"
+			id="page-2-styles"
+			href="../build/e2e/page-2.css"
+		/>
+	</head>
+
+	<body>
+		<h1 data-testid="csn-heading-page-2">Client-side navigation Page 2</h1>
+		<h2 data-testid="csn-subheading">Subheading</h2>
+		<button
+			data-wp-on.click="actions.toggleNewValue"
+			data-testid="toggle newValue"
+		>
+			Toggle trueValue
+		</button>
+
+		<div
+			data-wp-show="state.newValue"
+			id="new-show-div"
+			data-testid="show when newValue is true"
+		>
+			<p>Show when true</p>
+		</div>
+
+		<script src="../build/e2e/page-2.js"></script>
+		<script src="../build/runtime.js"></script>
+		<script src="../build/vendors.js"></script>
+	</body>
+</html>

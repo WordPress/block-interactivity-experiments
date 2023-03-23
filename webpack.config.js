@@ -1,5 +1,6 @@
 const defaultConfig = require('@wordpress/scripts/config/webpack.config');
 const { resolve } = require('path');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = [
 	defaultConfig,
@@ -7,7 +8,8 @@ module.exports = [
 		...defaultConfig,
 		entry: {
 			runtime: './src/runtime',
-			'e2e/store': './e2e/store',
+			'e2e/page-1': './e2e/page-1',
+			'e2e/page-2': './e2e/page-2',
 		},
 		output: {
 			filename: '[name].js',
@@ -58,7 +60,12 @@ module.exports = [
 						},
 					],
 				},
+				{
+					test: /\.css$/i,
+					use: [MiniCssExtractPlugin.loader, 'css-loader'],
+				},
 			],
 		},
+		plugins: [new MiniCssExtractPlugin()],
 	},
 ];
