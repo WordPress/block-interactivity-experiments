@@ -14,7 +14,7 @@ require_once __DIR__ . '/../../../src/directives/utils.php';
 class Tests_Utils_Evaluate extends WP_UnitTestCase {
 	public function test_evaluate_function_should_access_state() {
 		// Init a simple store.
-		store(
+		wp_store(
 			array(
 				'state' => array(
 					'core' => array(

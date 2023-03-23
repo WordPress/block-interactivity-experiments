@@ -2,7 +2,7 @@
 
 require_once  __DIR__ . '/class-wp-directive-store.php';
 
-function store( $data ) {
+function wp_store( $data ) {
 	WP_Directive_Store::merge_data( $data );
 }
 
