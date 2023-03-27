@@ -1,4 +1,5 @@
 import { store } from '../../src/runtime/store';
+import { navigate } from '../../src/runtime/router';
 
 store({
 	state: {
@@ -7,6 +8,10 @@ store({
 	actions: {
 		toggleNewValue: ({ state }) => {
 			state.newValue = !state.newValue;
+		},
+		replaceWithPage3: () => {
+			debugger;
+			navigate('/csn-page-3.html', { replace: true });
 		},
 	},
 });
