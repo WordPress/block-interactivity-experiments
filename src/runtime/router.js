@@ -122,8 +122,7 @@ export const navigate = async (href, { replace = false } = {}) => {
 	if (page) {
 		document.head.replaceChildren(...page.head);
 		render(page.body, rootFragment);
-		if (replace) window.history.replaceState({}, '', href);
-		else window.history.pushState({}, '', href);
+		window.history[replace ? "replaceState" : "pushState"]({}, '', href);
 	} else {
 		window.location.assign(href);
 	}
