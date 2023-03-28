@@ -30,12 +30,7 @@ export const test = base.extend<Fixtures>({
 			const { pathname } = new URL(req.url());
 			route.fulfill({ path: join(__dirname, './html', pathname) });
 		});
-		await page.route('**/*.js', async (route, req) => {
-			const { pathname } = new URL(req.url());
-			route.fulfill({ path: join(__dirname, '..', pathname) });
-		});
-
-		await page.route('**/*.css', async (route, req) => {
+		await page.route('**/*.{js,css}', async (route, req) => {
 			const { pathname } = new URL(req.url());
 			route.fulfill({ path: join(__dirname, '..', pathname) });
 		});
