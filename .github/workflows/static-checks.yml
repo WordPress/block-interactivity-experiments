@@ -22,6 +22,27 @@ jobs:
         steps:
             - uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c # v3.3.0
 
+            - name: Setup PHP
+              uses: shivammathur/setup-php@v2
+              with:
+                  php-version: '8.0'
+                  coverage: none
+                  tools: cs2pr
+
+            - name: Get Composer Cache Directory
+              id: composer-cache
+              run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+
+            - name: Configure Composer cache
+              uses: actions/cache@v3
+              with:
+                  path: ${{ steps.composer-cache.outputs.dir }}
+                  key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+                  restore-keys: ${{ runner.os }}-composer-
+
+            - name: Install Composer dependencies
+              run: composer install --prefer-dist --optimize-autoloader --no-progress --no-interaction
+
             - name: Use desired version of NodeJS
               uses: actions/setup-node@8c91899e586c5b171469028077307d293428b516 # v3.5.1
               with:
@@ -29,5 +50,5 @@ jobs:
                 cache: npm
 
             # TODO: Lint JS too!
-            - name: Check PHP coding standards (PHPCS)
-              run: npm run lint:php
+            - name: Detect coding standard violations (PHPCS)
+              run: vendor/bin/phpcs -q --report=checkstyle --runtime-set ignore_errors_on_exit 1 --runtime-set ignore_warnings_on_exit 1 | cs2pr --graceful-warnings
