@@ -1,5 +1,13 @@
 <?php
+/**
+ * WP_Directive_Processor class.
+ *
+ * @package wp-directives
+ */
 
+/**
+ * Process WP directives.
+ */
 class WP_Directive_Processor extends WP_HTML_Tag_Processor {
 	/**
 	 * Find the matching closing tag for an opening tag.
