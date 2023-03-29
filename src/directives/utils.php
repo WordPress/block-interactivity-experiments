@@ -1,12 +1,31 @@
 <?php
+/**
+ * Utility functions.
+ *
+ * @package wp-directives
+ */
 
+/** Include WP_Directives_Store class */
 require_once  __DIR__ . '/class-wp-directive-store.php';
 
+/**
+ * Add data to the store.
+ *
+ * @param array $data Data.
+ */
 function wp_store( $data ) {
 	WP_Directive_Store::merge_data( $data );
 }
 
-// TODO: Implement evaluation of complex logical expressions.
+/**
+ * Obtain data from store and context from the provided path.
+ *
+ * TODO: Implement evaluation of complex logical expressions.
+ *
+ * @param string $path Path.
+ * @param array  $context Context data.
+ * @return mixed
+ */
 function evaluate( $path, array $context = array() ) {
 	$current = array_merge(
 		WP_Directive_Store::get_data(),
@@ -24,6 +43,14 @@ function evaluate( $path, array $context = array() ) {
 	return $current;
 }
 
+/**
+ * Set style.
+ *
+ * @param string $style Existing style to amend.
+ * @param string $name  Style property name.
+ * @param string $value Style property value.
+ * @return string Amended styles.
+ */
 function set_style( $style, $name, $value ) {
 	$style_assignments = explode( ';', $style );
 	$modified          = false;
