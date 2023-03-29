@@ -8,6 +8,8 @@
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain:       wp-directives
+ *
+ * @package block-interactivity-experiments
  */
 
 // Check if Gutenberg plugin is active.
@@ -48,6 +50,9 @@ require_once __DIR__ . '/src/directives/attributes/wp-html.php';
 require_once __DIR__ . '/src/directives/attributes/wp-style.php';
 require_once __DIR__ . '/src/directives/attributes/wp-text.php';
 
+/**
+ * Load includes.
+ */
 function wp_directives_loader() {
 	// Load the Admin page.
 	require_once plugin_dir_path( __FILE__ ) . '/src/admin/admin-page.php';
@@ -100,6 +105,12 @@ function wp_directives_register_scripts() {
 }
 add_action( 'wp_enqueue_scripts', 'wp_directives_register_scripts' );
 
+/**
+ * Add data-wp-link attribute.
+ *
+ * @param string $block_content Block content.
+ * @return string Filtered block content.
+ */
 function wp_directives_add_wp_link_attribute( $block_content ) {
 	$site_url = parse_url( get_site_url() );
 	$w        = new WP_HTML_Tag_Processor( $block_content );
@@ -140,14 +151,22 @@ add_filter(
 	1
 );
 
+/**
+ * Check whether client-side navigation has been opted into.
+ *
+ * @return bool Whether client-side navigation is enabled.
+ */
 function wp_directives_get_client_side_navigation() {
 	static $client_side_navigation = null;
 	if ( is_null( $client_side_navigation ) ) {
-		$client_side_navigation = apply_filters( 'client_side_navigation', false );
+		$client_side_navigation = (bool) apply_filters( 'client_side_navigation', false );
 	}
 	return $client_side_navigation;
 }
 
+/**
+ * Print client-side navigation meta tag if enabled.
+ */
 function wp_directives_add_client_side_navigation_meta_tag() {
 	if ( wp_directives_get_client_side_navigation() ) {
 		echo '<meta itemprop="wp-client-side-navigation" content="active">';
@@ -155,9 +174,14 @@ function wp_directives_add_client_side_navigation_meta_tag() {
 }
 add_action( 'wp_head', 'wp_directives_add_client_side_navigation_meta_tag' );
 
+/**
+ * Obtain client-side navigation option.
+ *
+ * @return bool Whether client-side navigation is enabled.
+ */
 function wp_directives_client_site_navigation_option() {
 	$options = get_option( 'wp_directives_plugin_settings' );
-	return $options['client_side_navigation'];
+	return (bool) $options['client_side_navigation'];
 }
 add_filter(
 	'client_side_navigation',
@@ -165,6 +189,14 @@ add_filter(
 	9
 );
 
+/**
+ * Mark interactive blocks if client-side navigation is enabled.
+ *
+ * @param string   $block_content Block content.
+ * @param array    $block Block.
+ * @param WP_Block $instance Block instance.
+ * @return string Filtered block.
+ */
 function wp_directives_mark_interactive_blocks( $block_content, $block, $instance ) {
 	if ( wp_directives_get_client_side_navigation() ) {
 		return $block_content;
@@ -194,6 +226,10 @@ add_filter( 'render_block', 'wp_directives_mark_interactive_blocks', 10, 3 );
 
 /**
  * Add a flag to mark inner blocks of isolated interactive blocks.
+ *
+ * @param array         $parsed_block Parsed block.
+ * @param array         $source_block Source block.
+ * @param WP_Block|null $parent_block Parent block.
  */
 function wp_directives_inner_blocks( $parsed_block, $source_block, $parent_block ) {
 	if (
@@ -212,6 +248,12 @@ function wp_directives_inner_blocks( $parsed_block, $source_block, $parent_block
 }
 add_filter( 'render_block_data', 'wp_directives_inner_blocks', 10, 3 );
 
+/**
+ * Process directives in block.
+ *
+ * @param string $block_content Block content.
+ * @return string Filtered block content.
+ */
 function process_directives_in_block( $block_content ) {
 	// TODO: Add some directive/components registration mechanism.
 	$directives = array(
