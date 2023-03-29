@@ -11,8 +11,8 @@ require_once __DIR__ . '/../utils.php';
 /**
  * Process wp-html directive attribute.
  *
- * @param WP_HTML_Tag_Processor $tags Tags.
- * @param WP_Directive_Context  $context Directive context.
+ * @param WP_Directive_Processor $tags Tags.
+ * @param WP_Directive_Context   $context Directive context.
  */
 function process_wp_html( $tags, $context ) {
 	if ( $tags->is_tag_closer() ) {
