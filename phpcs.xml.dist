@@ -10,7 +10,7 @@
 	<rule ref="WordPress-Core" />
 	<rule ref="WordPress-Docs" />
 	<rule ref="WordPress.WP.I18n" />
-	<config name="text_domain" value="gutenberg,default" />
+	<config name="text_domain" value="wp-directives" />
 
 	<rule ref="VariableAnalysis.CodeAnalysis.VariableAnalysis">
 		<properties>
