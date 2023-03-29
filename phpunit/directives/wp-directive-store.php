@@ -131,7 +131,7 @@ class Tests_Directives_WPDirectiveStore extends WP_UnitTestCase {
 		$rendered = ob_get_clean();
 		$this->assertSame(
 			'<script id="store" type="application/json">{"state":{"core":{"a":1,"b":2}}}</script>',
-			$rendered,
+			$rendered
 		);
 	}
 }

@@ -7,7 +7,7 @@ function wp_store( $data ) {
 }
 
 // TODO: Implement evaluation of complex logical expressions.
-function evaluate( string $path, array $context = array() ) {
+function evaluate( $path, array $context = array() ) {
 	$current = array_merge(
 		WP_Directive_Store::get_data(),
 		array( 'context' => $context )
