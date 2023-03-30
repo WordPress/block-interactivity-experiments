@@ -1,6 +1,6 @@
 <?php
 /**
- * Polyfill WP_HTML_Directives.
+ * Polyfill WP_HTML_Tag_Processor.
  *
  * @package wp-directives
  */

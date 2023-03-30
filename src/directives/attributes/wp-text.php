@@ -1,6 +1,6 @@
 <?php
 /**
- * Process wp-html directive attribute.
+ * Process wp-text directive attribute.
  *
  * @package wp-directives
  */

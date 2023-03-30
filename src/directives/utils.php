@@ -20,7 +20,7 @@ function wp_store( $data ) {
 /**
  * Obtain data from store and context from the provided path.
  *
- * TODO: Implement evaluation of complex logical expressions.
+ * @todo Implement evaluation of complex logical expressions.
  *
  * @param string $path Path.
  * @param array  $context Context data.
