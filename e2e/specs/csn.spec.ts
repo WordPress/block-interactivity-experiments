@@ -50,4 +50,19 @@ test.describe('toVdom - full', () => {
 		await page.getByTestId('toggle newValue').click();
 		await expect(el).toBeHidden();
 	});
+
+	test('it should replace current page in session history when using `replace` option', async ({
+		page,
+	}) => {
+		// We start on page 1 and navigate using `push` to page 2.
+		await page.getByTestId('csn-next-page').click();
+		// Once we are in page 2, we navigate using `replace` to page 3.
+		await page.getByTestId('replace with page 3').click();
+		const newTitle = page.getByTestId('csn-heading-page-3');
+		await expect(newTitle).toHaveText(/Client-side navigation Page 3/);
+		// If we go back, we should go back to page 1 and not 2.
+		await page.goBack();
+		const prevTitle = page.getByTestId('csn-heading-page-1');
+		await expect(prevTitle).toHaveText(/Client-side navigation Page 1/);
+	});
 });

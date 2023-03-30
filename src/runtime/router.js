@@ -115,14 +115,14 @@ export const prefetch = (url) => {
 };
 
 // Navigate to a new page.
-export const navigate = async (href) => {
+export const navigate = async (href, { replace = false } = {}) => {
 	const url = cleanUrl(href);
 	prefetch(url);
 	const page = await pages.get(url);
 	if (page) {
 		document.head.replaceChildren(...page.head);
 		render(page.body, rootFragment);
-		window.history.pushState({}, '', href);
+		window.history[replace ? "replaceState" : "pushState"]({}, '', href);
 	} else {
 		window.location.assign(href);
 	}
