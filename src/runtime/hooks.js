@@ -19,8 +19,8 @@ export const component = (name, Comp) => {
 };
 
 // Resolve the path to some property of the store object.
-const resolve = (path, context) => {
-	let current = { ...store, context };
+const resolve = (path, ctx) => {
+	let current = { ...store, ctx };
 	path.split('.').forEach((p) => (current = current[p]));
 	return current;
 };
