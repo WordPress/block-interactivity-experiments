@@ -15,9 +15,8 @@ export default () => {
 		const contextValue = useContext(context);
 		if (evaluate(when, { context: contextValue })) {
 			return children;
-		} else {
-			return <template>{children}</template>;
 		}
+		return <template>{children}</template>;
 	};
 	component('show', Show);
 };
