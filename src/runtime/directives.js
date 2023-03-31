@@ -4,11 +4,6 @@ import { deepSignal, peek } from 'deepsignal';
 import { directive } from './hooks';
 import { prefetch, navigate, canDoClientSideNavigation } from './router';
 
-// Until useSignalEffects is fixed:
-// https://github.com/preactjs/signals/issues/228
-const raf = window.requestAnimationFrame;
-const tick = () => new Promise((r) => raf(() => raf(r)));
-
 // Check if current page can do client-side navigation.
 const clientSideNavigation = canDoClientSideNavigation(document.head);
 
