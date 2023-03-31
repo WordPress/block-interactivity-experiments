@@ -1,4 +1,9 @@
 <?php
+/**
+ * Polyfill WP_HTML_Tag_Processor.
+ *
+ * @package wp-directives
+ */
 
 if ( ! class_exists( 'WP_HTML_Tag_Processor' ) ) {
 	require __DIR__ . '/../../../gutenberg/lib/compat/wordpress-6.2/html-api/class-wp-html-attribute-token.php';

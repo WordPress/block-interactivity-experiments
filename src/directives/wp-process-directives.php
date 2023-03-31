@@ -1,8 +1,24 @@
 <?php
+/**
+ * Function wp_process_directives.
+ *
+ * @package wp-directives
+ */
 
+/** WP_Directive_Context class */
 require_once __DIR__ . '/class-wp-directive-context.php';
+
+/** WP_Directive_Processor class */
 require_once __DIR__ . '/class-wp-directive-processor.php';
 
+/**
+ * Process directives.
+ *
+ * @param WP_Directive_Processor $tags Tag processor.
+ * @param string                 $prefix Attribute prefix.
+ * @param string[]               $directives Directives.
+ * @return WP_Directive_Processor
+ */
 function wp_process_directives( $tags, $prefix, $directives ) {
 	$context = new WP_Directive_Context;
 

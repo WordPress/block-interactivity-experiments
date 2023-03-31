@@ -1,7 +1,19 @@
 <?php
+/**
+ * Process wp-bind directive attribute.
+ *
+ * @package wp-directives
+ */
 
+/** Utility functions */
 require_once __DIR__ . '/../utils.php';
 
+/**
+ * Process wp-bind directive attribute.
+ *
+ * @param WP_Directive_Processor $tags Tags.
+ * @param WP_Directive_Context   $context Directive context.
+ */
 function process_wp_bind( $tags, $context ) {
 	if ( $tags->is_tag_closer() ) {
 		return;

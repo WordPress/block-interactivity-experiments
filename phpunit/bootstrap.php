@@ -2,7 +2,7 @@
 /**
  * PHPUnit bootstrap file
  *
- * @package Gutenberg
+ * @package block-interactivity-experiments
  */
 
 // Debug settings for parity with WordPress Core's PHPUnit tests.
@@ -52,14 +52,6 @@ require_once $_tests_dir . '/includes/functions.php';
 // Do not try to load JavaScript files from an external URL - this takes a
 // while.
 define( 'GUTENBERG_LOAD_VENDOR_SCRIPTS', false );
-
-/**
- * Manually load the plugin being tested.
- */
-// function _manually_load_plugin() {
-// require dirname( __DIR__ ) . '/lib/load.php';
-// }
-// tests_add_filter( 'muplugins_loaded', '_manually_load_plugin' );
 
 /**
  * Adds a wp_die handler for use during tests.

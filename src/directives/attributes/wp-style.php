@@ -1,7 +1,19 @@
 <?php
+/**
+ * Process wp-style directive attribute.
+ *
+ * @package wp-directives
+ */
 
+/** Utility functions */
 require_once __DIR__ . '/../utils.php';
 
+/**
+ * Process wp-style directive attribute.
+ *
+ * @param WP_Directive_Processor $tags Tags.
+ * @param WP_Directive_Context   $context Directive context.
+ */
 function process_wp_style( $tags, $context ) {
 	if ( $tags->is_tag_closer() ) {
 		return;
@@ -23,7 +35,6 @@ function process_wp_style( $tags, $context ) {
 			$tags->set_attribute( 'style', $style_attr );
 		} else {
 			// TODO: Do we want to unset styles if they're null?
-			// $tags->remove_class( $style_name );
 		}
 	}
 }
