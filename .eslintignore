@@ -1,12 +1,6 @@
-.DS_Store
-node_modules
 build
+node_modules
 vendor
-composer.lock
-/test-results/
-/playwright-report/
-/playwright/.cache/
-.phpunit.result.cache
 
 # In case the wp-env directories were symlinked into the project for IDE indexing.
 gutenberg
