@@ -5,7 +5,7 @@
 
 require_once __DIR__ . '/../../src/directives/wp-process-directives.php';
 
-require_once __DIR__ . '/../../src/directives/wp-html.php';
+require_once __DIR__ . '/../../src/directives/class-wp-directive-processor.php';
 
 class Helper_Class {
 	function process_foo_test( $tags, $context ) {
@@ -44,7 +44,7 @@ class Tests_Directives_WpProcessDirectives extends WP_UnitTestCase {
 		);
 
 		$markup = '<div>Example: <div foo-test="abc"><img><span>This is a test></span><div>Here is a nested div</div></div></div>';
-		$tags   = new WP_HTML_Tag_Processor( $markup );
+		$tags   = new WP_Directive_Processor( $markup, 'foo-' );
 		wp_process_directives( $tags, 'foo-', $directives );
 	}
 
@@ -58,7 +58,7 @@ class Tests_Directives_WpProcessDirectives extends WP_UnitTestCase {
 		);
 
 		$markup = '<div foo-test.value="abc"></div>';
-		$tags   = new WP_HTML_Tag_Processor( $markup );
+		$tags   = new WP_Directive_Processor( $markup, 'foo-' );
 		wp_process_directives( $tags, 'foo-', $directives );
 	}
 }

@@ -9,6 +9,103 @@
  * Process WP directives.
  */
 class WP_Directive_Processor extends WP_HTML_Tag_Processor {
+
+	/**
+	 * The directive prefix.
+	 *
+	 * @var string
+	 */
+	protected $prefix;
+
+	/**
+	 * The directives found on the current tag.
+	 *
+	 * @var array
+	 */
+	protected $directives = array();
+
+	protected $tag_stack = array();
+
+	private $might_have_directives = true;
+
+	public function __construct( $html, $prefix = 'data-wp-' ) {
+		parent::__construct( $html );
+
+		$this->prefix = $prefix;
+
+		if ( false === stripos( $html, $this->prefix ) ) {
+			$this->might_have_directives = false;
+		}
+	}
+
+	public function next_directive() {
+		if ( false === $this->might_have_directives ) {
+			return false;
+		}
+
+		while ( $this->next_tag( array( 'tag_closers' => 'visit' ) ) ) {
+			$tag_name = strtolower( $this->get_tag() );
+
+			// Is this a tag that closes the latest opening tag?
+			if ( $this->is_tag_closer() ) {
+				if ( 0 === count( $this->tag_stack ) ) {
+					continue;
+				}
+
+				list( $latest_opening_tag_name, $attributes ) = end( $this->tag_stack );
+				if ( $latest_opening_tag_name === $tag_name ) {
+					array_pop( $this->tag_stack );
+
+					// If the matching opening tag didn't have any attribute directives,
+					// we move on.
+					if ( 0 === count( $attributes ) ) {
+						continue;
+					}
+				}
+			} else {
+				$attributes = $this->get_attribute_names_with_prefix( $this->prefix );
+				$attributes = array_map( array( __CLASS__, 'get_directive_type' ), $attributes );
+
+				// TODO: Filter allowed directives? Pass in constructor?
+				// $attributes = array_intersect( $attributes, array_keys( $directives ) );
+
+				// If this is an open tag, and if it either has attribute directives,
+				// or if we're inside a tag that does, take note of this tag and its attribute
+				// directives so we can call its directive processor once we encounter the
+				// matching closing tag.
+				if (
+					! self::is_html_void_element( $this->get_tag() ) &&
+					( 0 !== count( $attributes ) || 0 !== count( $this->tag_stack ) )
+				) {
+					$this->tag_stack[] = array( $tag_name, $attributes );
+				}
+			}
+
+			if ( 0 < count( $attributes ) ) {
+				$this->directives = $attributes;
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	public function get_directive_names() {
+		return $this->directives;
+	}
+
+	/**
+	 * Given a directive, get its type.
+	 *
+	 * Removes the part after the dot.
+	 *
+	 * @param string $attr The attribute directive.
+	 * @return string The part before the dot.
+	 */
+	private static function get_directive_type( $attr ) {
+		return strtok( $attr, '.' );
+	}
+
 	/**
 	 * Find the matching closing tag for an opening tag.
 	 *
