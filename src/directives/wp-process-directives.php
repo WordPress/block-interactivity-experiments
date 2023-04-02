@@ -23,14 +23,8 @@ function wp_process_directives( $tags, $prefix, $directives ) {
 	$context = new WP_Directive_Context;
 
 	while ( $tags->next_directive() ) {
-		// Helper that removes the part after the dot before looking
-		// for the directive processor inside `$attribute_directives`.
-		$get_directive_type = function ( $attr ) {
-			return strtok( $attr, '.' );
-		};
-
-		$attributes = $tags->get_directive_names();
-		$attributes = array_intersect( $attributes, array_keys( $directives ) );
+		$directive_attributes = $tags->get_directive_names();
+		$attributes           = array_intersect( $directive_attributes, array_keys( $directives ) );
 
 		foreach ( $attributes as $attribute ) {
 			call_user_func( $directives[ $attribute ], $tags, $context );
