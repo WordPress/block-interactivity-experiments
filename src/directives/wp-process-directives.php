@@ -17,6 +17,7 @@ require_once __DIR__ . '/class-wp-directive-processor.php';
  * @param WP_Directive_Processor $tags Tag processor.
  * @param string                 $prefix Attribute prefix.
  * @param string[]               $directives Directives.
+ * @param WP_Directive_Context   $context Directive context.
  * @return WP_Directive_Processor
  */
 function wp_process_directives( $tags, $prefix, $directives, $context = null ) {
@@ -82,9 +83,9 @@ function wp_process_directives( $tags, $prefix, $directives, $context = null ) {
 			call_user_func( $directive_opener_processor, $tags, $context );
 
 			// Get inner HTML. Create new tag processor for it and run on it.
-			$inner_html = $tags->get_inner_html();
-			$inner_tags = new WP_Directive_Processor( $inner_html );
-			$inner_tags = wp_process_directives( $inner_tags, 'data-wp-', $directives, $context ); // Needs context!!!
+			$inner_html  = $tags->get_inner_html();
+			$inner_tags  = new WP_Directive_Processor( $inner_html );
+			$inner_tags  = wp_process_directives( $inner_tags, 'data-wp-', $directives, $context ); // Needs context!!!
 			$inner_html .= $inner_tags->get_updated_html();
 			$tags->set_inner_html( $inner_html );
 
@@ -95,7 +96,7 @@ function wp_process_directives( $tags, $prefix, $directives, $context = null ) {
 				isset( $directives[ $attribute ][1] ) &&
 				is_callable( $directives[ $attribute ][1] )
 			) {
-				$directive_opener_processor = $directives[ $attribute ][1];
+				$directive_closer_processor = $directives[ $attribute ][1];
 				call_user_func( $directive_closer_processor, $tags, $context );
 			}
 		}
