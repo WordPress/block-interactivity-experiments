@@ -28,7 +28,7 @@ class Tests_Directives_Attributes_WpContext extends WP_UnitTestCase {
 		$tags   = new WP_HTML_Tag_Processor( $markup );
 		$tags->next_tag();
 
-		process_wp_context( $tags, $context );
+		process_wp_context_opener( $tags, $context );
 
 		$this->assertSame(
 			array(
@@ -52,7 +52,7 @@ class Tests_Directives_Attributes_WpContext extends WP_UnitTestCase {
 		$tags   = new WP_HTML_Tag_Processor( $markup );
 		$tags->next_tag( array( 'tag_closers' => 'visit' ) );
 
-		process_wp_context( $tags, $context );
+		process_wp_context_closer( $tags, $context );
 
 		$this->assertSame(
 			array( 'my-key' => 'original-value' ),

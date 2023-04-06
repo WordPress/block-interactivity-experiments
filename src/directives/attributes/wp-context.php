@@ -6,17 +6,12 @@
  */
 
 /**
- * Process wp-context directive attribute.
+ * Process wp-context directive attribute on tag opener.
  *
  * @param WP_Directive_Processor $tags Tags.
  * @param WP_Directive_Context   $context Directive context.
  */
-function process_wp_context( $tags, $context ) {
-	if ( $tags->is_tag_closer() ) {
-		$context->rewind_context();
-		return;
-	}
-
+function process_wp_context_opener( $tags, $context ) {
 	$value = $tags->get_attribute( 'data-wp-context' );
 	if ( null === $value ) {
 		// No data-wp-context directive.
@@ -27,4 +22,14 @@ function process_wp_context( $tags, $context ) {
 	// TODO: Error handling.
 
 	$context->set_context( $new_context );
+}
+
+/**
+ * Process tag closer matching opener with wp-context directive attribute.
+ *
+ * @param WP_Directive_Processor $tags Tags.
+ * @param WP_Directive_Context   $context Directive context.
+ */
+function process_wp_context_closer( $tags, $context ) {
+	$context->rewind_context();
 }

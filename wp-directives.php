@@ -257,7 +257,7 @@ add_filter( 'render_block_data', 'wp_directives_inner_blocks', 10, 3 );
 function process_directives_in_block( $block_content ) {
 	// TODO: Add some directive/components registration mechanism.
 	$directives = array(
-		'data-wp-context' => 'process_wp_context',
+		'data-wp-context' => array( 'process_wp_context_opener', 'process_wp_context_closer' ),
 		'data-wp-bind'    => 'process_wp_bind',
 		'data-wp-class'   => 'process_wp_class',
 		'data-wp-html'    => 'process_wp_html',
