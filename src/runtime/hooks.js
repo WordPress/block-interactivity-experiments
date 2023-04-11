@@ -20,7 +20,7 @@ export const component = (name, Comp) => {
 
 // Resolve the path to some property of the store object.
 const resolve = (path, ctx) => {
-	let current = { ...store, ctx };
+	let current = { ...store, context: ctx };
 	path.split('.').forEach((p) => (current = current[p]));
 	return current;
 };
