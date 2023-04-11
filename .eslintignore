@@ -3,6 +3,8 @@ node_modules
 vendor
 
 # In case the wp-env directories were symlinked into the project for IDE indexing.
+
 gutenberg
 wp
 wp-tests
+e2e
