@@ -80,12 +80,6 @@ class Tests_Directives_WpShow extends WP_UnitTestCase {
 				>
 					Images
 				</li>
-				<li
-					data-wp-class.wpmovies-active-tab="context.wpmovies.isVideosTab"
-					class=" wpmovies-tabs-title"
-				>
-					Videos
-				</li>
 			</ul>
 
 			<div data-wp-show="selectors.wpmovies.isImagesTab" class="abc">
@@ -112,9 +106,6 @@ END;
 		$tags->next_tag( array( 'class_name' => 'wpmovies-tabs-title' ) );
 		process_wp_class( $tags, $context );
 
-		$tags->next_tag( array( 'class_name' => 'wpmovies-tabs-title' ) );
-		process_wp_class( $tags, $context );
-
 		$tags->next_tag( array( 'class_name' => 'abc' ) );
 		process_wp_show( $tags, $context );
 
@@ -129,12 +120,6 @@ END;
 					class="wpmovies-tabs-title wpmovies-active-tab"
 				>
 					Images
-				</li>
-				<li
-					data-wp-class.wpmovies-active-tab="context.wpmovies.isVideosTab"
-					class=" wpmovies-tabs-title"
-				>
-					Videos
 				</li>
 			</ul>
 
