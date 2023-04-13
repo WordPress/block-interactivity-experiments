@@ -138,13 +138,13 @@ END;
 				</li>
 			</ul>
 
-			<template data-wp-show="selectors.wpmovies.isImagesTab"><div  class="abc">
+			<div data-wp-show="selectors.wpmovies.isImagesTab" class="abc">
 				Images Tab
-			</div></template>
-
-			<div data-wp-show="selectors.wpmovies.isVideosTab" class="abc">
-				Videos Tab
 			</div>
+
+			<template data-wp-show="selectors.wpmovies.isVideosTab"><div  class="abc">
+				Videos Tab
+			</div></template>
 END;
 
 		$this->assertSame( $updated_markup, $tags->get_updated_html() );
