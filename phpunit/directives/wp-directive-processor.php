@@ -136,6 +136,18 @@ class WP_Directive_Processor_Test extends WP_UnitTestCase {
 		$this->assertFalse( $tags->is_tag_closer() );
 	}
 
+	public function test_wrap_in_tag_wraps_balanced_tag_correctly_when_called_after_add_class() {
+		$tags = new WP_Directive_Processor( self::HTML );
+
+		$tags->next_tag();
+		$tags->add_class( 'foo' );
+		$tags->next_tag( 'section' );
+		$tags->wrap_in_tag( 'TEMPLATE' );
+		$this->assertSame( '<div class="foo">outside</div><template><section><div><img>inside</div></section></template>', $tags->get_updated_html() );
+		$this->assertSame( 'SECTION', $tags->get_tag() );
+		$this->assertFalse( $tags->is_tag_closer() );
+	}
+
 	public function test_wrap_in_tag_wraps_void_tag_correctly() {
 		$tags = new WP_Directive_Processor( self::HTML );
 
