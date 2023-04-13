@@ -233,28 +233,39 @@ add_filter( 'render_block', 'wp_directives_mark_interactive_blocks', 10, 3 );
  */
 function wp_directives_inner_blocks( $parsed_block, $source_block, $parent_block ) {
 	if (
-		isset( $parent_block ) &&
-		block_has_support(
-			$parent_block->block_type,
-			array(
-				'interactivity',
-				'isolated',
-			)
-		)
+		isset( $parent_block )
 	) {
-		$parsed_block['isolated'] = true;
+		if (
+			block_has_support(
+				$parent_block->block_type,
+				array(
+					'interactivity',
+					'isolated',
+				)
+			)
+		) {
+			$parsed_block['isolated'] = true;
+		}
+		$parsed_block['inner_block'] = true;
 	}
 	return $parsed_block;
 }
 add_filter( 'render_block_data', 'wp_directives_inner_blocks', 10, 3 );
 
+
 /**
  * Process directives in block.
  *
- * @param string $block_content Block content.
+ * @param string   $block_content Block content.
+ * @param array    $block Block.
+ * @param WP_Block $instance Block instance.
  * @return string Filtered block content.
  */
-function process_directives_in_block( $block_content ) {
+function process_directives_in_block( $block_content, $block, $instance ) {
+	if ( isset( $instance->parsed_block['inner_block'] ) ) {
+		return $block_content;
+	}
+
 	// TODO: Add some directive/components registration mechanism.
 	$directives = array(
 		'data-wp-context' => 'process_wp_context',
@@ -273,7 +284,7 @@ add_filter(
 	'render_block',
 	'process_directives_in_block',
 	10,
-	1
+	3
 );
 
 // TODO: check if priority 9 is enough.
