@@ -27,21 +27,29 @@ function wp_store( $data ) {
  * @return mixed
  */
 function evaluate( $path, array $context = array() ) {
-	$current = array_merge(
-		WP_Directive_Store::get_data(),
-		array( 'context' => $context )
-	);
+		$current = array_merge(
+				WP_Directive_Store::get_data(),
+				array( 'context' => $context )
+		);
 
-	$array = explode( '.', $path );
-	foreach ( $array as $p ) {
-		if ( isset( $current[ $p ] ) ) {
-			$current = $current[ $p ];
-		} else {
-			return null;
+		if ( strpos( $path, '!' ) === 0 ) {
+				$path = substr( $path, 1 );
+				$opposite = true;
 		}
-	}
-	return $current;
+
+		$array = explode( '.', $path );
+
+		foreach ( $array as $p ) {
+				if ( isset( $current[ $p ] ) ) {
+						$current = $current[ $p ];
+				} else {
+						return null;
+				}
+		}
+
+		return isset( $opposite ) ? ! $current : $current;
 }
+
 
 /**
  * Set style.
