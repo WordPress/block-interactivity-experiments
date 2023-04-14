@@ -33,8 +33,8 @@ function evaluate( $path, array $context = array() ) {
 	);
 
 	if ( strpos( $path, '!' ) === 0 ) {
-		$path     = substr( $path, 1 );
-		$opposite = true;
+		$path                  = substr( $path, 1 );
+		$has_negation_operator = true;
 	}
 
 	$array = explode( '.', $path );
@@ -47,7 +47,7 @@ function evaluate( $path, array $context = array() ) {
 		}
 	}
 
-	return isset( $opposite ) ? ! $current : $current;
+	return isset( $has_negation_operator ) ? ! $current : $current;
 }
 
 
