@@ -26,4 +26,13 @@ test.describe('toVdom', () => {
 		);
 		await expect(el2).toBeVisible();
 	});
+
+	test('it should replace CDATA with text nodes', async ({ page }) => {
+		const el = page.getByTestId('it should replace CDATA with text nodes');
+		const c = await el.innerHTML();
+		expect(c).toContain('##1##');
+		expect(c).toContain('##2##');
+		const el2 = page.getByTestId('it should keep this node between CDATA');
+		await expect(el2).toBeVisible();
+	});
 });
