@@ -30,7 +30,9 @@ class Tests_Utils_Evaluate extends WP_UnitTestCase {
 		$this->assertSame( 1, evaluate( 'state.core.number' ) );
 		$this->assertTrue( evaluate( 'state.core.bool' ) );
 		$this->assertSame( 'hi', evaluate( 'state.core.nested.string' ) );
+		$this->assertFalse( evaluate( '!state.core.bool' ) );
 	}
+
 	public function test_evaluate_function_should_access_passed_context() {
 		$context = array(
 			'local' => array(
@@ -43,8 +45,9 @@ class Tests_Utils_Evaluate extends WP_UnitTestCase {
 		);
 		$this->assertSame( 2, evaluate( 'context.local.number', $context ) );
 		$this->assertFalse( evaluate( 'context.local.bool', $context ) );
+		$this->assertTrue( evaluate( '!context.local.bool', $context ) );
 		$this->assertSame( 'bye', evaluate( 'context.local.nested.string', $context ) );
-		// Previous defined state is also accessible.
+		// Previously defined state is also accessible.
 		$this->assertSame( 1, evaluate( 'state.core.number' ) );
 		$this->assertTrue( evaluate( 'state.core.bool' ) );
 		$this->assertSame( 'hi', evaluate( 'state.core.nested.string' ) );

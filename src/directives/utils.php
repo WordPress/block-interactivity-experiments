@@ -32,7 +32,13 @@ function evaluate( $path, array $context = array() ) {
 		array( 'context' => $context )
 	);
 
+	if ( strpos( $path, '!' ) === 0 ) {
+		$path                  = substr( $path, 1 );
+		$has_negation_operator = true;
+	}
+
 	$array = explode( '.', $path );
+
 	foreach ( $array as $p ) {
 		if ( isset( $current[ $p ] ) ) {
 			$current = $current[ $p ];
@@ -40,8 +46,10 @@ function evaluate( $path, array $context = array() ) {
 			return null;
 		}
 	}
-	return $current;
+
+	return isset( $has_negation_operator ) ? ! $current : $current;
 }
+
 
 /**
  * Set style.
