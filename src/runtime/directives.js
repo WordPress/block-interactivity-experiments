@@ -2,15 +2,11 @@ import { useContext, useMemo, useEffect } from 'preact/hooks';
 import { useSignalEffect } from '@preact/signals';
 import { deepSignal, peek } from 'deepsignal';
 import { directive } from './hooks';
-import { prefetch, navigate, canDoClientSideNavigation } from './router';
 
 // Until useSignalEffects is fixed:
 // https://github.com/preactjs/signals/issues/228
 const raf = window.requestAnimationFrame;
 const tick = () => new Promise((r) => raf(() => raf(r)));
-
-// Check if current page can do client-side navigation.
-const clientSideNavigation = canDoClientSideNavigation(document.head);
 
 const isObject = (item) =>
 	item && typeof item === 'object' && !Array.isArray(item);
@@ -133,46 +129,6 @@ export default () => {
 							  );
 					}, []);
 				});
-		}
-	);
-
-	// data-wp-link
-	directive(
-		'link',
-		({
-			directives: {
-				link: { default: link },
-			},
-			props: { href },
-			element,
-		}) => {
-			useEffect(() => {
-				// Prefetch the page if it is in the directive options.
-				if (clientSideNavigation && link?.prefetch) {
-					prefetch(href);
-				}
-			});
-
-			// Don't do anything if it's falsy.
-			if (clientSideNavigation && link !== false) {
-				element.props.onclick = async (event) => {
-					event.preventDefault();
-
-					// Fetch the page (or return it from cache).
-					await navigate(href);
-
-					// Update the scroll, depending on the option. True by default.
-					if (link?.scroll === 'smooth') {
-						window.scrollTo({
-							top: 0,
-							left: 0,
-							behavior: 'smooth',
-						});
-					} else if (link?.scroll !== false) {
-						window.scrollTo(0, 0);
-					}
-				};
-			}
 		}
 	);
 
