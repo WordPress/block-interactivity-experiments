@@ -247,7 +247,7 @@ function wp_directives_inner_blocks( $parsed_block, $source_block, $parent_block
 		) {
 			$parsed_block['isolated'] = true;
 		}
-		$parsed_block['inner_block'] = true;
+		$parsed_block['inner_block'] = true; // TODO: Limit to interactive blocks.
 	}
 	return $parsed_block;
 }
