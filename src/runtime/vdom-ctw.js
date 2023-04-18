@@ -8,9 +8,9 @@ const directiveParser = new RegExp(`${p}([^.]+)\.?(.*)$`);
 export const hydratedIslands = new WeakSet();
 
 // Recursive function that transfoms a DOM tree into vDOM.
-export function toVdom(node) {
+export function toVdom(root) {
 	const treeWalker = document.createTreeWalker(
-		node,
+		root,
 		// 205
 		NodeFilter.SHOW_ELEMENT +
 			NodeFilter.SHOW_TEXT +
@@ -22,13 +22,16 @@ export function toVdom(node) {
 	function walk(node) {
 		const { attributes, nodeType } = node;
 
-		if (nodeType === 3) return node.data;
+		if (nodeType === 3) return [node.data];
 		if (nodeType === 4) {
+			const next = treeWalker.nextSibling();
 			node.replaceWith(new Text(node.nodeValue));
-			return node.nodeValue;
+			return [node.nodeValue, next];
 		}
 		if (nodeType === 8 || nodeType === 7) {
-			return null;
+			const next = treeWalker.nextSibling();
+			node.remove();
+			return [null, next];
 		}
 
 		const props = {};
@@ -63,11 +66,13 @@ export function toVdom(node) {
 		}
 
 		if (ignore && !island)
-			return h(node.localName, {
-				...props,
-				innerHTML: node.innerHTML,
-				directives: { ignore: true },
-			});
+			return [
+				h(node.localName, {
+					...props,
+					innerHTML: node.innerHTML,
+					directives: { ignore: true },
+				}),
+			];
 		if (island) hydratedIslands.add(node);
 
 		if (hasDirectives) props.directives = directives;
@@ -75,20 +80,14 @@ export function toVdom(node) {
 		let child = treeWalker.firstChild();
 		if (child) {
 			while (child) {
-				const vnode = walk(child);
-				if (vnode) {
-					children.push(vnode);
-					child = treeWalker.nextSibling();
-				} else {
-					const prevChild = child;
-					child = treeWalker.nextSibling();
-					prevChild.remove();
-				}
+				const [vnode, nextChild] = walk(child);
+				if (vnode) children.push(vnode);
+				child = nextChild || treeWalker.nextSibling();
 			}
 			treeWalker.parentNode();
 		}
 
-		return h(node.localName, props, children);
+		return [h(node.localName, props, children)];
 	}
 
 	return walk(treeWalker.currentNode);
