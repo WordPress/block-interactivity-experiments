@@ -82,11 +82,11 @@ class Tests_Directives_WpShow extends WP_UnitTestCase {
 				</li>
 			</ul>
 
-			<div data-wp-show="selectors.wpmovies.isImagesTab" class="abc">
+			<div data-wp-show="context.wpmovies.isImagesTab" class="abc">
 				Images Tab
 			</div>
 
-			<div data-wp-show="selectors.wpmovies.isVideosTab" class="abc">
+			<div data-wp-show="context.wpmovies.isVideosTab" class="abc">
 				Videos Tab
 			</div>
 END;
@@ -123,11 +123,11 @@ END;
 				</li>
 			</ul>
 
-			<div data-wp-show="selectors.wpmovies.isImagesTab" class="abc">
+			<div data-wp-show="context.wpmovies.isImagesTab" class="abc">
 				Images Tab
 			</div>
 
-			<template data-wp-show="selectors.wpmovies.isVideosTab"><div  class="abc">
+			<template data-wp-show="context.wpmovies.isVideosTab"><div  class="abc">
 				Videos Tab
 			</div></template>
 END;
