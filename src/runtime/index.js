@@ -1,6 +1,8 @@
 import registerDirectives from './directives';
 import registerComponents from './components';
 import { init } from './router';
+export { store } from './store';
+export { navigate } from './router';
 
 /**
  * Initialize the initial vDOM.

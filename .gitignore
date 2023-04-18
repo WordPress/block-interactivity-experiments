@@ -1,3 +1,4 @@
+.DS_Store
 node_modules
 build
 test.html
@@ -6,3 +7,4 @@ composer.lock
 /test-results/
 /playwright-report/
 /playwright/.cache/
+.phpunit.result.cache

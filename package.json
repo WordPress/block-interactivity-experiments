@@ -1,6 +1,6 @@
 {
-	"name": "block-hydration-experiments",
-	"version": "0.1.0",
+	"name": "block-interactivity-experiments",
+	"version": "0.1.14",
 	"author": "The WordPress Contributors",
 	"license": "GPL-2.0-or-later",
 	"main": "build/index.js",
@@ -11,8 +11,10 @@
 		"format:php": "wp-env run composer run-script format",
 		"lint:php": "wp-env run composer run-script lint",
 		"test": "jest",
+		"pretest:unit:php": "wp-env start",
+		"test:unit:php": "wp-env run tests-wordpress /var/www/html/wp-content/plugins/block-interactivity-experiments/vendor/bin/phpunit -c /var/www/html/wp-content/plugins/block-interactivity-experiments/phpunit.xml.dist --verbose",
 		"test:watch": "jest --watch",
-		"plugin-zip": "wp-scripts plugin-zip",
+		"plugin-zip": "node .github/scripts/build-plugin.js",
 		"wp-env": "wp-env"
 	},
 	"prettier": {
@@ -32,17 +34,20 @@
 		"@babel/preset-env": "^7.17.10",
 		"@faker-js/faker": "^7.6.0",
 		"@playwright/test": "^1.29.0",
-		"@prettier/plugin-php": "^0.18.9",
 		"@types/jest": "^27.5.1",
-		"@wordpress/env": "^4.4.0",
+		"@wordpress/env": "^5.8.0",
 		"@wordpress/scripts": "^24.3.0",
+		"archiver": "^5.3.1",
 		"babel-jest": "^28.1.0",
+		"css-loader": "^6.7.3",
 		"jest": "^28.1.0",
-		"prettier": "^2.7.1"
+		"mini-css-extract-plugin": "^2.7.5",
+		"prettier": "^2.7.1",
+		"style-loader": "^3.3.2"
 	},
 	"dependencies": {
 		"@preact/signals": "^1.1.2",
-		"deepsignal": "^1.1.0",
+		"deepsignal": "^1.2.1",
 		"hpq": "^1.3.0",
 		"preact": "^10.10.6"
 	}

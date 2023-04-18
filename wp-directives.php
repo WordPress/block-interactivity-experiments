@@ -1,13 +1,15 @@
 <?php
 /**
  * Plugin Name:       wp-directives
- * Version:           0.1.0
+ * Version:           0.1.14
  * Requires at least: 6.0
  * Requires PHP:      5.6
  * Author:            Gutenberg Team
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain:       wp-directives
+ *
+ * @package block-interactivity-experiments
  */
 
 // Check if Gutenberg plugin is active.
@@ -35,6 +37,22 @@ if ( ! is_plugin_active( 'gutenberg/gutenberg.php' ) ) {
 	return;
 }
 
+require_once __DIR__ . '/src/directives/wp-html.php';
+
+require_once __DIR__ . '/src/directives/class-wp-directive-context.php';
+require_once __DIR__ . '/src/directives/class-wp-directive-store.php';
+require_once __DIR__ . '/src/directives/wp-process-directives.php';
+
+require_once __DIR__ . '/src/directives/attributes/wp-bind.php';
+require_once __DIR__ . '/src/directives/attributes/wp-context.php';
+require_once __DIR__ . '/src/directives/attributes/wp-class.php';
+require_once __DIR__ . '/src/directives/attributes/wp-html.php';
+require_once __DIR__ . '/src/directives/attributes/wp-style.php';
+require_once __DIR__ . '/src/directives/attributes/wp-text.php';
+
+/**
+ * Load includes.
+ */
 function wp_directives_loader() {
 	// Load the Admin page.
 	require_once plugin_dir_path( __FILE__ ) . '/src/admin/admin-page.php';
@@ -48,7 +66,7 @@ function wp_directives_activate() {
 	add_option(
 		'wp_directives_plugin_settings',
 		array(
-			'client_side_transitions' => false,
+			'client_side_navigation' => false,
 		)
 	);
 }
@@ -87,6 +105,12 @@ function wp_directives_register_scripts() {
 }
 add_action( 'wp_enqueue_scripts', 'wp_directives_register_scripts' );
 
+/**
+ * Add data-wp-link attribute.
+ *
+ * @param string $block_content Block content.
+ * @return string Filtered block content.
+ */
 function wp_directives_add_wp_link_attribute( $block_content ) {
 	$site_url = parse_url( get_site_url() );
 	$w        = new WP_HTML_Tag_Processor( $block_content );
@@ -103,11 +127,11 @@ function wp_directives_add_wp_link_attribute( $block_content ) {
 				str_contains( $classes, 'page-numbers' )
 			) {
 				$w->set_attribute(
-					'wp-link',
+					'data-wp-link',
 					'{ "prefetch": true, "scroll": false }'
 				);
 			} else {
-				$w->set_attribute( 'wp-link', '{ "prefetch": true }' );
+				$w->set_attribute( 'data-wp-link', '{ "prefetch": true }' );
 			}
 		}
 	}
@@ -127,72 +151,131 @@ add_filter(
 	1
 );
 
-
-function wp_directives_get_client_side_transitions() {
-	static $client_side_transitions = null;
-	if ( is_null( $client_side_transitions ) ) {
-		$client_side_transitions = apply_filters( 'client_side_transitions', false );
+/**
+ * Check whether client-side navigation has been opted into.
+ *
+ * @return bool Whether client-side navigation is enabled.
+ */
+function wp_directives_get_client_side_navigation() {
+	static $client_side_navigation = null;
+	if ( is_null( $client_side_navigation ) ) {
+		$client_side_navigation = (bool) apply_filters( 'client_side_navigation', false );
 	}
-	return $client_side_transitions;
+	return $client_side_navigation;
 }
 
-function wp_directives_add_client_side_transitions_meta_tag() {
-	if ( wp_directives_get_client_side_transitions() ) {
-		echo '<meta itemprop="wp-client-side-transitions" content="active">';
+/**
+ * Print client-side navigation meta tag if enabled.
+ */
+function wp_directives_add_client_side_navigation_meta_tag() {
+	if ( wp_directives_get_client_side_navigation() ) {
+		echo '<meta itemprop="wp-client-side-navigation" content="active">';
 	}
 }
-add_action( 'wp_head', 'wp_directives_add_client_side_transitions_meta_tag' );
+add_action( 'wp_head', 'wp_directives_add_client_side_navigation_meta_tag' );
 
-function wp_directives_client_site_transitions_option() {
+/**
+ * Obtain client-side navigation option.
+ *
+ * @return bool Whether client-side navigation is enabled.
+ */
+function wp_directives_client_site_navigation_option() {
 	$options = get_option( 'wp_directives_plugin_settings' );
-	return $options['client_side_transitions'];
+	return (bool) $options['client_side_navigation'];
 }
 add_filter(
-	'client_side_transitions',
-	'wp_directives_client_site_transitions_option',
+	'client_side_navigation',
+	'wp_directives_client_site_navigation_option',
 	9
 );
 
+/**
+ * Mark interactive blocks if client-side navigation is enabled.
+ *
+ * @param string   $block_content Block content.
+ * @param array    $block Block.
+ * @param WP_Block $instance Block instance.
+ * @return string Filtered block.
+ */
 function wp_directives_mark_interactive_blocks( $block_content, $block, $instance ) {
-	if ( wp_directives_get_client_side_transitions() ) {
+	if ( wp_directives_get_client_side_navigation() ) {
 		return $block_content;
 	}
 
-		// Append the `wp-ignore` attribute for inner blocks of interactive blocks.
+	// Append the `data-wp-ignore` attribute for inner blocks of interactive blocks.
 	if ( isset( $instance->parsed_block['isolated'] ) ) {
 		$w = new WP_HTML_Tag_Processor( $block_content );
 		$w->next_tag();
-		$w->set_attribute( 'wp-ignore', '' );
+		$w->set_attribute( 'data-wp-ignore', '' );
 		$block_content = (string) $w;
 	}
 
-		// Return if it's not interactive.
+	// Return if it's not interactive.
 	if ( ! block_has_support( $instance->block_type, array( 'interactivity' ) ) ) {
 		return $block_content;
 	}
 
-		// Add the `wp-island` attribute if it's interactive.
-		$w = new WP_HTML_Tag_Processor( $block_content );
-		$w->next_tag();
-		$w->set_attribute( 'wp-island', '' );
+	// Add the `data-wp-island` attribute if it's interactive.
+	$w = new WP_HTML_Tag_Processor( $block_content );
+	$w->next_tag();
+	$w->set_attribute( 'data-wp-island', '' );
 
-		return (string) $w;
+	return (string) $w;
 }
 add_filter( 'render_block', 'wp_directives_mark_interactive_blocks', 10, 3 );
 
 /**
  * Add a flag to mark inner blocks of isolated interactive blocks.
+ *
+ * @param array         $parsed_block Parsed block.
+ * @param array         $source_block Source block.
+ * @param WP_Block|null $parent_block Parent block.
  */
-function bhe_inner_blocks( $parsed_block, $source_block, $parent_block ) {
+function wp_directives_inner_blocks( $parsed_block, $source_block, $parent_block ) {
 	if (
 		isset( $parent_block ) &&
 		block_has_support(
 			$parent_block->block_type,
-			array( 'interactivity', 'isolated' )
+			array(
+				'interactivity',
+				'isolated',
+			)
 		)
 	) {
 		$parsed_block['isolated'] = true;
 	}
 	return $parsed_block;
 }
-add_filter( 'render_block_data', 'bhe_inner_blocks', 10, 3 );
+add_filter( 'render_block_data', 'wp_directives_inner_blocks', 10, 3 );
+
+/**
+ * Process directives in block.
+ *
+ * @param string $block_content Block content.
+ * @return string Filtered block content.
+ */
+function process_directives_in_block( $block_content ) {
+	// TODO: Add some directive/components registration mechanism.
+	$directives = array(
+		'data-wp-context' => 'process_wp_context',
+		'data-wp-bind'    => 'process_wp_bind',
+		'data-wp-class'   => 'process_wp_class',
+		'data-wp-html'    => 'process_wp_html',
+		'data-wp-style'   => 'process_wp_style',
+		'data-wp-text'    => 'process_wp_text',
+	);
+
+	$tags = new WP_Directive_Processor( $block_content );
+	$tags = wp_process_directives( $tags, 'data-wp-', $directives );
+	return $tags->get_updated_html();
+}
+add_filter(
+	'render_block',
+	'process_directives_in_block',
+	10,
+	1
+);
+
+// TODO: check if priority 9 is enough.
+// TODO: check if `wp_footer` is the most appropriate hook.
+add_action( 'wp_footer', array( 'WP_Directive_Store', 'render' ), 9 );

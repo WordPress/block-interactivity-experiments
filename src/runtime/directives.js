@@ -1,19 +1,32 @@
 import { useContext, useMemo, useEffect } from 'preact/hooks';
 import { useSignalEffect } from '@preact/signals';
-import { deepSignal } from 'deepsignal';
+import { deepSignal, peek } from 'deepsignal';
 import { directive } from './hooks';
-import { prefetch, navigate, hasClientSideTransitions } from './router';
+import { prefetch, navigate, canDoClientSideNavigation } from './router';
 
 // Until useSignalEffects is fixed:
 // https://github.com/preactjs/signals/issues/228
 const raf = window.requestAnimationFrame;
 const tick = () => new Promise((r) => raf(() => raf(r)));
 
-// Check if current page has client-side transitions enabled.
-const clientSideTransitions = hasClientSideTransitions(document.head);
+// Check if current page can do client-side navigation.
+const clientSideNavigation = canDoClientSideNavigation(document.head);
+
+const isObject = (item) =>
+	item && typeof item === 'object' && !Array.isArray(item);
+
+const mergeDeepSignals = (target, source) => {
+	for (const k in source) {
+		if (typeof peek(target, k) === 'undefined') {
+			target[`$${k}`] = source[`$${k}`];
+		} else if (isObject(peek(target, k)) && isObject(peek(source, k))) {
+			mergeDeepSignals(target[`$${k}`].peek(), source[`$${k}`].peek());
+		}
+	}
+};
 
 export default () => {
-	// wp-context
+	// data-wp-context
 	directive(
 		'context',
 		({
@@ -21,14 +34,21 @@ export default () => {
 				context: { default: context },
 			},
 			props: { children },
-			context: { Provider },
+			context: inherited,
 		}) => {
-			const signals = useMemo(() => deepSignal(context), [context]);
-			return <Provider value={signals}>{children}</Provider>;
+			const { Provider } = inherited;
+			const inheritedValue = useContext(inherited);
+			const value = useMemo(() => {
+				const localValue = deepSignal(context);
+				mergeDeepSignals(localValue, inheritedValue);
+				return localValue;
+			}, [context, inheritedValue]);
+
+			return <Provider value={value}>{children}</Provider>;
 		}
 	);
 
-	// wp-effect:[name]
+	// data-wp-effect.[name]
 	directive('effect', ({ directives: { effect }, context, evaluate }) => {
 		const contextValue = useContext(context);
 		Object.values(effect).forEach((path) => {
@@ -38,7 +58,7 @@ export default () => {
 		});
 	});
 
-	// wp-on:[event]
+	// data-wp-on.[event]
 	directive('on', ({ directives: { on }, element, evaluate, context }) => {
 		const contextValue = useContext(context);
 		Object.entries(on).forEach(([name, path]) => {
@@ -48,7 +68,7 @@ export default () => {
 		});
 	});
 
-	// wp-class:[classname]
+	// data-wp-class.[classname]
 	directive(
 		'class',
 		({ directives: { class: className }, element, evaluate, context }) => {
@@ -60,19 +80,19 @@ export default () => {
 						className: name,
 						context: contextValue,
 					});
+					const currentClass = element.props.class || '';
+					const classFinder = new RegExp(
+						`(^|\\s)${name}(\\s|$)`,
+						'g'
+					);
 					if (!result)
-						element.props.class = element.props.class
-							.replace(
-								new RegExp(`(^|\\s)${name}(\\s|$)`, 'g'),
-								' '
-							)
+						element.props.class = currentClass
+							.replace(classFinder, ' ')
 							.trim();
-					else if (
-						!new RegExp(`(^|\\s)${name}(\\s|$)`).test(
-							element.props.class
-						)
-					)
-						element.props.class += ` ${name}`;
+					else if (!classFinder.test(currentClass))
+						element.props.class = currentClass
+							? `${currentClass} ${name}`
+							: name;
 
 					useEffect(() => {
 						// This seems necessary because Preact doesn't change the class names
@@ -88,7 +108,7 @@ export default () => {
 		}
 	);
 
-	// wp-bind:[attribute]
+	// data-wp-bind.[attribute]
 	directive(
 		'bind',
 		({ directives: { bind }, element, context, evaluate }) => {
@@ -96,14 +116,27 @@ export default () => {
 			Object.entries(bind)
 				.filter((n) => n !== 'default')
 				.forEach(([attribute, path]) => {
-					element.props[attribute] = evaluate(path, {
+					const result = evaluate(path, {
 						context: contextValue,
 					});
+					element.props[attribute] = result;
+
+					useEffect(() => {
+						// This seems necessary because Preact doesn't change the attributes
+						// on the hydration, so we have to do it manually. It doesn't need
+						// deps because it only needs to do it the first time.
+						result === false
+							? element.ref.current.removeAttribute(attribute)
+							: element.ref.current.setAttribute(
+									attribute,
+									result === true ? '' : result
+							  );
+					}, []);
 				});
 		}
 	);
 
-	// wp-link
+	// data-wp-link
 	directive(
 		'link',
 		({
@@ -115,13 +148,13 @@ export default () => {
 		}) => {
 			useEffect(() => {
 				// Prefetch the page if it is in the directive options.
-				if (clientSideTransitions && link?.prefetch) {
+				if (clientSideNavigation && link?.prefetch) {
 					prefetch(href);
 				}
 			});
 
 			// Don't do anything if it's falsy.
-			if (clientSideTransitions && link !== false) {
+			if (clientSideNavigation && link !== false) {
 				element.props.onclick = async (event) => {
 					event.preventDefault();
 
@@ -140,6 +173,58 @@ export default () => {
 					}
 				};
 			}
+		}
+	);
+
+	// data-wp-show
+	directive(
+		'show',
+		({
+			directives: {
+				show: { default: show },
+			},
+			element,
+			evaluate,
+			context,
+		}) => {
+			const contextValue = useContext(context);
+			if (!evaluate(show, { context: contextValue }))
+				element.props.children = (
+					<template>{element.props.children}</template>
+				);
+		}
+	);
+
+	// data-wp-ignore
+	directive(
+		'ignore',
+		({
+			element: {
+				type: Type,
+				props: { innerHTML, ...rest },
+			},
+		}) => {
+			// Preserve the initial inner HTML.
+			const cached = useMemo(() => innerHTML, []);
+			return (
+				<Type dangerouslySetInnerHTML={{ __html: cached }} {...rest} />
+			);
+		}
+	);
+
+	// data-wp-text
+	directive(
+		'text',
+		({
+			directives: {
+				text: { default: text },
+			},
+			element,
+			evaluate,
+			context,
+		}) => {
+			const contextValue = useContext(context);
+			element.props.children = evaluate(text, { context: contextValue });
 		}
 	);
 };

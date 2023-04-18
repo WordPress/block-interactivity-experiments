@@ -1,9 +1,8 @@
-import { join } from 'path';
-import { test, expect } from '@playwright/test';
+import { test, expect } from '../tests';
 
-test.describe('wp-class', () => {
-	test.beforeEach(async ({ page }) => {
-		await page.goto('file://' + join(__dirname, 'directives-class.html'));
+test.describe('data-wp-class', () => {
+	test.beforeEach(async ({ goToFile }) => {
+		await goToFile('directives-class.html');
 	});
 
 	test('remove class if callback returns falsy value', async ({ page }) => {
@@ -61,6 +60,19 @@ test.describe('wp-class', () => {
 		await expect(el).toHaveClass('foo baz');
 		page.getByTestId('toggle trueValue').click();
 		await expect(el).toHaveClass('foo bar baz');
+	});
+
+	test('can toggle class when class attribute is missing', async ({
+		page,
+	}) => {
+		const el = page.getByTestId(
+			'can toggle class when class attribute is missing'
+		);
+		await expect(el).toHaveClass('');
+		page.getByTestId('toggle falseValue').click();
+		await expect(el).toHaveClass('foo');
+		page.getByTestId('toggle falseValue').click();
+		await expect(el).toHaveClass('');
 	});
 
 	test('can use context values', async ({ page }) => {
