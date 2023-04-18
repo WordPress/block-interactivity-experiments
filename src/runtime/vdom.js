@@ -11,12 +11,7 @@ export const hydratedIslands = new WeakSet();
 export function toVdom(root) {
 	const treeWalker = document.createTreeWalker(
 		root,
-		// 205
-		NodeFilter.SHOW_ELEMENT +
-			NodeFilter.SHOW_TEXT +
-			NodeFilter.SHOW_COMMENT +
-			NodeFilter.SHOW_CDATA_SECTION +
-			NodeFilter.SHOW_PROCESSING_INSTRUCTION
+		205 // ELEMENT + TEXT + COMMENT + CDATA_SECTION + PROCESSING_INSTRUCTION
 	);
 
 	function walk(node) {

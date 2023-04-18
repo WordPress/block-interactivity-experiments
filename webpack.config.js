@@ -11,7 +11,6 @@ module.exports = [
 			'e2e/page-1': './e2e/page-1',
 			'e2e/page-2': './e2e/page-2',
 			'e2e/directive-bind': './e2e/js/directive-bind',
-			'e2e/tovdom': './e2e/js/tovdom',
 		},
 		output: {
 			filename: '[name].js',
