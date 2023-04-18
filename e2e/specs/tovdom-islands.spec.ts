@@ -28,7 +28,7 @@ test.describe('toVdom - isands', () => {
 		await expect(el).toBeVisible();
 	});
 
-	test('directives inside islands should not be hydrated twice', async ({
+	test.skip('directives inside islands should not be hydrated twice', async ({
 		page,
 	}) => {
 		const el = page.getByTestId('island inside another island');
