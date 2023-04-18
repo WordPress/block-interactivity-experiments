@@ -11,4 +11,5 @@ document.addEventListener('DOMContentLoaded', async () => {
 	registerDirectives();
 	registerComponents();
 	await init();
+	console.log('Interactivity API started');
 });

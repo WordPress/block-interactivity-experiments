@@ -2,10 +2,9 @@
 <html>
 	<head>
 		<title>toVdom</title>
-		<meta itemprop="wp-client-side-transitions" content="active" />
 	</head>
 
-	<body>
+	<body data-wp-island>
 		<div data-testid="it should delete comments">
 			<!-- ##1## -->
 			<div data-testid="it should keep this node between comments">
@@ -59,8 +58,7 @@
 				.replaceWith(cdataElement);
 		</script> -->
 
-		<script src="../build/e2e/wpx.js"></script>
-		<script src="../build/runtime.js"></script>
-		<script src="../build/vendors.js"></script>
+		<script src="../../build/runtime.js"></script>
+		<script src="../../build/vendors.js"></script>
 	</body>
 </html>

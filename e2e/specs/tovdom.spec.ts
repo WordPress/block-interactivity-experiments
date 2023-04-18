@@ -1,9 +1,8 @@
-import { join } from 'path';
-import { test, expect } from '@playwright/test';
+import { test, expect } from '../tests';
 
 test.describe('toVdom', () => {
-	test.beforeEach(async ({ page }) => {
-		await page.goto('file://' + join(__dirname, 'tovdom.html'));
+	test.beforeEach(async ({ goToFile }) => {
+		await goToFile('tovdom.html');
 	});
 
 	test('it should delete comments', async ({ page }) => {
