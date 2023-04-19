@@ -88,7 +88,7 @@ function wp_directives_register_scripts() {
 
 	wp_register_script(
 		'wp-directive-vendors',
-		plugins_url( 'build/vendors.js', __FILE__ ),
+		plugins_url( 'build/vendors' . $extension, __FILE__ ),
 		array(),
 		'1.0.0',
 		true
