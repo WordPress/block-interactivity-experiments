@@ -5,8 +5,8 @@
 	"license": "GPL-2.0-or-later",
 	"main": "build/index.js",
 	"scripts": {
-		"build": "webpack --mode=production",
-		"start": "webpack --mode=development --watch",
+		"build": "webpack",
+		"start": "webpack --watch",
 		"dev": "npm start",
 		"format:php": "wp-env run composer run-script format",
 		"lint:php": "wp-env run composer run-script lint",

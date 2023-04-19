@@ -67,9 +67,11 @@ module.exports = [
 	defaultConfig,
 	{
 		...sharedConfig,
+		name: 'runtime',
 		entry: {
 			runtime: './src/runtime',
 		},
+		mode: 'production',
 		output: {
 			...sharedConfig.output,
 			filename: '[name].min.js',
@@ -83,9 +85,11 @@ module.exports = [
 	},
 	{
 		...sharedConfig,
+		name: 'runtime-debug',
 		entry: {
 			runtime: './src/runtime',
 		},
+		mode: 'development',
 		plugins: [
 			...sharedConfig.plugins,
 			new DefinePlugin({
@@ -95,6 +99,8 @@ module.exports = [
 	},
 	{
 		...sharedConfig,
+		name: 'e2e',
+		mode: 'development',
 		entry: {
 			'e2e/page-1': './e2e/page-1',
 			'e2e/page-2': './e2e/page-2',
