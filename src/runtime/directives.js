@@ -120,12 +120,14 @@ export default () => {
 						// This seems necessary because Preact doesn't change the attributes
 						// on the hydration, so we have to do it manually. It doesn't need
 						// deps because it only needs to do it the first time.
-						result === false
-							? element.ref.current.removeAttribute(attribute)
-							: element.ref.current.setAttribute(
-									attribute,
-									result === true ? '' : result
-							  );
+						if (result === false) {
+							element.ref.current.removeAttribute(attribute);
+						} else {
+							element.ref.current.setAttribute(
+								attribute,
+								result === true ? '' : result
+							);
+						}
 					}, []);
 				});
 		}
