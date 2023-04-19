@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name:       wp-directives
- * Version:           0.1.14
+ * Version:           0.1.15
  * Requires at least: 6.0
  * Requires PHP:      5.6
  * Author:            Gutenberg Team
