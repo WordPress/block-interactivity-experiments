@@ -84,6 +84,8 @@ register_uninstall_hook( __FILE__, 'wp_directives_uninstall' );
  * Register the scripts
  */
 function wp_directives_register_scripts() {
+	$extension = SCRIPT_DEBUG ? '.js' : '.min.js';
+
 	wp_register_script(
 		'wp-directive-vendors',
 		plugins_url( 'build/vendors.js', __FILE__ ),
@@ -93,7 +95,7 @@ function wp_directives_register_scripts() {
 	);
 	wp_register_script(
 		'wp-directive-runtime',
-		plugins_url( 'build/runtime.js', __FILE__ ),
+		plugins_url( 'build/runtime' . $extension, __FILE__ ),
 		array( 'wp-directive-vendors' ),
 		'1.0.0',
 		true

@@ -1,3 +1,6 @@
+if (INCLUDE_DEBUG_TOOLS) {
+	require('./debug');
+}
 import registerDirectives from './directives';
 import registerComponents from './components';
 import { init } from './router';
