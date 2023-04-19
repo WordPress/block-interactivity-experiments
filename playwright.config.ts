@@ -1,5 +1,5 @@
-import type { PlaywrightTestConfig } from '@playwright/test';
-import { devices } from '@playwright/test';
+/* eslint-disable no-unused-vars */
+import { devices, type PlaywrightTestConfig } from '@playwright/test';
 
 /**
  * Read environment variables from file.

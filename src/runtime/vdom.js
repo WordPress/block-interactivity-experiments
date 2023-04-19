@@ -7,7 +7,7 @@ const directiveParser = new RegExp(`${p}([^.]+)\.?(.*)$`);
 
 export const hydratedIslands = new WeakSet();
 
-// Recursive function that transfoms a DOM tree into vDOM.
+// Recursive function that transforms a DOM tree into vDOM.
 export function toVdom(root) {
 	const treeWalker = document.createTreeWalker(
 		root,

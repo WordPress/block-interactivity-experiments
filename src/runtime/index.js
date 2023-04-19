@@ -11,5 +11,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 	registerDirectives();
 	registerComponents();
 	await init();
+	// eslint-disable-next-line no-console
 	console.log('Interactivity API started');
 });

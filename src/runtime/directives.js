@@ -4,11 +4,6 @@ import { deepSignal, peek } from 'deepsignal';
 import { directive } from './hooks';
 import { prefetch, navigate, canDoClientSideNavigation } from './router';
 
-// Until useSignalEffects is fixed:
-// https://github.com/preactjs/signals/issues/228
-const raf = window.requestAnimationFrame;
-const tick = () => new Promise((r) => raf(() => raf(r)));
-
 // Check if current page can do client-side navigation.
 const clientSideNavigation = canDoClientSideNavigation(document.head);
 
@@ -125,12 +120,14 @@ export default () => {
 						// This seems necessary because Preact doesn't change the attributes
 						// on the hydration, so we have to do it manually. It doesn't need
 						// deps because it only needs to do it the first time.
-						result === false
-							? element.ref.current.removeAttribute(attribute)
-							: element.ref.current.setAttribute(
-									attribute,
-									result === true ? '' : result
-							  );
+						if (result === false) {
+							element.ref.current.removeAttribute(attribute);
+						} else {
+							element.ref.current.setAttribute(
+								attribute,
+								result === true ? '' : result
+							);
+						}
 					}, []);
 				});
 		}

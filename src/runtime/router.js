@@ -29,13 +29,14 @@ export const canDoClientSideNavigation = (dom) =>
  * For each element found, fetch the content and store it in the cache.
  * Returns an array of elements to add to the document.
  *
- * @param {string} selector - CSS selector used to find the elements.
- * @param {'href'|'src'} attribute - Attribute that determines where to fetch
- * the styles or scripts from. Also used as the key for the cache.
- * @param {Map} cache - Cache to use for the elements. Can be `stylesheets` or `scripts`.
+ * @param {Document}         document
+ * @param {string}           selector        - CSS selector used to find the elements.
+ * @param {'href'|'src'}     attribute       - Attribute that determines where to fetch
+ *                                           the styles or scripts from. Also used as the key for the cache.
+ * @param {Map}              cache           - Cache to use for the elements. Can be `stylesheets` or `scripts`.
  * @param {'style'|'script'} elementToCreate - Element to create for each fetched
- * item. Can be 'style' or 'script'.
- * @returns {Promise<Array<HTMLElement>>} - Array of elements to add to the document.
+ *                                           item. Can be 'style' or 'script'.
+ * @return {Promise<Array<HTMLElement>>} - Array of elements to add to the document.
  */
 const fetchScriptOrStyle = async (
 	document,

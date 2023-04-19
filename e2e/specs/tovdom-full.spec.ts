@@ -19,7 +19,9 @@ test.describe('toVdom - full', () => {
 		const oldContent = page.getByTestId('inside data-wp-ignore');
 		await expect(oldContent).toBeVisible();
 
-		const newContent = page.getByTestId('new content inside data-wp-ignore');
+		const newContent = page.getByTestId(
+			'new content inside data-wp-ignore'
+		);
 		await expect(newContent).not.toBeVisible();
 
 		const link = page.getByTestId('next');
