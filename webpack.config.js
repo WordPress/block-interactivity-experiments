@@ -10,6 +10,7 @@ module.exports = [
 			runtime: './src/runtime',
 			'e2e/page-1': './e2e/page-1',
 			'e2e/page-2': './e2e/page-2',
+			'e2e/directive-bind': './e2e/js/directive-bind',
 		},
 		output: {
 			filename: '[name].js',

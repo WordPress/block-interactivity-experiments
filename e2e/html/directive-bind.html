@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Directives -- data-wp-bind</title>
+		<meta itemprop="wp-client-side-navigation" content="active" />
+	</head>
+	<body>
+		<a
+			data-wp-bind.href="state.url"
+			data-testid="add missing href at hydration"
+		></a>
+
+		<a
+			href="/other-url"
+			data-wp-bind.href="state.url"
+			data-testid="change href at hydration"
+		></a>
+
+		<input
+			type="checkbox"
+			data-wp-bind.checked="state.checked"
+			data-testid="add missing checked at hydration"
+		/>
+
+		<input
+			type="checkbox"
+			checked
+			data-wp-bind.checked="!state.checked"
+			data-testid="remove existing checked at hydration"
+		/>
+
+		<button data-testid="toggle" data-wp-on.click="actions.toggle">
+			Update
+		</button>
+
+		<script src="../../build/e2e/directive-bind.js"></script>
+		<script src="../../build/runtime.js"></script>
+		<script src="../../build/vendors.js"></script>
+	</body>
+</html>
