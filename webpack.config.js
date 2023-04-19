@@ -77,7 +77,7 @@ module.exports = [
 		plugins: [
 			...sharedConfig.plugins,
 			new DefinePlugin({
-				INCLUDE_DEBUG_TOOLS: false,
+				SCRIPT_DEBUG: false,
 			}),
 		],
 	},
@@ -89,7 +89,7 @@ module.exports = [
 		plugins: [
 			...sharedConfig.plugins,
 			new DefinePlugin({
-				INCLUDE_DEBUG_TOOLS: true,
+				SCRIPT_DEBUG: true,
 			}),
 		],
 	},

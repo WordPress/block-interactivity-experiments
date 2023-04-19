@@ -1,4 +1,4 @@
-if (INCLUDE_DEBUG_TOOLS) {
+if (SCRIPT_DEBUG) {
 	require('./debug');
 }
 import registerDirectives from './directives';
