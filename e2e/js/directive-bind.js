@@ -1,6 +1,5 @@
 import { store } from '../../src/runtime/store';
 
-// State for the store hydration tests.
 store({
 	state: {
 		url: '/some-url',

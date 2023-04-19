@@ -122,7 +122,7 @@ export const navigate = async (href, { replace = false } = {}) => {
 	if (page) {
 		document.head.replaceChildren(...page.head);
 		render(page.body, rootFragment);
-		window.history[replace ? "replaceState" : "pushState"]({}, '', href);
+		window.history[replace ? 'replaceState' : 'pushState']({}, '', href);
 	} else {
 		window.location.assign(href);
 	}
@@ -149,7 +149,6 @@ export const init = async () => {
 			document.documentElement,
 			document.body
 		);
-
 		const body = toVdom(document.body);
 		hydrate(body, rootFragment);
 
