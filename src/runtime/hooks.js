@@ -34,7 +34,7 @@ const getEvaluate =
 		const value = resolve(path, extraArgs.context);
 		return typeof value === 'function'
 			? value({
-					state: store.state,
+					...store,
 					...(ref !== undefined ? { ref } : {}),
 					...extraArgs,
 			  })
@@ -44,7 +44,7 @@ const getEvaluate =
 // Directive wrapper.
 const Directive = ({ type, directives, props: originalProps }) => {
 	const ref = useRef(null);
-	const element = h(type, { ...originalProps, ref, _wrapped: true });
+	const element = h(type, { ...originalProps, ref });
 	const props = { ...originalProps, children: element };
 	const evaluate = getEvaluate({ ref: ref.current });
 	const directiveArgs = { directives, props, element, context, evaluate };
@@ -61,7 +61,7 @@ const Directive = ({ type, directives, props: originalProps }) => {
 const old = options.vnode;
 options.vnode = (vnode) => {
 	const type = vnode.type;
-	const { directives } = vnode.props;
+	const { __directives } = vnode.props;
 
 	if (
 		typeof type === 'string' &&
@@ -72,15 +72,11 @@ options.vnode = (vnode) => {
 			{ ...vnode.props, context, evaluate: getEvaluate() },
 			vnode.props.children
 		);
-	} else if (directives) {
+	} else if (__directives) {
 		const props = vnode.props;
-		delete props.directives;
-		if (!props._wrapped) {
-			vnode.props = { type: vnode.type, directives, props };
-			vnode.type = Directive;
-		} else {
-			delete props._wrapped;
-		}
+		delete props.__directives;
+		vnode.props = { type: vnode.type, directives: __directives, props };
+		vnode.type = Directive;
 	}
 
 	if (old) old(vnode);

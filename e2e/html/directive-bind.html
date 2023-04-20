@@ -29,6 +29,18 @@
 			data-testid="remove existing checked at hydration"
 		/>
 
+		<a
+			href="/other-url"
+			data-wp-bind.href="state.url"
+			data-testid="nested binds - 1"
+		>
+			<img
+				width="1"
+				data-wp-bind.width="state.width"
+				data-testid="nested binds - 2"
+			/>
+		</a>
+
 		<button data-testid="toggle" data-wp-on.click="actions.toggle">
 			Update
 		</button>
