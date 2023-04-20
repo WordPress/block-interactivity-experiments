@@ -4,11 +4,12 @@ import { init } from './hydration';
 export { store } from './store';
 
 /**
- * Initialize the initial vDOM.
+ * Initialize the Interactivity API.
  */
 document.addEventListener('DOMContentLoaded', async () => {
 	registerDirectives();
 	registerComponents();
 	await init();
-	console.log('hydrated!');
+	// eslint-disable-next-line no-console
+	console.log('Interactivity API started');
 });

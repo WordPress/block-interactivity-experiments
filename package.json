@@ -1,6 +1,6 @@
 {
 	"name": "block-interactivity-experiments",
-	"version": "0.1.13",
+	"version": "0.1.16",
 	"author": "The WordPress Contributors",
 	"license": "GPL-2.0-or-later",
 	"main": "build/index.js",
@@ -10,6 +10,8 @@
 		"dev": "npm start",
 		"format:php": "wp-env run composer run-script format",
 		"lint:php": "wp-env run composer run-script lint",
+		"lint:js": "wp-scripts lint-js",
+		"lint:js:fix": "npm run lint:js -- --fix",
 		"test": "jest",
 		"pretest:unit:php": "wp-env start",
 		"test:unit:php": "wp-env run tests-wordpress /var/www/html/wp-content/plugins/block-interactivity-experiments/vendor/bin/phpunit -c /var/www/html/wp-content/plugins/block-interactivity-experiments/phpunit.xml.dist --verbose",
