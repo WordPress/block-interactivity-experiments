@@ -53,13 +53,13 @@ const Directive = ({ type, directives, props: originalProps }) => {
 // Preact Options Hook called each time a vnode is created.
 const old = options.vnode;
 options.vnode = (vnode) => {
-	const props = vnode.props;
-
-	if (props.__directives) {
+	if (vnode.props.__directives) {
+		const props = vnode.props;
+		const directives = props.__directives;
 		delete props.__directives;
 		vnode.props = {
 			type: vnode.type,
-			directives: props.__directives,
+			directives,
 			props,
 		};
 		vnode.type = Directive;
