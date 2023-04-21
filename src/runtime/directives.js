@@ -44,8 +44,18 @@ export default () => {
 		const contextValue = useContext(context);
 		Object.values(effect).forEach((path) => {
 			useSignalEffect(() => {
-				evaluate(path, { context: contextValue });
+				return evaluate(path, { context: contextValue });
 			});
+		});
+	});
+
+	// data-wp-init.[name]
+	directive('init', ({ directives: { init }, context, evaluate }) => {
+		const contextValue = useContext(context);
+		Object.values(init).forEach((path) => {
+			useEffect(() => {
+				return evaluate(path, { context: contextValue });
+			}, []);
 		});
 	});
 
@@ -54,7 +64,7 @@ export default () => {
 		const contextValue = useContext(context);
 		Object.entries(on).forEach(([name, path]) => {
 			element.props[`on${name}`] = (event) => {
-				evaluate(path, { event, context: contextValue });
+				return evaluate(path, { event, context: contextValue });
 			};
 		});
 	});
@@ -86,9 +96,9 @@ export default () => {
 							: name;
 
 					useEffect(() => {
-						// This seems necessary because Preact doesn't change the class names
-						// on the hydration, so we have to do it manually. It doesn't need
-						// deps because it only needs to do it the first time.
+						// This seems necessary because Preact doesn't change the class
+						// names on the hydration, so we have to do it manually. It doesn't
+						// need deps because it only needs to do it the first time.
 						if (!result) {
 							element.ref.current.classList.remove(name);
 						} else {
