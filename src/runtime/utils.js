@@ -1,3 +1,57 @@
+import { useRef, useEffect } from 'preact/hooks';
+import { effect } from '@preact/signals';
+
+const HAS_RAF = typeof requestAnimationFrame === 'function';
+
+function afterNextFrame(callback) {
+	const done = () => {
+		clearTimeout(timeout);
+		if (HAS_RAF) cancelAnimationFrame(raf);
+		setTimeout(callback);
+	};
+	const timeout = setTimeout(done, 100);
+
+	let raf;
+	if (HAS_RAF) {
+		raf = requestAnimationFrame(done);
+	}
+}
+
+function createFlusher(compute, notify) {
+	let flush;
+	const dispose = effect(function () {
+		flush = this._callback.bind(this);
+		this._compute = compute;
+		this._callback = notify;
+		return compute();
+	});
+	return { flush, dispose };
+}
+
+// Version of `useSignalEffect` with a `useEffect`-like execution. This hook
+// implementation comes from this PR:
+// https://github.com/preactjs/signals/pull/290.
+//
+// We need to include it here in this repo until the mentioned PR is merged.
+export function useSignalEffect(cb, options) {
+	const callback = useRef(cb);
+	callback.current = cb;
+
+	useEffect(() => {
+		const mode = options?.mode || 'sync';
+		const execute = () => callback.current();
+		const notify = () => {
+			if (mode === 'afterPaint') {
+				afterNextFrame(eff.flush);
+			} else {
+				eff.flush();
+			}
+		};
+		const eff = createFlusher(execute, notify);
+		return eff.dispose;
+	}, []);
+}
+
 // For wrapperless hydration of document.body.
 // See https://gist.github.com/developit/f4c67a2ede71dc2fab7f357f39cff28c
 export const createRootFragment = (parent, replaceNode) => {
