@@ -1,7 +1,6 @@
 import { h, options, createContext } from 'preact';
 import { useRef } from 'preact/hooks';
 import { rawStore as store } from './store';
-import { componentPrefix } from './constants';
 
 // Main context.
 const context = createContext({});
@@ -10,12 +9,6 @@ const context = createContext({});
 const directiveMap = {};
 export const directive = (name, cb) => {
 	directiveMap[name] = cb;
-};
-
-// WordPress Components.
-const componentMap = {};
-export const component = (name, Comp) => {
-	componentMap[name] = Comp;
 };
 
 // Resolve the path to some property of the store object.
@@ -60,19 +53,9 @@ const Directive = ({ type, directives, props: originalProps }) => {
 // Preact Options Hook called each time a vnode is created.
 const old = options.vnode;
 options.vnode = (vnode) => {
-	const type = vnode.type;
 	const { directives } = vnode.props;
 
-	if (
-		typeof type === 'string' &&
-		type.slice(0, componentPrefix.length) === componentPrefix
-	) {
-		vnode.props.children = h(
-			componentMap[type.slice(componentPrefix.length)],
-			{ ...vnode.props, context, evaluate: getEvaluate() },
-			vnode.props.children
-		);
-	} else if (directives) {
+	if (directives) {
 		const props = vnode.props;
 		delete props.directives;
 		if (!props._wrapped) {
