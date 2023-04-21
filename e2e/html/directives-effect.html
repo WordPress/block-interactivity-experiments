@@ -6,9 +6,15 @@
 	</head>
 
 	<body>
-		<div data-wp-context="{}">
-			<div data-wp-effect="effects.writeToWindow"></div>
+		<div data-wp-show="state.isOpen">
+			<input data-testid="input" data-wp-effect="effects.writeToWindow" />
 		</div>
+
+		<div data-wp-effect="effects.changeFocus"></div>
+
+		<button data-testid="toggle" data-wp-on.click="actions.toggle">
+			Update
+		</button>
 
 		<script defer src="../../build/e2e/directive-effect.js"></script>
 		<script defer src="../../build/runtime.js"></script>

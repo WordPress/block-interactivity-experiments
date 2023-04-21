@@ -5,10 +5,22 @@ test.describe('data-wp-effect', () => {
 		await goToFile('directives-effect.html');
 	});
 
-	test('check that effect runs', async ({ page }) => {
-		const csnPage1 = await page.evaluate('window.effect');
-		expect(csnPage1).toBeTruthy();
+	test('check that effect runs when it is added', async ({ page }) => {
+		const effect = await page.evaluate('window.effect');
+		expect(effect).toBe('effect added');
 	});
 
-	// test.skip('check that returned callback runs on node removal');
+	test('check that effect runs when it is removed', async ({ page }) => {
+		await page.getByTestId('toggle').click();
+		const effect = await page.evaluate('window.effect');
+		expect(effect).toBe('effect removed');
+	});
+
+	test('change focus after DOM changes', async ({ page }) => {
+		const el = page.getByTestId('input');
+		await expect(el).toBeFocused();
+		await page.getByTestId('toggle').click();
+		await page.getByTestId('toggle').click();
+		await expect(el).toBeFocused();
+	});
 });

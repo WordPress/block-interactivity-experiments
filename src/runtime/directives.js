@@ -48,7 +48,17 @@ export default () => {
 		const contextValue = useContext(context);
 		Object.values(effect).forEach((path) => {
 			useSignalEffect(() => {
-				evaluate(path, { context: contextValue });
+				return evaluate(path, { context: contextValue });
+			});
+		});
+	});
+
+	// data-wp-init.[name]
+	directive('init', ({ directives: { init }, context, evaluate }) => {
+		const contextValue = useContext(context);
+		Object.values(init).forEach((path) => {
+			useEffect(() => {
+				return evaluate(path, { context: contextValue });
 			});
 		});
 	});
@@ -58,7 +68,7 @@ export default () => {
 		const contextValue = useContext(context);
 		Object.entries(on).forEach(([name, path]) => {
 			element.props[`on${name}`] = (event) => {
-				evaluate(path, { event, context: contextValue });
+				return evaluate(path, { event, context: contextValue });
 			};
 		});
 	});
@@ -173,7 +183,7 @@ export default () => {
 		}
 	);
 
-	// data-wp-show
+	// wp-show
 	directive(
 		'show',
 		({
@@ -185,10 +195,17 @@ export default () => {
 			context,
 		}) => {
 			const contextValue = useContext(context);
-			if (!evaluate(show, { context: contextValue }))
-				element.props.children = (
-					<template>{element.props.children}</template>
-				);
+
+			const children = useMemo(
+				() =>
+					element.type === 'template'
+						? element.props.templateChildren
+						: element,
+				[]
+			);
+
+			if (!evaluate(show, { context: contextValue })) return null;
+			return children;
 		}
 	);
 
