@@ -1,7 +1,6 @@
 import { h, options, createContext } from 'preact';
 import { useRef } from 'preact/hooks';
 import { rawStore as store } from './store';
-import { componentPrefix } from './constants';
 
 // Main context.
 const context = createContext({});
@@ -10,12 +9,6 @@ const context = createContext({});
 const directiveMap = {};
 export const directive = (name, cb) => {
 	directiveMap[name] = cb;
-};
-
-// WordPress Components.
-const componentMap = {};
-export const component = (name, Comp) => {
-	componentMap[name] = Comp;
 };
 
 // Resolve the path to some property of the store object.
@@ -34,7 +27,7 @@ const getEvaluate =
 		const value = resolve(path, extraArgs.context);
 		return typeof value === 'function'
 			? value({
-					state: store.state,
+					...store,
 					...(ref !== undefined ? { ref } : {}),
 					...extraArgs,
 			  })
@@ -44,7 +37,7 @@ const getEvaluate =
 // Directive wrapper.
 const Directive = ({ type, directives, props: originalProps }) => {
 	const ref = useRef(null);
-	const element = h(type, { ...originalProps, ref, _wrapped: true });
+	const element = h(type, { ...originalProps, ref });
 	const props = { ...originalProps, children: element };
 	const evaluate = getEvaluate({ ref: ref.current });
 	const directiveArgs = { directives, props, element, context, evaluate };
@@ -60,27 +53,16 @@ const Directive = ({ type, directives, props: originalProps }) => {
 // Preact Options Hook called each time a vnode is created.
 const old = options.vnode;
 options.vnode = (vnode) => {
-	const type = vnode.type;
-	const { directives } = vnode.props;
-
-	if (
-		typeof type === 'string' &&
-		type.slice(0, componentPrefix.length) === componentPrefix
-	) {
-		vnode.props.children = h(
-			componentMap[type.slice(componentPrefix.length)],
-			{ ...vnode.props, context, evaluate: getEvaluate() },
-			vnode.props.children
-		);
-	} else if (directives) {
+	if (vnode.props.__directives) {
 		const props = vnode.props;
-		delete props.directives;
-		if (!props._wrapped) {
-			vnode.props = { type: vnode.type, directives, props };
-			vnode.type = Directive;
-		} else {
-			delete props._wrapped;
-		}
+		const directives = props.__directives;
+		delete props.__directives;
+		vnode.props = {
+			type: vnode.type,
+			directives,
+			props,
+		};
+		vnode.type = Directive;
 	}
 
 	if (old) old(vnode);

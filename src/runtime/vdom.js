@@ -55,9 +55,8 @@ export function toVdom(root) {
 				}
 			} else if (n === 'ref') {
 				continue;
-			} else {
-				props[n] = attributes[i].value;
 			}
+			props[n] = attributes[i].value;
 		}
 
 		if (ignore && !island)
@@ -65,12 +64,12 @@ export function toVdom(root) {
 				h(node.localName, {
 					...props,
 					innerHTML: node.innerHTML,
-					directives: { ignore: true },
+					__directives: { ignore: true },
 				}),
 			];
 		if (island) hydratedIslands.add(node);
 
-		if (hasDirectives) props.directives = directives;
+		if (hasDirectives) props.__directives = directives;
 
 		let child = treeWalker.firstChild();
 		if (child) {

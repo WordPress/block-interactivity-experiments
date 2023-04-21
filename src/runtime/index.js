@@ -1,5 +1,4 @@
 import registerDirectives from './directives';
-import registerComponents from './components';
 import { init } from './hydration';
 export { store } from './store';
 
@@ -8,7 +7,6 @@ export { store } from './store';
  */
 document.addEventListener('DOMContentLoaded', async () => {
 	registerDirectives();
-	registerComponents();
 	await init();
 	// eslint-disable-next-line no-console
 	console.log('Interactivity API started');
