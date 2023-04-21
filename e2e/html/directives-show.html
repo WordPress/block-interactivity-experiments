@@ -27,12 +27,11 @@
 			<p>trueValue children</p>
 		</div>
 
-		<div
-			data-wp-show="state.falseValue"
-			data-testid="do not show if callback returns false value"
-		>
-			<p>falseValue children</p>
-		</div>
+		<template data-wp-show="state.falseValue">
+			<div data-testid="do not show if callback returns false value">
+				<p>falseValue children</p>
+			</div>
+		</template>
 
 		<div data-wp-context='{ "falseValue": false }'>
 			<div

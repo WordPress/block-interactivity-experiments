@@ -1,6 +1,7 @@
 import { useContext, useMemo, useEffect } from 'preact/hooks';
 import { deepSignal, peek } from 'deepsignal';
 import { useSignalEffect } from './utils';
+// import { useSignalEffect } from '@preact/signals';
 import { directive } from './hooks';
 import { prefetch, navigate, canDoClientSideNavigation } from './router';
 
@@ -205,6 +206,7 @@ export default () => {
 			);
 
 			if (!evaluate(show, { context: contextValue })) return null;
+
 			return children;
 		}
 	);
