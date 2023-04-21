@@ -17,12 +17,15 @@ function afterNextFrame(callback) {
 	}
 }
 
+// this.c: this._callback
+// this.x: this._compute
+// https://github.com/preactjs/signals/blob/main/mangle.json
 function createFlusher(compute, notify) {
 	let flush;
 	const dispose = effect(function () {
-		flush = this._callback.bind(this);
-		this._compute = compute;
-		this._callback = notify;
+		flush = this.c.bind(this);
+		this.x = compute;
+		this.c = notify;
 		return compute();
 	});
 	return { flush, dispose };
