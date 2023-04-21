@@ -28,6 +28,8 @@ test.describe('toVdom - isands', () => {
 		await expect(el).toBeVisible();
 	});
 
+	// TODO: Implement this test once we have data-wp-init:
+	// https://github.com/WordPress/block-interactivity-experiments/pull/220#discussion_r1171417552
 	test.skip('directives inside islands should not be hydrated twice', async ({
 		page,
 	}) => {
