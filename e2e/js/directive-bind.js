@@ -1,15 +1,19 @@
 import { store } from '../../src/runtime/store';
 
-// State for the store hydration tests.
 store({
 	state: {
 		url: '/some-url',
 		checked: true,
+		width: 1,
+	},
+	foo: {
+		bar: 1,
 	},
 	actions: {
-		toggle: ({ state }) => {
+		toggle: ({ state, foo }) => {
 			state.url = '/some-other-url';
 			state.checked = !state.checked;
+			state.width += foo.bar;
 		},
 	},
 });

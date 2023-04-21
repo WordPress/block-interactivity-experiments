@@ -16,10 +16,10 @@ type Fixtures = {
 	 * });
 	 * ```
 	 *
-	 * @param filename The name of the HTML file to visit.
-	 * @param options Same options object accepted by `page.goto`.
+	 * @param  filename The name of the HTML file to visit.
+	 * @param  options  Same options object accepted by `page.goto`.
 	 *
-	 * @returns Promise.
+	 * @return Promise.
 	 */
 	goToFile: (...params: Parameters<Page['goto']>) => ReturnType<Page['goto']>;
 };

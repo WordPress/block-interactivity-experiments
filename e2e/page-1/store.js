@@ -28,14 +28,10 @@ store({
 			obj[key] = value;
 		},
 		toggleStateText: ({ state }) => {
-			state.text === 'Text 1'
-				? (state.text = 'Text 2')
-				: (state.text = 'Text 1');
+			state.text = state.text === 'Text 1' ? 'Text 2' : 'Text 1';
 		},
 		toggleContextText: ({ context }) => {
-			context.text === 'Text 1'
-				? (context.text = 'Text 2')
-				: (context.text = 'Text 1');
+			context.text = context.text === 'Text 1' ? 'Text 2' : 'Text 1';
 		},
 	},
 });

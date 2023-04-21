@@ -53,4 +53,14 @@ test.describe('data-wp-bind', () => {
 		expect(checked).toBe(false);
 		expect(checked2).toBe(true);
 	});
+
+	test('nested binds', async ({ page }) => {
+		const el = page.getByTestId('nested binds - 1');
+		await expect(el).toHaveAttribute('href', '/some-url');
+		const el2 = page.getByTestId('nested binds - 2');
+		await expect(el2).toHaveAttribute('width', '1');
+		await page.getByTestId('toggle').click();
+		await expect(el).toHaveAttribute('href', '/some-other-url');
+		await expect(el2).toHaveAttribute('width', '2');
+	});
 });

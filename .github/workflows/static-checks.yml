@@ -51,6 +51,8 @@ jobs:
             - name: Install Composer dependencies
               run: composer install --prefer-dist --optimize-autoloader --no-progress --no-interaction
 
-            # TODO: Lint JS too!
             - name: Check PHP coding standards (PHPCS)
               run: composer run-script lint
+
+            - name: Check JS coding standards (eslint)
+              run: npm run lint:js
