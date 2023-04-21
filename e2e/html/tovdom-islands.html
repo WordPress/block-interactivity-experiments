@@ -5,14 +5,14 @@
 	</head>
 	<body>
 		<div>
-			<div data-wp-show="state.falseValue">
+			<div data-wp-bind.hidden="!state.falseValue">
 				<span data-testid="not inside an island">
 					This should be shown because it is inside an island.
 				</span>
 			</div>
 
 			<div data-wp-island>
-				<div data-wp-show="state.falseValue">
+				<div data-wp-bind.hidden="!state.falseValue">
 					<span data-testid="inside an island">
 						This should not be shown because it is inside an island.
 					</span>
@@ -21,7 +21,7 @@
 
 			<div data-wp-island>
 				<div data-wp-ignore>
-					<div data-wp-show="state.falseValue">
+					<div data-wp-bind.hidden="!state.falseValue">
 						<span
 							data-testid="inside an inner block of an isolated island"
 						>
@@ -34,14 +34,13 @@
 
 			<div data-wp-island>
 				<div data-wp-island>
-					<div
-						data-wp-show="state.falseValue"
-						data-testid="island inside another island"
-					>
-						<span>
-							This should not have two template wrappers because
-							that means we hydrated twice.
-						</span>
+					<div data-testid="island inside another island">
+						<div data-wp-bind.hidden="!state.falseValue">
+							<span>
+								This should not have two template wrappers
+								because that means we hydrated twice.
+							</span>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -49,7 +48,7 @@
 			<div data-wp-island>
 				<div>
 					<div data-wp-island data-wp-ignore>
-						<div data-wp-show="state.falseValue">
+						<div data-wp-bind.hidden="!state.falseValue">
 							<span
 								data-testid="island inside inner block of isolated island"
 							>
