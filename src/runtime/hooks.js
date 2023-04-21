@@ -1,5 +1,5 @@
 import { h, options, createContext } from 'preact';
-import { useRef } from 'preact/hooks';
+import { useRef, useMemo } from 'preact/hooks';
 import { rawStore as store } from './store';
 
 // Main context.
@@ -27,8 +27,8 @@ const getEvaluate =
 		const value = resolve(path, extraArgs.context);
 		return typeof value === 'function'
 			? value({
+					ref: ref.current,
 					...store,
-					...(ref !== undefined ? { ref } : {}),
 					...extraArgs,
 			  })
 			: value;
@@ -39,7 +39,7 @@ const Directive = ({ type, directives, props: originalProps }) => {
 	const ref = useRef(null);
 	const element = h(type, { ...originalProps, ref });
 	const props = { ...originalProps, children: element };
-	const evaluate = getEvaluate({ ref: ref.current });
+	const evaluate = useMemo(() => getEvaluate({ ref }), []);
 	const directiveArgs = { directives, props, element, context, evaluate };
 
 	for (const d in directives) {
