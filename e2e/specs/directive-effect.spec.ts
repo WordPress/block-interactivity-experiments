@@ -6,14 +6,14 @@ test.describe('data-wp-effect', () => {
 	});
 
 	test('check that effect runs when it is added', async ({ page }) => {
-		const effect = await page.evaluate('window.effect');
-		expect(effect).toBe('effect added');
+		const el = page.getByTestId('element in the DOM');
+		await expect(el).toContainText('element is in the DOM');
 	});
 
 	test('check that effect runs when it is removed', async ({ page }) => {
 		await page.getByTestId('toggle').click();
-		const effect = await page.evaluate('window.effect');
-		expect(effect).toBe('effect removed');
+		const el = page.getByTestId('element in the DOM');
+		await expect(el).toContainText('element is not in the DOM');
 	});
 
 	test('change focus after DOM changes', async ({ page }) => {
