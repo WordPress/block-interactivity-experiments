@@ -6,7 +6,7 @@ function afterNextFrame(callback) {
 		cancelAnimationFrame(raf);
 		setTimeout(callback);
 	};
-	let raf = requestAnimationFrame(done);
+	const raf = requestAnimationFrame(done);
 }
 
 // Using the mangled properties:
