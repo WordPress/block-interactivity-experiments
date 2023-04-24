@@ -54,16 +54,6 @@ export default () => {
 		});
 	});
 
-	// data-wp-init.[name]
-	directive('init', ({ directives: { init }, context, evaluate }) => {
-		const contextValue = useContext(context);
-		Object.values(init).forEach((path) => {
-			useEffect(() => {
-				return evaluate(path, { context: contextValue });
-			});
-		});
-	});
-
 	// data-wp-on.[event]
 	directive('on', ({ directives: { on }, element, evaluate, context }) => {
 		const contextValue = useContext(context);
@@ -184,7 +174,7 @@ export default () => {
 		}
 	);
 
-	// wp-show
+	// data-wp-show
 	directive(
 		'show',
 		({
@@ -197,17 +187,10 @@ export default () => {
 		}) => {
 			const contextValue = useContext(context);
 
-			const children = useMemo(
-				() =>
-					element.type === 'template'
-						? element.props.templateChildren
-						: element,
-				[]
-			);
-
-			if (!evaluate(show, { context: contextValue })) return null;
-
-			return children;
+			if (!evaluate(show, { context: contextValue }))
+				element.props.children = (
+					<template>{element.props.children}</template>
+				);
 		}
 	);
 

@@ -9,14 +9,13 @@ export const hydratedIslands = new WeakSet();
 
 // Recursive function that transforms a DOM tree into vDOM.
 export function toVdom(root) {
-	let treeWalker = document.createTreeWalker(
+	const treeWalker = document.createTreeWalker(
 		root,
 		205 // ELEMENT + TEXT + COMMENT + CDATA_SECTION + PROCESSING_INSTRUCTION
 	);
 
 	function walk(node) {
-		const { attributes, nodeType, localName } = node;
-		const isTemplate = localName === 'template';
+		const { attributes, nodeType } = node;
 
 		if (nodeType === 3) return [node.data];
 		if (nodeType === 4) {
@@ -72,27 +71,14 @@ export function toVdom(root) {
 
 		if (hasDirectives) props.__directives = directives;
 
-		if (!isTemplate) {
-			let child = treeWalker.firstChild();
-			if (child) {
-				while (child) {
-					const [vnode, nextChild] = walk(child);
-					if (vnode) children.push(vnode);
-					child = nextChild || treeWalker.nextSibling();
-				}
-				treeWalker.parentNode();
-			}
-		} else {
-			const parentTreeWalker = treeWalker;
-			treeWalker = document.createTreeWalker(node.content, 205);
-			let child = treeWalker.firstChild();
+		let child = treeWalker.firstChild();
+		if (child) {
 			while (child) {
 				const [vnode, nextChild] = walk(child);
 				if (vnode) children.push(vnode);
 				child = nextChild || treeWalker.nextSibling();
 			}
-			treeWalker = parentTreeWalker;
-			return [h(localName, { ...props, templateChildren: children })];
+			treeWalker.parentNode();
 		}
 
 		return [h(node.localName, props, children)];
