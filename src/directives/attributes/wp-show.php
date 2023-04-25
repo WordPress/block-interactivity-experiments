@@ -17,6 +17,10 @@ function process_wp_show( $tags, $context ) {
 		return;
 	}
 
+	if ( 'TEMPLATE' === $tags->get_tag() ) {
+		return; // Don't wrap a `<template>` in a `<template>`.
+	}
+
 	$wrapper_bookmark = $tags->wrap_in_tag( 'TEMPLATE' );
 	$tags->seek( $wrapper_bookmark );
 	$tags->set_attribute( 'data-wp-show', $value );
