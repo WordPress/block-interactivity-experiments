@@ -105,4 +105,72 @@ class Tests_Directives_WpShow extends WP_UnitTestCase {
 		$this->assertSame( $updated_markup, $tags->get_updated_html() );
 		$this->assertSame( $context_before->get_context(), $context->get_context(), 'data-wp-show directive changed context' );
 	}
+
+	public function test_nested_directives_within_wp_show_with_truthy_value() {
+		$markup = <<<END
+			<div data-wp-show="context.myBlock.open">
+				I should be shown!
+				<div data-wp-show="context.myOtherBlock.open">I should be shown!</div>
+				<div data-wp-show="!context.myOtherBlock.open">I should not be shown!</div>
+			</div>
+END;
+
+		$context_before = new WP_Directive_Context(
+			array(
+				'myBlock'      => array( 'open' => true ),
+				'myOtherBlock' => array( 'open' => true ),
+			)
+		);
+		$context        = clone $context_before;
+
+		$tags = new WP_Directive_Processor( $markup );
+
+		while ( $tags->next_tag( array( 'tag_closers' => 'visit' ) ) ) {
+			process_wp_show( $tags, $context );
+		}
+
+		$updated_markup = <<<END
+			<div data-wp-show="context.myBlock.open">
+				I should be shown!
+				<div data-wp-show="context.myOtherBlock.open">I should be shown!</div>
+				<template data-wp-show="!context.myOtherBlock.open"><div >I should not be shown!</div></template>
+			</div>
+END;
+		$this->assertSame( $updated_markup, $tags->get_updated_html() );
+		$this->assertSame( $context_before->get_context(), $context->get_context(), 'data-wp-show directive changed context' );
+	}
+
+	public function test_nested_directives_within_wp_show_with_falsy_value() {
+		$markup = <<<END
+			<div data-wp-show="context.myBlock.open">
+				I should be shown!
+				<div data-wp-show="context.myOtherBlock.open">I should be shown!</div>
+				<div data-wp-show="!context.myOtherBlock.open">I should not be shown!</div>
+			</div>
+END;
+
+		$context_before = new WP_Directive_Context(
+			array(
+				'myBlock'      => array( 'open' => false ),
+				'myOtherBlock' => array( 'open' => true ),
+			)
+		);
+		$context        = clone $context_before;
+
+		$tags = new WP_Directive_Processor( $markup );
+
+		while ( $tags->next_tag( array( 'tag_closers' => 'visit' ) ) ) {
+			process_wp_show( $tags, $context );
+		}
+
+		$updated_markup = <<<END
+			<template data-wp-show="context.myBlock.open"><div >
+				I should be shown!
+				<div data-wp-show="context.myOtherBlock.open">I should be shown!</div>
+				<template data-wp-show="!context.myOtherBlock.open"><div >I should not be shown!</div></template>
+			</div></template>
+END;
+		$this->assertSame( $updated_markup, $tags->get_updated_html() );
+		$this->assertSame( $context_before->get_context(), $context->get_context(), 'data-wp-show directive changed context' );
+	}
 }
