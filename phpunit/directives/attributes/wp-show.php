@@ -165,7 +165,7 @@ END;
 
 		$updated_markup = <<<END
 			<template data-wp-show="context.myBlock.open"><div >
-				I should be shown!
+				I should not be shown!
 				<div data-wp-show="context.myOtherBlock.open">I should be shown!</div>
 				<template data-wp-show="!context.myOtherBlock.open"><div >I should not be shown!</div></template>
 			</div></template>
