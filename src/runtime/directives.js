@@ -1,6 +1,6 @@
 import { useContext, useMemo, useEffect } from 'preact/hooks';
-import { useSignalEffect } from '@preact/signals';
 import { deepSignal, peek } from 'deepsignal';
+import { useSignalEffect } from './utils';
 import { directive } from './hooks';
 
 const isObject = (item) =>
