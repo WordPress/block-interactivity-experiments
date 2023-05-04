@@ -143,7 +143,7 @@ END;
 	public function test_nested_directives_within_wp_show_with_falsy_value() {
 		$markup = <<<END
 			<div data-wp-show="context.myBlock.open">
-				I should be shown!
+				I should not be shown!
 				<div data-wp-show="context.myOtherBlock.open">I should be shown!</div>
 				<div data-wp-show="!context.myOtherBlock.open">I should not be shown!</div>
 			</div>
