@@ -1,6 +1,6 @@
 import { useContext, useMemo, useEffect } from 'preact/hooks';
-import { useSignalEffect } from '@preact/signals';
 import { deepSignal, peek } from 'deepsignal';
+import { useSignalEffect } from './utils';
 import { directive } from './hooks';
 import { prefetch, navigate, canDoClientSideNavigation } from './router';
 
@@ -48,7 +48,7 @@ export default () => {
 		const contextValue = useContext(context);
 		Object.values(effect).forEach((path) => {
 			useSignalEffect(() => {
-				evaluate(path, { context: contextValue });
+				return evaluate(path, { context: contextValue });
 			});
 		});
 	});
@@ -185,6 +185,7 @@ export default () => {
 			context,
 		}) => {
 			const contextValue = useContext(context);
+
 			if (!evaluate(show, { context: contextValue }))
 				element.props.children = (
 					<template>{element.props.children}</template>
