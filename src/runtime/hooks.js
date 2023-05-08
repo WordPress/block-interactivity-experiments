@@ -7,8 +7,10 @@ const context = createContext({});
 
 // WordPress Directives.
 const directiveMap = {};
-export const directive = (name, cb) => {
+const directivePriorities = {};
+export const directive = (name, cb, { priority = 10 } = {}) => {
 	directiveMap[name] = cb;
+	directivePriorities[name] = priority;
 };
 
 // Resolve the path to some property of the store object.
@@ -34,13 +36,58 @@ const getEvaluate =
 			: value;
 	};
 
+// Return a matrix of directive names by priority. The resulting array contains
+// lists of directives grouped by same priority, and sorted in ascending order.
+const usePriorityLevels = (directives) =>
+	useMemo(() => {
+		const byPriority = directives.reduce((acc, name) => {
+			const priority = directivePriorities[name];
+			if (!acc[priority]) {
+				acc[priority] = [name];
+			} else {
+				acc[priority].push(name);
+			}
+
+			return acc;
+		}, {});
+
+		return Object.entries(byPriority)
+			.sort(([p1], [p2]) => p1 - p2)
+			.map(([, names]) => names);
+	}, [directives]);
+
 // Directive wrapper.
 const Directive = ({ type, directives, props: originalProps }) => {
 	const ref = useRef(null);
 	const element = h(type, { ...originalProps, ref });
-	const props = { ...originalProps, children: element };
 	const evaluate = useMemo(() => getEvaluate({ ref }), []);
-	const directiveArgs = { directives, props, element, context, evaluate };
+
+	// Add wrappers incrementally for each priority level.
+	return usePriorityLevels(directives).reduceRight(
+		(children, withLevel) => (
+			<PriorityLevel
+				directives={withLevel}
+				element={element}
+				evaluate={evaluate}
+				originalProps={originalProps}
+			>
+				{children}
+			</PriorityLevel>
+		),
+		element
+	);
+};
+
+// Priority level wrapper.
+const PriorityLevel = ({
+	directives,
+	element,
+	evaluate,
+	originalProps,
+	children,
+}) => {
+	const props = { ...originalProps, children };
+	const directiveArgs = { props, element, context, evaluate };
 
 	for (const d in directives) {
 		const wrapper = directiveMap[d]?.(directiveArgs);
