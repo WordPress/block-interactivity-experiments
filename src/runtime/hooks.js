@@ -36,24 +36,27 @@ const getEvaluate =
 			: value;
 	};
 
-// Return a matrix of directive names by priority. The resulting array contains
-// lists of directives grouped by same priority, and sorted in ascending order.
+// Separate directives by priority. The resulting array contains objects
+// of directives grouped by same priority, and sorted in ascending order.
 const usePriorityLevels = (directives) =>
 	useMemo(() => {
-		const byPriority = directives.reduce((acc, name) => {
-			const priority = directivePriorities[name];
-			if (!acc[priority]) {
-				acc[priority] = [name];
-			} else {
-				acc[priority].push(name);
-			}
+		const byPriority = Object.entries(directives).reduce(
+			(acc, [name, values]) => {
+				const priority = directivePriorities[name];
+				if (!acc[priority]) {
+					acc[priority] = { [name]: values };
+				} else {
+					acc[priority][name] = values;
+				}
 
-			return acc;
-		}, {});
+				return acc;
+			},
+			{}
+		);
 
 		return Object.entries(byPriority)
 			.sort(([p1], [p2]) => p1 - p2)
-			.map(([, names]) => names);
+			.map(([, obj]) => obj);
 	}, [directives]);
 
 // Directive wrapper.
@@ -64,9 +67,9 @@ const Directive = ({ type, directives, props: originalProps }) => {
 
 	// Add wrappers incrementally for each priority level.
 	return usePriorityLevels(directives).reduceRight(
-		(children, withLevel) => (
+		(children, withPriorityN) => (
 			<PriorityLevel
-				directives={withLevel}
+				directives={withPriorityN}
 				element={element}
 				evaluate={evaluate}
 				originalProps={originalProps}
@@ -87,7 +90,7 @@ const PriorityLevel = ({
 	children,
 }) => {
 	const props = { ...originalProps, children };
-	const directiveArgs = { props, element, context, evaluate };
+	const directiveArgs = { directives, props, element, context, evaluate };
 
 	for (const d in directives) {
 		const wrapper = directiveMap[d]?.(directiveArgs);
