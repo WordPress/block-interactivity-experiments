@@ -62,28 +62,26 @@ const usePriorityLevels = (directives) =>
 // Directive wrapper.
 const Directive = ({ type, directives, props: originalProps }) => {
 	const ref = useRef(null);
-	const element = h(type, { ...originalProps, ref });
+	const element = useMemo(() => h(type, { ...originalProps, ref }), []);
 	const evaluate = useMemo(() => getEvaluate({ ref }), []);
 
-	// Add wrappers incrementally for each priority level.
-	return usePriorityLevels(directives).reduceRight(
-		(children, withPriorityN) => (
-			<PriorityLevel
-				directives={withPriorityN}
-				element={element}
-				evaluate={evaluate}
-				originalProps={originalProps}
-			>
-				{children}
-			</PriorityLevel>
-		),
-		element
+	// Add wrappers recursively for each priority level.
+	const byPriorityLevel = usePriorityLevels(directives);
+	return (
+		<RecursivePriorityLevel
+			directives={byPriorityLevel}
+			element={element}
+			evaluate={evaluate}
+			originalProps={originalProps}
+		>
+			{element}
+		</RecursivePriorityLevel>
 	);
 };
 
 // Priority level wrapper.
-const PriorityLevel = ({
-	directives,
+const RecursivePriorityLevel = ({
+	directives: [directives, ...rest],
 	element,
 	evaluate,
 	originalProps,
@@ -97,7 +95,20 @@ const PriorityLevel = ({
 		if (wrapper !== undefined) props.children = wrapper;
 	}
 
-	return props.children;
+	if (rest.length === 0) {
+		return props.children;
+	}
+
+	return (
+		<RecursivePriorityLevel
+			directives={rest}
+			element={element}
+			evaluate={evaluate}
+			originalProps={originalProps}
+		>
+			{props.children}
+		</RecursivePriorityLevel>
+	);
 };
 
 // Preact Options Hook called each time a vnode is created.
