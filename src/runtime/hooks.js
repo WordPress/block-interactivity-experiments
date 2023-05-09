@@ -1,4 +1,4 @@
-import { h, options, createContext } from 'preact';
+import { h, options, createContext, cloneElement } from 'preact';
 import { useRef, useMemo } from 'preact/hooks';
 import { rawStore as store } from './store';
 
@@ -62,7 +62,7 @@ const usePriorityLevels = (directives) =>
 // Directive wrapper.
 const Directive = ({ type, directives, props: originalProps }) => {
 	const ref = useRef(null);
-	const element = useMemo(() => h(type, { ...originalProps, ref }), []);
+	const element = h(type, { ...originalProps, ref });
 	const evaluate = useMemo(() => getEvaluate({ ref }), []);
 
 	// Add wrappers recursively for each priority level.
@@ -73,21 +73,19 @@ const Directive = ({ type, directives, props: originalProps }) => {
 			element={element}
 			evaluate={evaluate}
 			originalProps={originalProps}
-		>
-			{element}
-		</RecursivePriorityLevel>
+		/>
 	);
 };
 
 // Priority level wrapper.
 const RecursivePriorityLevel = ({
 	directives: [directives, ...rest],
-	element,
+	element: passedElement,
 	evaluate,
 	originalProps,
-	children,
 }) => {
-	const props = { ...originalProps, children };
+	const element = cloneElement(passedElement);
+	const props = { ...originalProps, children: element };
 	const directiveArgs = { directives, props, element, context, evaluate };
 
 	for (const d in directives) {
@@ -105,9 +103,7 @@ const RecursivePriorityLevel = ({
 			element={element}
 			evaluate={evaluate}
 			originalProps={originalProps}
-		>
-			{props.children}
-		</RecursivePriorityLevel>
+		/>
 	);
 };
 
