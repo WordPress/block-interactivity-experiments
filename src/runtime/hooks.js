@@ -1,4 +1,4 @@
-import { h, options, createContext } from 'preact';
+import { h, options, createContext, cloneElement } from 'preact';
 import { useRef, useMemo } from 'preact/hooks';
 import { rawStore as store } from './store';
 
@@ -97,7 +97,9 @@ const PriorityLevel = ({
 		if (wrapper !== undefined) props.children = wrapper;
 	}
 
-	return props.children;
+	// This forces a children re-render so new signal values are applied. Not
+	// sure why this is needed, but it is.
+	return props.children && cloneElement(props.children);
 };
 
 // Preact Options Hook called each time a vnode is created.
