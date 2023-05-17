@@ -80,12 +80,25 @@ const Directive = ({ type, directives, props: originalProps }) => {
 // Priority level wrapper.
 const RecursivePriorityLevel = ({
 	directives: [directives, ...rest],
-	element: passedElement,
+	element,
 	evaluate,
 	originalProps,
 }) => {
-	const element = cloneElement(passedElement);
-	const props = { ...originalProps, children: element };
+	element = cloneElement(element);
+
+	const children =
+		rest.length > 0 ? (
+			<RecursivePriorityLevel
+				directives={rest}
+				element={element}
+				evaluate={evaluate}
+				originalProps={originalProps}
+			/>
+		) : (
+			element
+		);
+
+	const props = { ...originalProps, children };
 	const directiveArgs = { directives, props, element, context, evaluate };
 
 	for (const d in directives) {
@@ -93,18 +106,7 @@ const RecursivePriorityLevel = ({
 		if (wrapper !== undefined) props.children = wrapper;
 	}
 
-	if (rest.length === 0) {
-		return props.children;
-	}
-
-	return (
-		<RecursivePriorityLevel
-			directives={rest}
-			element={element}
-			evaluate={evaluate}
-			originalProps={originalProps}
-		/>
-	);
+	return props.children;
 };
 
 // Preact Options Hook called each time a vnode is created.
