@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Negation Operator</title>
+		<meta itemprop="wp-client-side-navigation" content="active" />
+	</head>
+	<body>
+		<button
+			data-wp-on.click="actions.toggle"
+			data-testid="toggle active value"
+		>
+			Toggle Active Value
+		</button>
+
+		<div
+			data-wp-bind.hidden="!state.active"
+			data-testid="add hidden attribute if state is not active"
+		></div>
+
+		<div
+			data-wp-bind.hidden="!selectors.active"
+			data-testid="add hidden attribute if selector is not active"
+		></div>
+
+		<script defer src="../../build/e2e/negation-operator.js"></script>
+		<script defer src="../../build/runtime.js"></script>
+		<script defer src="../../build/vendors.js"></script>
+	</body>
+</html>
