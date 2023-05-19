@@ -4,6 +4,7 @@ store({
 	state: {
 		url: '/some-url',
 		checked: true,
+		show: false,
 		width: 1,
 	},
 	foo: {
@@ -13,6 +14,7 @@ store({
 		toggle: ({ state, foo }) => {
 			state.url = '/some-other-url';
 			state.checked = !state.checked;
+			state.show = !state.show;
 			state.width += foo.bar;
 		},
 	},

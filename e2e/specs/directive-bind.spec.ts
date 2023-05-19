@@ -63,4 +63,21 @@ test.describe('data-wp-bind', () => {
 		await expect(el).toHaveAttribute('href', '/some-other-url');
 		await expect(el2).toHaveAttribute('width', '2');
 	});
+
+	test('check enumerated attributes with true/false values', async ({
+		page,
+	}) => {
+		const el = page.getByTestId(
+			'check enumerated attributes with true/false exist and have a string value'
+		);
+		await expect(el).toHaveAttribute('hidden', '');
+		await expect(el).toHaveAttribute('aria-hidden', 'true');
+		await expect(el).toHaveAttribute('aria-expanded', 'false');
+		await expect(el).toHaveAttribute('draggable', 'false');
+		await page.getByTestId('toggle').click();
+		await expect(el).not.toHaveAttribute('hidden', '');
+		await expect(el).toHaveAttribute('aria-hidden', 'false');
+		await expect(el).toHaveAttribute('aria-expanded', 'true');
+		await expect(el).toHaveAttribute('draggable', 'true');
+	});
 });

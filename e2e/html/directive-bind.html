@@ -45,6 +45,16 @@
 			Update
 		</button>
 
+		<p
+			data-wp-bind.hidden="!state.show"
+			data-wp-bind.aria-hidden="!state.show"
+			data-wp-bind.aria-expanded="state.show"
+			data-wp-bind.draggable="state.show"
+			data-testid="check enumerated attributes with true/false exist and have a string value"
+		>
+			Some Text
+		</p>
+
 		<script defer src="../../build/e2e/directive-bind.js"></script>
 		<script defer src="../../build/runtime.js"></script>
 		<script defer src="../../build/vendors.js"></script>
