@@ -73,11 +73,11 @@ test.describe('data-wp-bind', () => {
 		await expect(el).toHaveAttribute('hidden', '');
 		await expect(el).toHaveAttribute('aria-hidden', 'true');
 		await expect(el).toHaveAttribute('aria-expanded', 'false');
-		await expect(el).toHaveAttribute('draggable', 'false');
+		await expect(el).toHaveAttribute('data-some-value', 'false');
 		await page.getByTestId('toggle').click();
 		await expect(el).not.toHaveAttribute('hidden', '');
 		await expect(el).toHaveAttribute('aria-hidden', 'false');
 		await expect(el).toHaveAttribute('aria-expanded', 'true');
-		await expect(el).toHaveAttribute('draggable', 'true');
+		await expect(el).toHaveAttribute('data-some-value', 'true');
 	});
 });
