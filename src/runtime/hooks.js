@@ -43,11 +43,8 @@ const usePriorityLevels = (directives) =>
 		const byPriority = Object.entries(directives).reduce(
 			(acc, [name, values]) => {
 				const priority = directivePriorities[name];
-				if (!acc[priority]) {
-					acc[priority] = { [name]: values };
-				} else {
-					acc[priority][name] = values;
-				}
+				if (!acc[priority]) acc[priority] = {};
+				acc[priority][name] = values;
 
 				return acc;
 			},
