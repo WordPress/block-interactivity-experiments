@@ -82,17 +82,18 @@ const RecursivePriorityLevel = ({
 	originalProps,
 }) => {
 	// This element needs to be a fresh copy so we are not modifying an already
-	// rendered element. This prevents an error with changes in
-	// `element.props.children` not being reflected in `element.__k`.
+	// rendered element with Preact's internal properties initialized. This
+	// prevents an error with changes in `element.props.children` not being
+	// reflected in `element.__k`.
 	element = cloneElement(element);
 
 	// Recursively render the wrapper for the next priority level.
 	//
-	// Note that, even though we're effectively calling `createElement` here,
-	// the element will not be rendered just yet. In fact, the render function
-	// of `RecursivePriorityLevel` will be delayed until the current render
-	// function has finished. That ensures directives in the current priorty
-	// level have run (and thus modified `element`) before the next level.
+	// Note that, even though we're instantiating a vnode with a
+	// `RecursivePriorityLevel` here, its render function will not be executed
+	// just yet. Actually, it will be delayed until the current render function
+	// has finished. That ensures directives in the current priorty level have
+	// run (and thus modified the passed `element`) before the next level.
 	const children =
 		rest.length > 0 ? (
 			<RecursivePriorityLevel
