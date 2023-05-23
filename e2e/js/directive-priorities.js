@@ -67,8 +67,8 @@ directive(
 
 /**
  * Children directive, for testing purposes. It adds a wrapper around
- * `children`, including two buttons to modify `text` and `attribute values from
- * the received context.
+ * `children`, including two buttons to modify `text` and `attribute` values
+ * from the received context.
  */
 directive(
 	'test-children',
