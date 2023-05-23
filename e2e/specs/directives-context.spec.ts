@@ -132,4 +132,19 @@ test.describe('data-wp-context', () => {
 		expect(parentContext.array).toMatchObject([1, 2, 3]);
 		expect(childContext.array).toMatchObject([4, 5, 6]);
 	});
+
+	test('can be accessed in other directives on the same element', async ({
+		page,
+	}) => {
+		await page.pause();
+		const element = page.getByTestId('context & other directives');
+		await expect(element).toHaveText('Text 1');
+		await expect(element).toHaveAttribute('value', 'Text 1');
+		await element.click();
+		await expect(element).toHaveText('Text 2');
+		await expect(element).toHaveAttribute('value', 'Text 2');
+		await element.click();
+		await expect(element).toHaveText('Text 1');
+		await expect(element).toHaveAttribute('value', 'Text 1');
+	});
 });

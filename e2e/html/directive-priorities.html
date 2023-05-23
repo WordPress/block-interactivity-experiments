@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Directive priorities</title>
+		<meta itemprop="wp-client-side-navigation" content="active" />
+	</head>
+	<body>
+		<pre data-testid="execution order"></pre>
+
+		<!-- Element with test directives -->
+		<div
+			data-testid="test directives"
+			data-wp-test-attribute
+			data-wp-test-children
+			data-wp-test-text
+			data-wp-test-context
+		></div>
+
+		<script defer src="../../build/e2e/directive-priorities.js"></script>
+		<script defer src="../../build/runtime.js"></script>
+		<script defer src="../../build/vendors.js"></script>
+	</body>
+</html>

@@ -105,6 +105,17 @@
 					obj.prop6
 				</button>
 			</div>
+			<br />
+
+			<button
+				data-testid="context & other directives"
+				data-wp-context='{ "text": "Text 1" }'
+				data-wp-text="context.text"
+				data-wp-on.click="actions.toggleContextText"
+				data-wp-bind.value="context.text"
+			>
+				Toggle Context Text
+			</button>
 		</div>
 
 		<script defer src="../../build/e2e/page-1.js"></script>
