@@ -2,7 +2,7 @@ import { h } from 'preact';
 import { directivePrefix as p } from './constants';
 
 const ignoreAttr = `data-${p}-ignore`;
-const islandAttr = `data-${p}-island`;
+const islandAttr = `data-${p}-interactive`;
 const fullPrefix = `data-${p}-`;
 
 // Regular expression for directive parsing.
