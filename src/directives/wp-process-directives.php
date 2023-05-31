@@ -46,7 +46,7 @@ function wp_process_directives( $tags, $prefix, $directives ) {
 			// Helper that removes the part after the dot before looking
 			// for the directive processor inside `$attribute_directives`.
 			$get_directive_type = function ( $attr ) {
-				return strtok( $attr, '.' );
+				return explode( '--', $attr )[0];
 			};
 
 			$attributes = $tags->get_attribute_names_with_prefix( $prefix );
