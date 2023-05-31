@@ -1,12 +1,13 @@
 import { h } from 'preact';
 import { directivePrefix as p } from './constants';
 
-const ignoreAttr = `${p}ignore`;
-const islandAttr = `${p}island`;
+const ignoreAttr = `data-${p}-ignore`;
+const islandAttr = `data-${p}-island`;
+const fullPrefix = `data-${p}-`;
 
 // Regular expression for directive parsing.
 const directiveParser = new RegExp(
-	`^${p}` + // ${p} must be a prefix string, like 'wp'.
+	`^data-${p}-` + // ${p} must be a prefix string, like 'wp'.
 		// Match alphanumeric characters including hyphen-separated
 		// segments. It excludes underscore intentionally to prevent confusion.
 		// E.g., "custom-directive".
@@ -51,7 +52,10 @@ export function toVdom(root) {
 
 		for (let i = 0; i < attributes.length; i++) {
 			const n = attributes[i].name;
-			if (n[p.length] && n.slice(0, p.length) === p) {
+			if (
+				n[fullPrefix.length] &&
+				n.slice(0, fullPrefix.length) === fullPrefix
+			) {
 				if (n === ignoreAttr) {
 					ignore = true;
 				} else if (n === islandAttr) {
