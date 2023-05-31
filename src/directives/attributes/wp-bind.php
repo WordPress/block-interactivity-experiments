@@ -19,10 +19,10 @@ function process_wp_bind( $tags, $context ) {
 		return;
 	}
 
-	$prefixed_attributes = $tags->get_attribute_names_with_prefix( 'data-wp-bind.' );
+	$prefixed_attributes = $tags->get_attribute_names_with_prefix( 'data-wp-bind--' );
 
 	foreach ( $prefixed_attributes as $attr ) {
-		list( , $bound_attr ) = explode( '.', $attr );
+		list( , $bound_attr ) = explode( '--', $attr );
 		if ( empty( $bound_attr ) ) {
 			continue;
 		}
