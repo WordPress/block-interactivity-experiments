@@ -3,7 +3,20 @@ import { directivePrefix as p } from './constants';
 
 const ignoreAttr = `${p}ignore`;
 const islandAttr = `${p}island`;
-const directiveParser = new RegExp(`${p}([^.]+)\.?(.*)$`);
+
+// Regular expression for directive parsing.
+const directiveParser = new RegExp(
+	`^${p}` + // ${p} must be a prefix string, like 'wp'.
+		// Match alphanumeric characters including hyphen-separated
+		// segments. It excludes underscore intentionally to prevent confusion.
+		// E.g., "custom-directive".
+		'([a-z0-9]+(?:-[a-z0-9]+)*)' +
+		// (Optional) Match '--' followed by any alphanumeric charachters. It
+		// excludes underscore intentionally to prevent confusion, but it can
+		// contain multiple hyphens. E.g., "--custom-prefix--with-more-info".
+		'(?:--([a-z0-9][a-z0-9-]+))?$',
+	'i' // Case insensitive.
+);
 
 export const hydratedIslands = new WeakSet();
 
