@@ -42,7 +42,7 @@ jobs:
               run: |
                   git add wp-directives.php package.json package-lock.json
                   git commit -m "Bump plugin version to ${{ steps.get_version.outputs.new_version }}"
-                  git push
+                  git push --set-upstream origin main-wp-directives-plugin
                   echo "version_bump_commit=$(git rev-parse --verify --short HEAD)" >> $GITHUB_OUTPUT
 
     build:
