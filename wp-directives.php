@@ -215,10 +215,10 @@ function wp_directives_mark_interactive_blocks( $block_content, $block, $instanc
 		return $block_content;
 	}
 
-	// Add the `data-wp-island` attribute if it's interactive.
+	// Add the `data-wp-interactive` attribute if it's interactive.
 	$w = new WP_HTML_Tag_Processor( $block_content );
 	$w->next_tag();
-	$w->set_attribute( 'data-wp-island', '' );
+	$w->set_attribute( 'data-wp-interactive', '' );
 
 	return (string) $w;
 }

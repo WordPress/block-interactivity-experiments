@@ -19,10 +19,10 @@ function process_wp_style( $tags, $context ) {
 		return;
 	}
 
-	$prefixed_attributes = $tags->get_attribute_names_with_prefix( 'data-wp-style.' );
+	$prefixed_attributes = $tags->get_attribute_names_with_prefix( 'data-wp-style--' );
 
 	foreach ( $prefixed_attributes as $attr ) {
-		list( , $style_name ) = explode( '.', $attr );
+		list( , $style_name ) = explode( '--', $attr );
 		if ( empty( $style_name ) ) {
 			continue;
 		}

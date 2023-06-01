@@ -162,7 +162,7 @@ export const init = async () => {
 		pages.set(cleanUrl(window.location), Promise.resolve({ body, head }));
 	} else {
 		document
-			.querySelectorAll(`[${directivePrefix}island]`)
+			.querySelectorAll(`[data-${directivePrefix}-interactive]`)
 			.forEach((node) => {
 				if (!hydratedIslands.has(node)) {
 					const fragment = createRootFragment(node.parentNode, node);

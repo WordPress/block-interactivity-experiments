@@ -17,7 +17,7 @@ require_once __DIR__ . '/../../../src/directives/wp-html.php';
  */
 class Tests_Directives_WpStyle extends WP_UnitTestCase {
 	public function test_directive_adds_style() {
-		$markup = '<div data-wp-style.color="context.myblock.color" style="background: blue;">Test</div>';
+		$markup = '<div data-wp-style--color="context.myblock.color" style="background: blue;">Test</div>';
 		$tags   = new WP_HTML_Tag_Processor( $markup );
 		$tags->next_tag();
 
@@ -26,7 +26,7 @@ class Tests_Directives_WpStyle extends WP_UnitTestCase {
 		process_wp_style( $tags, $context );
 
 		$this->assertSame(
-			'<div data-wp-style.color="context.myblock.color" style="background: blue;color: green;">Test</div>',
+			'<div data-wp-style--color="context.myblock.color" style="background: blue;color: green;">Test</div>',
 			$tags->get_updated_html()
 		);
 		$this->assertStringContainsString( 'color: green;', $tags->get_attribute( 'style' ) );

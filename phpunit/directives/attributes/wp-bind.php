@@ -17,7 +17,7 @@ require_once __DIR__ . '/../../../src/directives/wp-html.php';
  */
 class Tests_Directives_WpBind extends WP_UnitTestCase {
 	public function test_directive_sets_attribute() {
-		$markup = '<img data-wp-bind.src="context.myblock.imageSource" />';
+		$markup = '<img data-wp-bind--src="context.myblock.imageSource" />';
 		$tags   = new WP_HTML_Tag_Processor( $markup );
 		$tags->next_tag();
 
@@ -26,7 +26,7 @@ class Tests_Directives_WpBind extends WP_UnitTestCase {
 		process_wp_bind( $tags, $context );
 
 		$this->assertSame(
-			'<img src="./wordpress.png" data-wp-bind.src="context.myblock.imageSource" />',
+			'<img src="./wordpress.png" data-wp-bind--src="context.myblock.imageSource" />',
 			$tags->get_updated_html()
 		);
 		$this->assertSame( './wordpress.png', $tags->get_attribute( 'src' ) );
