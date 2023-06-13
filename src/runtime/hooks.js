@@ -109,7 +109,14 @@ const RecursivePriorityLevel = ({
 		);
 
 	const props = { ...originalProps, children };
-	const directiveArgs = { directives, props, element, context, evaluate };
+	const directiveArgs = {
+		directives,
+		props,
+		element,
+		context,
+		evaluate,
+		store,
+	};
 
 	for (const d in directives) {
 		const wrapper = directiveMap[d]?.(directiveArgs);
