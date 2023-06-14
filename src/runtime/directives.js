@@ -88,12 +88,14 @@ export default () => {
 											'';
 
 									// Get new key
-									const linkKey =
+									const transitionKey =
+										'item-' +
 										ref.getAttribute('data-wp-transition');
 
-									ref.style.viewTransitionName = linkKey;
+									ref.style.viewTransitionName =
+										transitionKey;
 									state.core.navigation.viewTransitionKey =
-										linkKey;
+										transitionKey;
 									state.core.navigation.viewTransitionElement =
 										ref;
 								},
@@ -104,23 +106,30 @@ export default () => {
 
 			const contextValue = useContext(context);
 			Object.values(transition).forEach((key) => {
+				const transitionKey = 'item-' + key;
 				useLayoutEffect(() => {
 					// If there is no Key, set it to the main option if exists.
 					if (
 						!state.core.navigation.viewTransitionKey &&
 						element.props['data-wp-transition-main']
 					) {
-						state.core.navigation.viewTransitionKey = key;
+						state.core.navigation.viewTransitionKey = transitionKey;
 						state.core.navigation.viewTransitionElement =
 							element.ref.current;
 					}
 
 					// If the key matches, add transition. If not, remove it.
-					if (state.core.navigation.viewTransitionKey === key) {
-						element.ref.current.style.viewTransitionName = key;
+					if (
+						state.core.navigation.viewTransitionKey ===
+						transitionKey
+					) {
+						element.ref.current.style.viewTransitionName =
+							transitionKey;
 					} else {
 						element.ref.current.style.viewTransitionName = '';
 					}
+					// console.log(element.ref.current.style);
+
 					return evaluate(key, { context: contextValue });
 				});
 			});
