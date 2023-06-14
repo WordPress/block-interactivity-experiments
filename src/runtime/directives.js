@@ -128,7 +128,6 @@ export default () => {
 					} else {
 						element.ref.current.style.viewTransitionName = '';
 					}
-					// console.log(element.ref.current.style);
 
 					return evaluate(key, { context: contextValue });
 				});
