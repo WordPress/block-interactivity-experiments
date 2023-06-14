@@ -80,10 +80,6 @@ export default () => {
 							navigation: {
 								addTransition: ({ ref, state }) => {
 									// Reset the previous element transition
-									console.log(
-										state.core.navigation
-											.viewTransitionElement
-									);
 									if (
 										state.core.navigation
 											.viewTransitionElement
@@ -92,23 +88,8 @@ export default () => {
 											'';
 
 									// Get new key
-									let linkKey = '';
-									if (
-										ref.getAttribute('data-wp-transition')
-									) {
-										linkKey =
-											ref.getAttribute(
-												'data-wp-transition'
-											);
-									} else if (
-										ref.getAttribute(
-											'[data-wp-transition--main]'
-										)
-									) {
-										linkKey = ref.getAttribute(
-											'data-wp-transition--main'
-										);
-									}
+									const linkKey =
+										ref.getAttribute('data-wp-transition');
 
 									ref.style.viewTransitionName = linkKey;
 									state.core.navigation.viewTransitionKey =
@@ -122,12 +103,12 @@ export default () => {
 				});
 
 			const contextValue = useContext(context);
-			Object.entries(transition).forEach(([option, key]) => {
+			Object.values(transition).forEach((key) => {
 				useLayoutEffect(() => {
 					// If there is no Key, set it to the main option if exists.
 					if (
 						!state.core.navigation.viewTransitionKey &&
-						option === 'main'
+						element.props['data-wp-transition-main']
 					) {
 						state.core.navigation.viewTransitionKey = key;
 						state.core.navigation.viewTransitionElement =
