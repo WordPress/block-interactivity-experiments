@@ -1,9 +1,8 @@
-import { useContext, useMemo, useEffect, useLayoutEffect } from 'preact/hooks';
+import { useContext, useMemo, useEffect } from 'preact/hooks';
 import { deepSignal, peek } from 'deepsignal';
 import { useSignalEffect } from './utils';
 import { directive } from './hooks';
 import { prefetch, navigate, canDoClientSideNavigation } from './router';
-import { store as addStore } from './store';
 
 // Check if current page can do client-side navigation.
 const clientSideNavigation = canDoClientSideNavigation(document.head);
@@ -54,86 +53,6 @@ export default () => {
 			});
 		});
 	});
-
-	// data-wp-view-transitions-key--[option]
-	directive(
-		'transition',
-		({
-			directives: { transition },
-			context,
-			evaluate,
-			element,
-			store: { state, actions },
-		}) => {
-			if (!actions?.core?.navigation?.addTransition)
-				addStore({
-					state: {
-						core: {
-							navigation: {
-								viewTransitionKey: null,
-								viewTransitionElement: null,
-							},
-						},
-					},
-					actions: {
-						core: {
-							navigation: {
-								addTransition: ({ ref, state }) => {
-									// Reset the previous element transition
-									if (
-										state.core.navigation
-											.viewTransitionElement
-									)
-										state.core.navigation.viewTransitionElement.style.viewTransitionName =
-											'';
-
-									// Get new key
-									const transitionKey =
-										'item-' +
-										ref.getAttribute('data-wp-transition');
-
-									ref.style.viewTransitionName =
-										transitionKey;
-									state.core.navigation.viewTransitionKey =
-										transitionKey;
-									state.core.navigation.viewTransitionElement =
-										ref;
-								},
-							},
-						},
-					},
-				});
-
-			const contextValue = useContext(context);
-			Object.values(transition).forEach((key) => {
-				const transitionKey = 'item-' + key;
-				useLayoutEffect(() => {
-					// If there is no Key, set it to the main option if exists.
-					if (
-						!state.core.navigation.viewTransitionKey &&
-						element.props['data-wp-transition-main']
-					) {
-						state.core.navigation.viewTransitionKey = transitionKey;
-						state.core.navigation.viewTransitionElement =
-							element.ref.current;
-					}
-
-					// If the key matches, add transition. If not, remove it.
-					if (
-						state.core.navigation.viewTransitionKey ===
-						transitionKey
-					) {
-						element.ref.current.style.viewTransitionName =
-							transitionKey;
-					} else {
-						element.ref.current.style.viewTransitionName = '';
-					}
-
-					return evaluate(key, { context: contextValue });
-				});
-			});
-		}
-	);
 
 	// data-wp-on--[event]
 	directive('on', ({ directives: { on }, element, evaluate, context }) => {
