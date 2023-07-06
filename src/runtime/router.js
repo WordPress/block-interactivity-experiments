@@ -116,7 +116,11 @@ export const prefetch = (url) => {
 };
 
 // Navigate to a new page.
-export const navigate = async (href, { replace = false } = {}) => {
+export const navigate = async (
+	href,
+	scroll = true,
+	{ replace = false } = {}
+) => {
 	const url = cleanUrl(href);
 	prefetch(url);
 	const page = await pages.get(url);
@@ -126,6 +130,17 @@ export const navigate = async (href, { replace = false } = {}) => {
 		window.history[replace ? 'replaceState' : 'pushState']({}, '', href);
 	} else {
 		window.location.assign(href);
+	}
+
+	// Update the scroll, depending on the option. True by default.
+	if (scroll === 'smooth') {
+		window.scrollTo({
+			top: 0,
+			left: 0,
+			behavior: 'smooth',
+		});
+	} else if (scroll !== false) {
+		window.scrollTo(0, 0);
 	}
 };
 
