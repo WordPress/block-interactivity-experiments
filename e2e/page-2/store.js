@@ -10,7 +10,7 @@ store({
 			state.newValue = !state.newValue;
 		},
 		replaceWithPage3: () => {
-			navigate('/csn-page-3.html', { replace: true });
+			navigate('/csn-page-3.html', true, { replace: true });
 		},
 	},
 });
