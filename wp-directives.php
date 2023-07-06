@@ -131,7 +131,7 @@ function wp_directives_add_wp_link_attribute( $block_content ) {
 					'{ "prefetch": true, "viewTransitionsAPI": true, "scroll": false }'
 				);
 			} else {
-				$w->set_attribute( 'data-wp-link', '{ "prefetch": true, "viewTransitionsAPI": true, "scroll": false }' );
+				$w->set_attribute( 'data-wp-link', '{ "prefetch": true, "viewTransitionsAPI": true }' );
 			}
 		}
 	}
