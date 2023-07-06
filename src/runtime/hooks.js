@@ -130,6 +130,8 @@ const RecursivePriorityLevel = ({
 const old = options.vnode;
 options.vnode = (vnode) => {
 	if (vnode.props.__directives) {
+		if (vnode.props['data-wp-key'])
+			vnode.props.key = vnode.props['data-wp-key'];
 		const props = vnode.props;
 		const directives = props.__directives;
 		delete props.__directives;
