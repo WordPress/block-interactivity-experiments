@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name:       wp-directives
- * Version:           0.1.26
+ * Version:           0.1.27
  * Requires at least: 6.0
  * Requires PHP:      5.6
  * Author:            Gutenberg Team
@@ -37,18 +37,18 @@ if ( ! is_plugin_active( 'gutenberg/gutenberg.php' ) ) {
 	return;
 }
 
-require_once __DIR__ . '/src/directives/wp-html.php';
+// require_once __DIR__ . '/src/directives/wp-html.php';
 
-require_once __DIR__ . '/src/directives/class-wp-directive-context.php';
-require_once __DIR__ . '/src/directives/class-wp-directive-store.php';
-require_once __DIR__ . '/src/directives/wp-process-directives.php';
+// require_once __DIR__ . '/src/directives/class-wp-directive-context.php';
+// require_once __DIR__ . '/src/directives/class-wp-directive-store.php';
+// require_once __DIR__ . '/src/directives/wp-process-directives.php';
 
-require_once __DIR__ . '/src/directives/attributes/wp-bind.php';
-require_once __DIR__ . '/src/directives/attributes/wp-context.php';
-require_once __DIR__ . '/src/directives/attributes/wp-class.php';
-require_once __DIR__ . '/src/directives/attributes/wp-html.php';
-require_once __DIR__ . '/src/directives/attributes/wp-style.php';
-require_once __DIR__ . '/src/directives/attributes/wp-text.php';
+// require_once __DIR__ . '/src/directives/attributes/wp-bind.php';
+// require_once __DIR__ . '/src/directives/attributes/wp-context.php';
+// require_once __DIR__ . '/src/directives/attributes/wp-class.php';
+// require_once __DIR__ . '/src/directives/attributes/wp-html.php';
+// require_once __DIR__ . '/src/directives/attributes/wp-style.php';
+// require_once __DIR__ . '/src/directives/attributes/wp-text.php';
 
 /**
  * Load includes.
@@ -269,13 +269,13 @@ function process_directives_in_block( $block_content ) {
 	$tags = wp_process_directives( $tags, 'data-wp-', $directives );
 	return $tags->get_updated_html();
 }
-add_filter(
-	'render_block',
-	'process_directives_in_block',
-	10,
-	1
-);
+// add_filter(
+// 	'render_block',
+// 	'process_directives_in_block',
+// 	10,
+// 	1
+// );
 
 // TODO: check if priority 9 is enough.
 // TODO: check if `wp_footer` is the most appropriate hook.
-add_action( 'wp_footer', array( 'WP_Directive_Store', 'render' ), 9 );
+// add_action( 'wp_footer', array( 'WP_Directive_Store', 'render' ), 9 );
