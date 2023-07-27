@@ -1,42 +1,11 @@
-# Block Interactivity Experiments
+> **WARNING:** This repository is no longer active. The development and discussions have been moved to the Gutenberg repository.
 
-This repository aims to explore block interactivity patterns with the goal of absorbing as much complexity as possible from the final developers.
+We have transitioned ongoing work on the Interactivity API to the [Gutenberg repository](https://github.com/WordPress/gutenberg).
 
-_It's not a goal to do an in-depth analysis of the patterns, only to experiment with them in a controlled environment to assess their potential and then test them in [the Gutenberg repository](https://github.com/WordPress/gutenberg), where we will see if they are a good fit or not._
+- Conversations and collaboration are now taking place within the [Interactivity API category](https://github.com/WordPress/gutenberg/discussions/categories/interactivity-api).
 
-## Current Experiments
+- Development of the Interactivity API is now happening directly in the Gutenberg repository using the label [\[Feature\] Interactivity API](https://github.com/WordPress/gutenberg/issues?q=label%3A%22%5BFeature%5D+Interactivity+API%22).
 
-- 🎨 **WordPress Directives Plugin**
+We welcome you to join us in Gutenberg! Your feedback, ideas, and contributions regarding the Interactivity API are greatly appreciated. By centralizing the development process in one location, we aim to streamline collaboration and keep everyone up to date.
 
-  - Main branch: `main-wp-directives-plugin` 
-  - Tracking Issue: [Tracking issue: WordPress Directives Plugin 🎨](https://github.com/WordPress/block-interactivity-experiments/issues/80)
-
-  An installable plugin that adds a set of basic directives and client-side navigation.
-
-- 🧩 **Custom Elements Hydration**
-
-  - Main branch: `main-custom-elements-hydration`
-  - Tracking Issue: [Tracking issue: Custom Elements Hydration 🧩](https://github.com/WordPress/block-interactivity-experiments/issues/39)
-
-  This hydration method is based on custom elements (`<wp-block>`) that hydrates isolated islands. It interconnects those islands through synchronized bridges for APIs like `context`, `Suspense` or `ErrorBoundary`.
-
-- ⚛️ **Directives Hydration**
-
-  - Main branch: `main-directives-hydration`
-  - Tracking Issue: [Tracking issue: Directives Hydration ⚛](https://github.com/WordPress/block-interactivity-experiments/issues/64)
-
-  This hydration method is based on the creation of a static virtual DOM from the root, where only the interactive islands are replaced by P/React components. It behaves like a single P/React application.
-
-## Block Requirements
-
-If you want to use these experiments on your blocks, they will need:
-
-- To have a `block.json` file.
-- To be registered on the server.
-- A single node wrapper.
-
-## Collaborate!
-
-Feel free to clone this repository and inspect the code, open issues, submit PRs, suggest features or ask questions!
-
-And if you are doing any other frontend-related work, please leave a comment in this [Make Core post](https://make.wordpress.org/core/2022/04/27/exploration-to-enable-better-developer-and-visitor-experiences-with-blocks/).
+Please go to the Gutenberg repository to find the latest developments, discuss use cases, ask questions, and be part of shaping this exciting API. We look forward to continuing the conversation on this project in its new home.
